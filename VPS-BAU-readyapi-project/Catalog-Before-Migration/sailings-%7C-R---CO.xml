@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testCase xmlns:con="http://eviware.com/soapui/config" id="320afaf9-04b4-4c1b-9203-ac367b8c73cb" discardOkResults="false" failOnError="false" failTestCaseOnErrors="true" keepSession="false" name="sailings | R - CO" searchProperties="true" timeout="0">
+  <con:settings id="4fb9276b-0257-4313-b77f-0437c25c8038">
+    <con:setting id="320afaf9-04b4-4c1b-9203-ac367b8c73cbfileName">sailings-%7C-R---CO</con:setting>
+  </con:settings>
+  <con:testStep type="groovy" name="loadTestData" id="200d36aa-1965-477e-8866-a5731912091b">
+    <con:settings/>
+    <con:config>
+      <script>//load/fetch test data from an external json file
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+//get OS and set directory based on OS
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsTestData/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsTestData/" //to insert directory for mac
+	}
+
+	
+def testData = context.expand( '${#Project#testData-royal}' )
+def filePath = directory + testData
+def restResponse = new JsonSlurper().parseText(new File(filePath).text)
+def prettyJson = new groovy.json.JsonBuilder(restResponse).toPrettyString()</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="setVariables" id="0f9dd710-7f89-47e4-bf4e-0076fdd67e1e">
+    <con:settings/>
+    <con:config>
+      <script>//set variables from the fetched test data needed for the REST request
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+def shipCode = context.expand( '${loadTestData#result#$[\'royal\'][\'CO\'][\'shipCode\']}' )
+log.info(shipCode);
+testRunner.testCase.setPropertyValue("shipCode",shipCode);
+
+def sailDate = context.expand( '${loadTestData#result#$[\'royal\'][\'CO\'][\'sailDate\']}' )
+log.info(sailDate);
+testRunner.testCase.setPropertyValue("sailDate",sailDate);
+
+def packageCode = context.expand( '${loadTestData#result#$[\'royal\'][\'CO\'][\'packageCode\']}' )
+log.info(packageCode);
+testRunner.testCase.setPropertyValue("packageCode",packageCode);</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="restrequest" name="sailingsBefore" id="b3f59806-24e5-4a73-a0cd-a4e21f3fa1e3">
+    <con:settings/>
+    <con:config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" service="Catalog" resourcePath="/v1/sailings" methodName="sailings" xsi:type="con:RestRequestStep">
+      <con:restRequest name="sailingsBefore" id="670f0f3d-fb4f-423f-bf1b-6ef9fc014f68" mediaType="application/json" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;con:entry key="Content-Type" value="application/json" xmlns:con="http://eviware.com/soapui/config"/></con:setting>
+        </con:settings>
+        <con:request>{
+	"shipCode": "${#TestCase#shipCode}",
+	"sailDate":"${#TestCase#sailDate}",
+	"packageCode": "${#TestCase#packageCode}"
+}</con:request>
+        <con:originalUri>http://vps-stg-a.rccl.com/vps-sierra/catalog/v1/sailings</con:originalUri>
+        <con:assertion type="Valid HTTP Status Codes" id="ee4e7d99-654b-4cc4-b172-9da8ad7fc25f" name="Valid HTTP Status Codes">
+          <con:settings/>
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:assertion type="GroovyScriptAssertion" id="7c66d7b9-859a-4f14-811f-8ecac2ad77e1" name="Script Assertion">
+          <con:configuration>
+            <scriptText>def jsonRes = messageExchange.getResponse().contentAsString
+
+
+def jsonSlurper = new groovy.json.JsonSlurper();
+def parse = jsonSlurper.parseText(jsonRes)
+
+
+def sailing = parse
+log.info sailing
+assert sailing!=null</scriptText>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:parameters/>
+        <con:environmentSpec>
+          <con:entry environmentId="9ba133c3-3cd7-45c8-8561-64ce1c92ea67">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="015736b2-7549-4743-94e6-d64278e45b46">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="e94bb75c-7f53-42a7-9f97-eb5aa3fcaf53">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b2abf588-b45c-4e44-9dd0-8b2249bbc4e7">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="5322014d-43c7-4904-af96-4329a0290c25">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="495bcf82-3dfa-4956-b162-f0b1bfb07f10">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="feba3ebd-aeec-4c25-8b24-4b9e406c22cb">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b3e5490d-8b80-49fe-97a2-a82077345345">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="a98aa22f-37cb-4a0e-84c6-f2de81903489">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+        </con:environmentSpec>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="fetchResponse" id="e25b5ab2-626d-49e6-825d-bc7bbe1946fc">
+    <con:settings/>
+    <con:config>
+      <script>//fetch the REST response
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+
+def restResponse = context.expand( '${sailingsBefore#Response}' );
+def restResponse2 = new JsonSlurper().parseText(restResponse);
+def prettyJson = new groovy.json.JsonBuilder(restResponse2).toPrettyString();</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="setFolderDirectory" id="65660085-a67a-4e36-91a9-f9da181d57e1">
+    <con:settings/>
+    <con:config>
+      <script>//set folder directory for storing the response
+
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+String jsonFileName = "sailings-R-CO.json"
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsResponseBeforeMigration/" + jsonFileName
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsResponseBeforeMigration/" + jsonFileName // to insert directory for mac
+	}</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="datasink" name="storeResponse" id="b9c06ba5-cb7e-4160-bc86-15607d025b54">
+    <con:settings/>
+    <con:config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="con:DataSinkStep">
+      <con:dataSink type="File">
+        <con:configuration>
+          <fileName>${setFolderDirectory#result}</fileName>
+          <separator/>
+          <escape/>
+          <quote>false</quote>
+          <trim>true</trim>
+          <append>false</append>
+          <encoding>UTF-8</encoding>
+        </con:configuration>
+      </con:dataSink>
+      <con:properties>
+        <con:property>
+          <con:name>sailings-R-CO</con:name>
+          <con:value>${fetchResponse#result}</con:value>
+        </con:property>
+      </con:properties>
+    </con:config>
+  </con:testStep>
+  <con:properties>
+    <con:property>
+      <con:name>shipCode</con:name>
+      <con:value>NV</con:value>
+    </con:property>
+    <con:property>
+      <con:name>sailDate</con:name>
+      <con:value>20250103</con:value>
+    </con:property>
+    <con:property>
+      <con:name>packageCode</con:name>
+      <con:value>NV03X023</con:value>
+    </con:property>
+  </con:properties>
+  <con:reportParameters/>
+</con:testCase>

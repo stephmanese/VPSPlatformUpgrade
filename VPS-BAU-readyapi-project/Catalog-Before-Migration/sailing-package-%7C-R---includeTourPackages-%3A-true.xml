@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testCase xmlns:con="http://eviware.com/soapui/config" id="6442673d-1672-43af-8f46-972b3253845e" discardOkResults="false" failOnError="false" failTestCaseOnErrors="true" keepSession="false" name="sailing-package | R - includeTourPackages : true" searchProperties="true" timeout="0" disabled="true">
+  <con:settings id="e338d2dd-f419-4bfa-b865-d6c4a65749e0">
+    <con:setting id="6442673d-1672-43af-8f46-972b3253845efileName">sailing-package-%7C-R---includeTourPackages-%3A-true</con:setting>
+  </con:settings>
+  <con:testStep type="groovy" name="loadTestData" id="63b8178e-c163-4d61-b856-ef2b56918388">
+    <con:settings/>
+    <con:config>
+      <script>//load/fetch test data from an external json file
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+//get OS and set directory based on OS
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsTestData/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsTestData/" //to insert directory for mac
+	}
+
+	
+def testData = context.expand( '${#Project#testData-royal}' )
+def filePath = directory + testData
+def restResponse = new JsonSlurper().parseText(new File(filePath).text)
+def prettyJson = new groovy.json.JsonBuilder(restResponse).toPrettyString()</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="setVariables" id="25162149-541e-4c26-b1b8-bd00f774e4fc">
+    <con:settings/>
+    <con:config>
+      <script>//set variables from the fetched test data needed for the REST request
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+
+def brandCode = context.expand( '${loadTestData#result#$[\'royal\'][\'brandCode\']}' )
+log.info(brandCode);
+testRunner.testCase.setPropertyValue("brandCode",brandCode);
+
+def shipCode = context.expand( '${loadTestData#result#$[\'royal\'][\'CT\'][\'shipCode\']}' )
+log.info(shipCode);
+testRunner.testCase.setPropertyValue("shipCode",shipCode);
+
+def fromSailDate = context.expand( '${loadTestData#result#$[\'royal\'][\'CT\'][\'fromSailDate\']}' )
+log.info(fromSailDate);
+testRunner.testCase.setPropertyValue("fromSailDate",fromSailDate);
+
+def toSailDate = context.expand( '${loadTestData#result#$[\'royal\'][\'CT\'][\'toSailDate\']}' )
+log.info(toSailDate);
+testRunner.testCase.setPropertyValue("toSailDate",toSailDate);</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="restrequest" name="sailing-packageBefore" id="cd1678b6-aee2-46aa-91fd-1ec41def0cf5">
+    <con:settings/>
+    <con:config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" service="Catalog" resourcePath="/v1/sailing-package" methodName="sailing-package" xsi:type="con:RestRequestStep">
+      <con:restRequest name="sailing-packageBefore" id="7b73aa86-05d5-4faa-9b1b-809d1de63128" mediaType="application/json">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;con:entry key="accept" value="*/*" xmlns:con="http://eviware.com/soapui/config"/></con:setting>
+        </con:settings>
+        <con:request/>
+        <con:originalUri>http://vps-stg-a.rccl.com/vps-sierra/catalog/v1/sailing-package</con:originalUri>
+        <con:assertion type="Valid HTTP Status Codes" id="421bec49-7e47-45e3-9ae3-7797fb9f9244" name="Valid HTTP Status Codes">
+          <con:settings/>
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:assertion type="GroovyScriptAssertion" id="89da5de7-a522-4bba-9d4e-00145afbf551" name="Script Assertion">
+          <con:configuration>
+            <scriptText>def jsonRes = messageExchange.getResponse().contentAsString
+
+
+def jsonSlurper = new groovy.json.JsonSlurper();
+def parse = jsonSlurper.parseText(jsonRes)
+
+
+def sailingPackages = parse.sailingPackages
+log.info sailingPackages
+assert sailingPackages!=null</scriptText>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:parameters>
+          <con:entry key="shipCodes" value="${#TestCase#shipCode}"/>
+          <con:entry key="toSailDate" value="${#TestCase#toSailDate}"/>
+          <con:entry key="includeTourPackages" value="true"/>
+          <con:entry key="fromSailDate" value="${#TestCase#fromSailDate}"/>
+          <con:entry key="brandCode" value="${#TestCase#brandCode}"/>
+        </con:parameters>
+        <con:parameterOrder>
+          <con:entry>brandCode</con:entry>
+          <con:entry>shipCodes</con:entry>
+          <con:entry>fromSailDate</con:entry>
+          <con:entry>toSailDate</con:entry>
+          <con:entry>includeTourPackages</con:entry>
+        </con:parameterOrder>
+        <con:environmentSpec>
+          <con:entry environmentId="9ba133c3-3cd7-45c8-8561-64ce1c92ea67">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="015736b2-7549-4743-94e6-d64278e45b46">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="e94bb75c-7f53-42a7-9f97-eb5aa3fcaf53">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b2abf588-b45c-4e44-9dd0-8b2249bbc4e7">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="5322014d-43c7-4904-af96-4329a0290c25">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="495bcf82-3dfa-4956-b162-f0b1bfb07f10">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="feba3ebd-aeec-4c25-8b24-4b9e406c22cb">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b3e5490d-8b80-49fe-97a2-a82077345345">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="a98aa22f-37cb-4a0e-84c6-f2de81903489">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+        </con:environmentSpec>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="fetchResponse" id="3564f062-fdc6-45b2-a9e2-a64e66f92c73">
+    <con:settings/>
+    <con:config>
+      <script>//fetch the REST response
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+
+def restResponse = context.expand( '${sailing-packageBefore#Response}' );
+def restResponse2 = new JsonSlurper().parseText(restResponse);
+def prettyJson = new groovy.json.JsonBuilder(restResponse2).toPrettyString();</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="setFolderDirectory" id="95fcede2-9b76-4599-b2b3-97dd5fe50f01">
+    <con:settings/>
+    <con:config>
+      <script>//set folder directory for storing the response
+
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+String jsonFileName = "sailing-package-R-includeTourPackages-T.json"
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsResponseBeforeMigration/" + jsonFileName
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsResponseBeforeMigration/" + jsonFileName // to insert directory for mac
+	}</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="datasink" name="storeResponse" id="7d012573-5ce7-4ba9-a365-e70863d45e7a">
+    <con:settings/>
+    <con:config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="con:DataSinkStep">
+      <con:dataSink type="File">
+        <con:configuration>
+          <fileName>${setFolderDirectory#result}</fileName>
+          <separator/>
+          <escape/>
+          <quote>false</quote>
+          <trim>true</trim>
+          <append>false</append>
+          <encoding>UTF-8</encoding>
+        </con:configuration>
+      </con:dataSink>
+      <con:properties>
+        <con:property>
+          <con:name>sailing-package-R-includeTourPackages-T</con:name>
+          <con:value>${fetchResponse#result}</con:value>
+        </con:property>
+      </con:properties>
+    </con:config>
+  </con:testStep>
+  <con:properties>
+    <con:property>
+      <con:name>brandCode</con:name>
+      <con:value>R</con:value>
+    </con:property>
+    <con:property>
+      <con:name>shipCode</con:name>
+      <con:value>RD</con:value>
+    </con:property>
+    <con:property>
+      <con:name>fromSailDate</con:name>
+      <con:value>2024-06-21</con:value>
+    </con:property>
+    <con:property>
+      <con:name>toSailDate</con:name>
+      <con:value>2024-06-21</con:value>
+    </con:property>
+  </con:properties>
+  <con:reportParameters/>
+</con:testCase>

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testCase xmlns:con="http://eviware.com/soapui/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="061edf75-12cf-42e3-b810-f31a28a0180c" discardOkResults="false" failOnError="false" failTestCaseOnErrors="true" keepSession="false" name="promo-codes:by-loyalty-email|Search both loyalty &amp; email only w/promoID filter" searchProperties="true" timeout="0" disabled="true">
+  <con:settings id="3e65e34d-49ca-46f1-b803-bd508fafcead">
+    <con:setting id="061edf75-12cf-42e3-b810-f31a28a0180cfileName">promo-codes%3Aby-loyalty-email%7CSearch-both-loyalty-%26-email-only-w%2FpromoID-filter</con:setting>
+  </con:settings>
+  <con:testStep type="groovy" name="loadTestData-promoSpecifScenario" id="51a18908-234f-4d88-ac23-94bc377f9176">
+    <con:settings/>
+    <con:config>
+      <script>//load/fetch test data from local source
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+//get user's device OS and set directory
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsTestData/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsTestData/" //directory for mac
+	}
+
+	
+def testData = context.expand( '${#Project#testData-promoSpecifScenario}' ) //modify this based on test case
+def filePath = directory + testData
+def restResponse = new JsonSlurper().parseText(new File(filePath).text)
+def prettyJson = new groovy.json.JsonBuilder(restResponse).toPrettyString()</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="setVariables" id="d92c1209-ab1e-49c8-bc6d-0898ac8aff11">
+    <con:settings/>
+    <con:config>
+      <script>//set variables from the fetched test data needed for the REST request
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+
+//get data from promoSpecificScenario
+def loyaltyId = context.expand( '${loadTestData-promoSpecifScenario#result#$[\'promoSpecifScenario\'][\'TO\'][\'TORestricted\'][\'guestPreferences\'][0][\'loyaltyId\']}' )
+log.info(loyaltyId);
+testRunner.testCase.setPropertyValue("loyaltyId",loyaltyId);
+
+def emailAddress = context.expand( '${loadTestData-promoSpecifScenario#result#$[\'promoSpecifScenario\'][\'TO\'][\'TORestricted\'][\'guestPreferences\'][0][\'email\']}' )
+log.info(emailAddress);
+testRunner.testCase.setPropertyValue("emailAddress",emailAddress);
+
+def promoId = context.expand( '${loadTestData-promoSpecifScenario#result#$[\'promoSpecifScenario\'][\'TO\'][\'TORestricted\'][\'promoID\']}' )
+log.info(promoId);
+testRunner.testCase.setPropertyValue("promoId",promoId);</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="restrequest" name="promoCodeAfter" id="a95d8d15-adcd-421f-8594-4b19576d46c1">
+    <con:settings/>
+    <con:config service="Promotion(Ingress)(Used by ESL)" resourcePath="/v1/promo-codes:by-loyalty-email" methodName="promo-codes:by-loyalty-email" xsi:type="con:RestRequestStep">
+      <con:restRequest name="promoCodeAfter" id="0a29a0be-8cf2-419d-aa44-2aaa06c95d3c" mediaType="application/json" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+        </con:settings>
+        <con:request>{
+	"loyaltyIds": [
+		"${#TestCase#loyaltyId}"
+	],
+	"emailAddresses": [
+		"${#TestCase#emailAddress}"
+	],
+	"filters": {
+		"promotionIds": [
+			"${#TestCase#promoId}"
+		]
+		}
+}</con:request>
+        <con:originalUri>http://vps-stg-a.rccl.com/vps-sierra/promotion/v1/promo-codes:by-loyalty-email</con:originalUri>
+        <con:assertion type="Valid HTTP Status Codes" id="9d0e37a9-295a-4db0-a63c-a517ad9349d1" name="Valid HTTP Status Codes">
+          <con:settings/>
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:assertion type="GroovyScriptAssertion" id="5c1965d8-85cc-4670-9f93-ef00fb57f212" name="Script Assertion">
+          <con:configuration>
+            <scriptText>def jsonRes = messageExchange.getResponse().contentAsString
+
+
+def jsonSlurper = new groovy.json.JsonSlurper();
+def parse = jsonSlurper.parseText(jsonRes)
+
+
+def promoCode = parse.promoCodes[0]
+log.info promoCode
+assert promoCode!= null</scriptText>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:parameters/>
+        <con:environmentSpec>
+          <con:entry environmentId="9ba133c3-3cd7-45c8-8561-64ce1c92ea67">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="015736b2-7549-4743-94e6-d64278e45b46">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="e94bb75c-7f53-42a7-9f97-eb5aa3fcaf53">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b2abf588-b45c-4e44-9dd0-8b2249bbc4e7">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="5322014d-43c7-4904-af96-4329a0290c25">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="495bcf82-3dfa-4956-b162-f0b1bfb07f10">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="feba3ebd-aeec-4c25-8b24-4b9e406c22cb">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b3e5490d-8b80-49fe-97a2-a82077345345">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="a98aa22f-37cb-4a0e-84c6-f2de81903489">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+        </con:environmentSpec>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="compareResponse" id="21e28fa5-d264-4ffe-8e06-a4d48f2c7d98">
+    <con:settings/>
+    <con:config>
+      <script>import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+//get OS and set directory based on OS
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsResponseBeforeMigration/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsResponseBeforeMigration/" //to insert directory for mac
+	}
+
+//for response before migration
+def filePath = directory + "promoCodeByLoyaltyEmailwithPromoId.json"; // Retrieving JSON response from a text file
+def jsonObject1 = new JsonSlurper().parseText(new File(filePath).text); // Parsing JSON response into JSON objects
+jsonObject1.status.remove("dateTime"); //Removing specific elements from the JSON objects
+//jsonObject1.metaInfo.remove("effectiveDateTime");
+def refStr = new groovy.json.JsonBuilder(jsonObject1).toPrettyString(); // Converting JSON objects back to pretty-printed JSON strings
+
+refStr = refStr.replaceAll('}', '');   // without this, there is a close brace whose result is only differentiated by its existance
+refStr = refStr.replaceAll(',', '');
+def refStrList = refStr.split(); // Splitting strings into lists and sorting them
+def refStrListSorted = refStrList.sort(); 
+
+//for response after migration
+def jsonString2 = context.expand( '${promoCodeAfter#Response}' );
+def jsonObject2 = new groovy.json.JsonSlurper().parseText(jsonString2);
+jsonObject2.status.remove("dateTime");
+//jsonObject2.metaInfo.remove("effectiveDateTime");
+def compStr = new groovy.json.JsonBuilder(jsonObject2).toPrettyString();
+
+compStr = compStr.replaceAll('}', '');  // without this, there is a close brace whose result is only differentiated by its existance
+compStr = compStr.replaceAll(',', '');
+def compStrList = compStr.split();
+def compStrListSorted = compStrList.sort();
+
+// Sanity check to ensure both lists have the same size
+log.info "refStrList.size()=" + refStrList.size();
+log.info "compStrList.size()=" + compStrList.size();
+assert refStrList.size().equals(compStrList.size()), "Mismatch - There are ${refStrList.size()} reference values and ${compStrList.size()} compare values";
+
+// sorted line by sorted line check...
+refStrListSorted.eachWithIndex { refValue, idx ->
+   def compValue = compStrListSorted[idx];
+   if ( refValue != compValue ) {
+      log.info "refValue=" + refValue + "  " + idx;
+      log.info "compValue=" + compValue + "  " + idx;
+      assert refValue.equals(compValue), "Mismatch - At index $idx the reference value '$refValue' does not match the comparison value '$compValue'";
+   };
+};
+
+// If we get here, then the contents are equal
+log.info "";
+log.info "   ***  Reference and Compare strings are equal  ***";
+
+log.info "";
+log.info 'Test Step "' + testRunner.runContext.currentStep.name + '" done...';</script>
+    </con:config>
+  </con:testStep>
+  <con:properties>
+    <con:property>
+      <con:name>loyaltyId</con:name>
+      <con:value>387303535</con:value>
+    </con:property>
+    <con:property>
+      <con:name>emailAddress</con:name>
+      <con:value>047ED62E89A33FB83C3DB94FFAB26F2ACD3E09E16B4362A6684E0B1C5644460C</con:value>
+    </con:property>
+    <con:property>
+      <con:name>promoId</con:name>
+      <con:value>M7392338</con:value>
+    </con:property>
+  </con:properties>
+  <con:reportParameters/>
+</con:testCase>

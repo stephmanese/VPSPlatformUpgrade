@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testCase xmlns:con="http://eviware.com/soapui/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="7c5815dc-c1fa-4412-9bc6-90b42216c47b" discardOkResults="false" failOnError="false" failTestCaseOnErrors="true" keepSession="false" name="promotions:all|Force Promo" searchProperties="true" timeout="0" disabled="true">
+  <con:settings id="c56b68b1-9553-4eb7-94d5-ba787f5538c4">
+    <con:setting id="7c5815dc-c1fa-4412-9bc6-90b42216c47bfileName">promotions%3Aall%7CForce-Promo</con:setting>
+  </con:settings>
+  <con:testStep type="groovy" name="loadTestData-promoSpecifScenario" id="b8d1b36e-4552-4ba5-a9d5-5ec8350abd58">
+    <con:settings/>
+    <con:config>
+      <script>//load/fetch test data from local source
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+//get user's device OS and set directory
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsTestData/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsTestData/" //directory for mac
+	}
+
+	
+def testData = context.expand( '${#Project#testData-promoSpecifScenario}' ) //modify this based on test case
+def filePath = directory + testData
+def restResponse = new JsonSlurper().parseText(new File(filePath).text)
+def prettyJson = new groovy.json.JsonBuilder(restResponse).toPrettyString()</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="setVariables" id="90fb925f-88d3-4672-9537-664ac02b1930">
+    <con:settings/>
+    <con:config>
+      <script>//set variables from the fetched test data needed for the REST request
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+def shipCode = context.expand( '${loadTestData-promoSpecifScenario#result#$[\'promoSpecifScenario\'][\'nonTO\'][\'force\'][\'shipCode\']}' )
+log.info(shipCode);
+testRunner.testCase.setPropertyValue("shipCode",shipCode);
+
+
+def sailDate = context.expand( '${loadTestData-promoSpecifScenario#result#$[\'promoSpecifScenario\'][\'nonTO\'][\'force\'][\'sailDate\']}' )
+log.info(sailDate);
+testRunner.testCase.setPropertyValue("sailDate",sailDate);
+
+def packageCode = context.expand( '${loadTestData-promoSpecifScenario#result#$[\'promoSpecifScenario\'][\'nonTO\'][\'force\'][\'packageCode\']}' )
+log.info(packageCode);
+testRunner.testCase.setPropertyValue("packageCode",packageCode);
+
+def officeCode = context.expand( '${loadTestData-promoSpecifScenario#result#$[\'promoSpecifScenario\'][\'nonTO\'][\'force\'][\'officeCode\']}' )
+log.info(officeCode);
+testRunner.testCase.setPropertyValue("officeCode",officeCode);
+
+def countryCode = context.expand( '${loadTestData-promoSpecifScenario#result#$[\'promoSpecifScenario\'][\'nonTO\'][\'force\'][\'countryCode\']}' )
+log.info(countryCode);
+testRunner.testCase.setPropertyValue("countryCode",countryCode);
+
+def currencyCode = context.expand( '${loadTestData-promoSpecifScenario#result#$[\'promoSpecifScenario\'][\'nonTO\'][\'force\'][\'currencyCode\']}' )
+log.info(currencyCode);
+testRunner.testCase.setPropertyValue("currencyCode",currencyCode);
+
+def guestAge = context.expand( '${loadTestData-promoSpecifScenario#result#$[\'promoSpecifScenario\'][\'nonTO\'][\'force\'][\'guestPreferences\'][0][\'age\']}' )
+log.info(guestAge);
+testRunner.testCase.setPropertyValue("guestAge",guestAge);
+
+
+def lifeStageCode = context.expand( '${loadTestData-promoSpecifScenario#result#$[\'promoSpecifScenario\'][\'nonTO\'][\'force\'][\'guestPreferences\'][0][\'lifeStageCode\']}' )
+log.info(lifeStageCode);
+testRunner.testCase.setPropertyValue("lifeStageCode",lifeStageCode);
+
+
+def loyaltyId = context.expand( '${loadTestData-promoSpecifScenario#result#$[\'promoSpecifScenario\'][\'nonTO\'][\'force\'][\'guestPreferences\'][0][\'loyaltyId\']}' )
+log.info(loyaltyId);
+testRunner.testCase.setPropertyValue("loyaltyId",loyaltyId);
+
+def loyaltyTierCode = context.expand( '${loadTestData-promoSpecifScenario#result#$[\'promoSpecifScenario\'][\'nonTO\'][\'force\'][\'guestPreferences\'][0][\'loyaltyTierCode\']}' )
+log.info(loyaltyTierCode);
+testRunner.testCase.setPropertyValue("loyaltyTierCode",loyaltyTierCode);
+
+def promoCode = context.expand( '${loadTestData-promoSpecifScenario#result#$[\'promoSpecifScenario\'][\'nonTO\'][\'force\'][\'promoCodes\']}' )
+log.info(promoCode);
+testRunner.testCase.setPropertyValue("promoCode",promoCode);
+
+
+def promoId = context.expand( '${loadTestData-promoSpecifScenario#result#$[\'promoSpecifScenario\'][\'nonTO\'][\'force\'][\'promoId\']}' )
+log.info(promoId);
+testRunner.testCase.setPropertyValue("promoId",promoId);</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="restrequest" name="promotionsAllBefore" id="176c6407-d9a9-4340-9b4a-1477ee81bd20">
+    <con:settings/>
+    <con:config service="Promotion(Ingress)(Used by ESL)" resourcePath="/v1/promotions:all" methodName="promotions:all" xsi:type="con:RestRequestStep">
+      <con:restRequest name="promotionsAllBefore" id="4adcd40c-3f95-420d-8782-1665c1835853" mediaType="application/json" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+        </con:settings>
+        <con:request>{
+	"commonParameters": {
+		"shipCode": "${#TestCase#shipCode}",
+		"sailDate": "${#TestCase#sailDate}",
+		"packageCode": "${#TestCase#packageCode}",
+		"bookingChannel": "VP",
+		"officeCode": "${#TestCase#officeCode}",
+		"countryCode": "${#TestCase#countryCode}",
+		"currencyCode": "${#TestCase#currencyCode}",
+		"bookingType": "I",
+		"occupancy": 2,
+		"effectiveDateTime": "${#Project#effectiveDateTime}"
+	},
+	"shipCurrencyCode": "USD",
+	"showGuestDetail": true,
+	"guestInformation": [
+		{
+			"guestAge": "${#TestCase#guestAge}",
+			"lifeStageCode": "${#TestCase#lifeStageCode}",
+			"loyaltyTierCode": "${#TestCase#loyaltyTierCode}",
+			"loyaltyId": "${#TestCase#loyaltyId}"
+		},
+		{
+			"guestAge": "${#TestCase#guestAge}",
+			"lifeStageCode": "${#TestCase#lifeStageCode}"
+		}
+	],
+	"promoCodes": [
+		"${#TestCase#promoCode}"
+	],
+	"forcePromotion": {
+		"promotionId": "${#TestCase#promoId}",
+		"qualifiedOnly": true,
+		"ignoreExcludeBestRate": true
+	},
+  "returnExcludeFromBestRatePromotions": true
+}</con:request>
+        <con:originalUri>http://vps-stg-a.rccl.com/vps-sierra/promotion/v1/promotions:all</con:originalUri>
+        <con:assertion type="Valid HTTP Status Codes" id="cdd712f9-ef90-4fc3-b584-44b589671332" name="Valid HTTP Status Codes">
+          <con:settings/>
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:assertion type="GroovyScriptAssertion" name="Script Assertion" id="ba7ef233-5755-4c18-8473-d7b611505de5">
+          <con:configuration>
+            <scriptText>def jsonRes = messageExchange.getResponse().contentAsString
+
+def jsonSlurper = new groovy.json.JsonSlurper();
+def parse = jsonSlurper.parseText(jsonRes)
+
+def promotions = parse.promotions[0]
+log.info promotions
+assert promotions != null</scriptText>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:parameters/>
+        <con:environmentSpec>
+          <con:entry environmentId="9ba133c3-3cd7-45c8-8561-64ce1c92ea67">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="015736b2-7549-4743-94e6-d64278e45b46">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="e94bb75c-7f53-42a7-9f97-eb5aa3fcaf53">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b2abf588-b45c-4e44-9dd0-8b2249bbc4e7">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="5322014d-43c7-4904-af96-4329a0290c25">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="495bcf82-3dfa-4956-b162-f0b1bfb07f10">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="feba3ebd-aeec-4c25-8b24-4b9e406c22cb">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b3e5490d-8b80-49fe-97a2-a82077345345">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="a98aa22f-37cb-4a0e-84c6-f2de81903489">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+        </con:environmentSpec>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="fetchResponse" id="faa0afdb-5f3c-43b4-9984-7ad4b4b19543">
+    <con:settings/>
+    <con:config>
+      <script>//fetch the REST response
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+
+def restResponse = context.expand( '${promotionsAllBefore#Response}' ); //modify this based on test case
+def restResponse2 = new JsonSlurper().parseText(restResponse);
+def prettyJson = new groovy.json.JsonBuilder(restResponse2).toPrettyString();</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="setFolderDirectory" id="55119e58-8212-49bf-82da-6c0a39266352">
+    <con:settings/>
+    <con:config>
+      <script>//set folder directory for storing the response and create json file for storing REST response
+
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+String jsonFileName = "promotions-all-Force Promo.json" //modify this based on test case
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsResponseBeforeMigration/" + jsonFileName
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsResponseBeforeMigration/" + jsonFileName // directory for mac
+	}</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="datasink" name="storeResponse" id="b5f4cc40-1c13-48ac-aa16-c3f0bd2ed116">
+    <con:settings/>
+    <con:config xsi:type="con:DataSinkStep">
+      <con:dataSink type="File">
+        <con:configuration>
+          <fileName>${setFolderDirectory#result}</fileName>
+          <separator/>
+          <escape/>
+          <quote>false</quote>
+          <trim>true</trim>
+          <append>false</append>
+          <encoding>UTF-8</encoding>
+        </con:configuration>
+      </con:dataSink>
+      <con:properties>
+        <con:property>
+          <con:name>promotions-all-Force Promo</con:name>
+          <con:value>${fetchResponse#result}</con:value>
+        </con:property>
+      </con:properties>
+    </con:config>
+  </con:testStep>
+  <con:properties>
+    <con:property>
+      <con:name>shipCode</con:name>
+      <con:value>EN</con:value>
+    </con:property>
+    <con:property>
+      <con:name>sailDate</con:name>
+      <con:value>20231113</con:value>
+    </con:property>
+    <con:property>
+      <con:name>packageCode</con:name>
+      <con:value>EN14T230</con:value>
+    </con:property>
+    <con:property>
+      <con:name>officeCode</con:name>
+      <con:value>LON</con:value>
+    </con:property>
+    <con:property>
+      <con:name>countryCode</con:name>
+      <con:value>GBR</con:value>
+    </con:property>
+    <con:property>
+      <con:name>currencyCode</con:name>
+      <con:value>GBP</con:value>
+    </con:property>
+    <con:property>
+      <con:name>guestAge</con:name>
+      <con:value>64</con:value>
+    </con:property>
+    <con:property>
+      <con:name>lifeStageCode</con:name>
+      <con:value>S</con:value>
+    </con:property>
+    <con:property>
+      <con:name>loyaltyId</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>loyaltyTierCode</con:name>
+      <con:value/>
+    </con:property>
+    <con:property>
+      <con:name>promoCode</con:name>
+      <con:value>[]</con:value>
+    </con:property>
+    <con:property>
+      <con:name>promoId</con:name>
+      <con:value>H3799188</con:value>
+    </con:property>
+  </con:properties>
+  <con:reportParameters/>
+</con:testCase>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testCase xmlns:con="http://eviware.com/soapui/config" id="b85715c7-8a7c-4e0e-ad96-284fab178336" discardOkResults="false" failOnError="false" failTestCaseOnErrors="true" keepSession="false" name="group-shell:byId|Headquarter - BR - SOME" searchProperties="true" timeout="0" disabled="true">
+  <con:settings id="1eb26baa-418a-446f-8484-32d4d9716179">
+    <con:setting id="b85715c7-8a7c-4e0e-ad96-284fab178336fileName">group-shell%3AbyId%7CHeadquarter---BR---SOME</con:setting>
+  </con:settings>
+  <con:testStep xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="groovy" name="loadTestData-groupShell" id="d5d13a17-416b-4f4d-9e78-99736f8370e1">
+    <con:settings/>
+    <con:config>
+      <script>//load/fetch test data from an external json file
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+//get OS and set directory based on OS
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsTestData/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsTestData/" //to insert directory for mac
+	}
+
+	
+def testData = context.expand( '${#Project#testData-groupShell}' )
+def filePath = directory + testData
+def restResponse = new JsonSlurper().parseText(new File(filePath).text)
+def prettyJson = new groovy.json.JsonBuilder(restResponse).toPrettyString()</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="groovy" name="setVariables" id="70ec715b-0dd6-4ed2-932c-20f22e1cea2b">
+    <con:settings/>
+    <con:config>
+      <script>//set variables from the fetched test data needed for the REST request
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+
+//get data from TestData-groupShell
+def groupId = context.expand( '${loadTestData-groupShell#result#$[\'groupShell\'][\'headquarter\'][\'BR\'][\'some\'][\'id\']}' )
+log.info(groupId);
+testRunner.testCase.setPropertyValue("groupId",groupId);</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="restrequest" name="group-shell:byId|Headquarter - BR - SOME-Before" id="2c7dc348-2a96-4200-8a0a-c368a03c1e96">
+    <con:settings/>
+    <con:config service="Group Shell" resourcePath="/v1/group-shell:byId" methodName="group-shell:byId" xsi:type="con:RestRequestStep">
+      <con:restRequest name="group-shell:byId|Headquarter - BR - SOME-Before" id="293b6478-7ed3-4bc8-b8d4-8052da84901e" mediaType="application/json" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+        </con:settings>
+        <con:request>{
+	"key": {
+		"groupId": "${#TestCase#groupId}"
+	}
+}</con:request>
+        <con:assertion type="Valid HTTP Status Codes" id="90b5fe22-9227-42f0-9b52-ccfb7ce16ec7" name="Valid HTTP Status Codes">
+          <con:settings/>
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:assertion type="GroovyScriptAssertion" id="ff3b580d-7c1a-4eb5-ae7f-91084c30e59a" name="Script Assertion">
+          <con:configuration>
+            <scriptText>def jsonRes = messageExchange.getResponse().contentAsString
+
+def jsonSlurper = new groovy.json.JsonSlurper();
+def parse = jsonSlurper.parseText(jsonRes)
+
+def groupShell = parse.groupShell
+log.info groupShell
+assert groupShell != null</scriptText>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:parameters/>
+        <con:environmentSpec>
+          <con:entry environmentId="9ba133c3-3cd7-45c8-8561-64ce1c92ea67">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="015736b2-7549-4743-94e6-d64278e45b46">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="e94bb75c-7f53-42a7-9f97-eb5aa3fcaf53">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b2abf588-b45c-4e44-9dd0-8b2249bbc4e7">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="5322014d-43c7-4904-af96-4329a0290c25">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="495bcf82-3dfa-4956-b162-f0b1bfb07f10">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="feba3ebd-aeec-4c25-8b24-4b9e406c22cb">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b3e5490d-8b80-49fe-97a2-a82077345345">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="a98aa22f-37cb-4a0e-84c6-f2de81903489">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+        </con:environmentSpec>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="groovy" name="fetchResponse" id="d754c886-8fa5-42fb-8e65-41001a5c92da">
+    <con:settings/>
+    <con:config>
+      <script>//fetch the REST response
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+
+def restResponse = context.expand( '${group-shell:byId|Headquarter - BR - SOME-Before#Response}' );
+def restResponse2 = new JsonSlurper().parseText(restResponse);
+def prettyJson = new groovy.json.JsonBuilder(restResponse2).toPrettyString();</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="groovy" name="setFolderDirectory" id="9bb3bd65-508f-4aff-baa8-6918012d950e">
+    <con:settings/>
+    <con:config>
+      <script>//set folder directory for storing the response
+
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+String jsonFileName = "group-shell-byId-Headquarter-BR-SOME.json"
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsResponseBeforeMigration/" + jsonFileName
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsResponseBeforeMigration/" + jsonFileName // to insert directory for mac
+	}</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="datasink" name="storeResponse" id="7b975fdb-b2be-405d-b682-fe2500ccc3d7">
+    <con:settings/>
+    <con:config xsi:type="con:DataSinkStep">
+      <con:dataSink type="File">
+        <con:configuration>
+          <fileName>${setFolderDirectory#result}</fileName>
+          <separator/>
+          <escape/>
+          <quote>false</quote>
+          <trim>true</trim>
+          <append>false</append>
+          <encoding>UTF-8</encoding>
+        </con:configuration>
+      </con:dataSink>
+      <con:properties>
+        <con:property>
+          <con:name>group-shell-byId-Headquarter-BR-SOME</con:name>
+          <con:value>${fetchResponse#result}</con:value>
+        </con:property>
+      </con:properties>
+    </con:config>
+  </con:testStep>
+  <con:properties/>
+  <con:reportParameters/>
+</con:testCase>

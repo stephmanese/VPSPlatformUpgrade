@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:con="http://eviware.com/soapui/config" name="componentBundle" path="/v1/componentBundle" id="bce830b9-c374-477d-9eff-fac50b52c69a">
+  <con:settings id="84c70379-dea4-4798-ba89-0c2bd13e7f5f">
+    <con:setting id="bce830b9-c374-477d-9eff-fac50b52c69afileName">componentBundle</con:setting>
+  </con:settings>
+  <con:parameters/>
+  <con:method name="componentBundle" id="b92f4836-fecc-4c5b-a414-98d0fddc238b" method="POST">
+    <con:settings/>
+    <con:parameters/>
+    <con:request name="componentBundle" id="8896cb57-ddc7-43a3-8ec7-bbe1115b5285" mediaType="application/json" postQueryString="false">
+      <con:settings>
+        <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;con:entry key="Content-Type" value="application/json" xmlns:con="http://eviware.com/soapui/config"/></con:setting>
+      </con:settings>
+      <con:request>{
+	"brandCode": "${#TestCase#brandCode}",
+	"officeCode": "{#TestCase#officeCode}",
+	"countryCode": "{#TestCase#countryCode}",
+	"bookingChannel": "",
+	"effectiveDateTime": ""
+}</con:request>
+      <con:credentials>
+        <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+        <con:authType>No Authorization</con:authType>
+      </con:credentials>
+      <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+      <con:parameters/>
+      <con:environmentSpec>
+        <con:entry environmentId="9ba133c3-3cd7-45c8-8561-64ce1c92ea67">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="015736b2-7549-4743-94e6-d64278e45b46">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="e94bb75c-7f53-42a7-9f97-eb5aa3fcaf53">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="b2abf588-b45c-4e44-9dd0-8b2249bbc4e7">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="5322014d-43c7-4904-af96-4329a0290c25">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="495bcf82-3dfa-4956-b162-f0b1bfb07f10">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="feba3ebd-aeec-4c25-8b24-4b9e406c22cb">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="b3e5490d-8b80-49fe-97a2-a82077345345">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="a98aa22f-37cb-4a0e-84c6-f2de81903489">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+      </con:environmentSpec>
+    </con:request>
+  </con:method>
+</con:resource>

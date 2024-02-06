@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testCase xmlns:con="http://eviware.com/soapui/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="eb3fdf74-5f84-42df-bf84-871c63902ca8" discardOkResults="false" failOnError="false" failTestCaseOnErrors="true" keepSession="false" name="groupBestPrices|Traditional HQ-ALL Scope" searchProperties="true" timeout="0" disabled="true">
+  <con:settings id="37b694d5-dd26-4a3d-88aa-185cf3ec11a9">
+    <con:setting id="eb3fdf74-5f84-42df-bf84-871c63902ca8fileName">groupBestPrices%7CTraditional-HQ-ALL-Scope</con:setting>
+  </con:settings>
+  <con:testStep type="groovy" name="loadTestData-groupShell" id="926e3a90-88db-4904-a169-a2486f65829a">
+    <con:settings/>
+    <con:config>
+      <script>//load/fetch test data from an external json file
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+//get OS and set directory based on OS
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsTestData/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsTestData/" //to insert directory for mac
+	}
+
+	
+def testData = context.expand( '${#Project#testData-groupShell}' )
+def filePath = directory + testData
+def restResponse = new JsonSlurper().parseText(new File(filePath).text)
+def prettyJson = new groovy.json.JsonBuilder(restResponse).toPrettyString()</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="loadTestData-guestPreferences" id="2f700ef8-6c6c-48b7-a6fe-f3b8f1b5f825">
+    <con:settings/>
+    <con:config>
+      <script>//load/fetch test data from an external json file
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+//get OS and set directory based on OS
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsTestData/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsTestData/" //to insert directory for mac
+	}
+
+	
+def testData = context.expand( '${#Project#testData-guestPreferences}' )
+def filePath = directory + testData
+def restResponse = new JsonSlurper().parseText(new File(filePath).text)
+def prettyJson = new groovy.json.JsonBuilder(restResponse).toPrettyString()</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="setVariables" id="b42c8644-23a4-468d-be6f-637fb2674eb1">
+    <con:settings/>
+    <con:config>
+      <script>//set variables from the fetched test data needed for the REST request
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+
+//get data from TestData-groupShell
+def agencyId = context.expand( '${loadTestData-groupShell#result#$[\'groupShell\'][\'traditional\'][\'HQ\'][\'all\'][\'ownerAgencyId\']}' )
+log.info(agencyId);
+testRunner.testCase.setPropertyValue("agencyId",agencyId);
+
+
+def occupancy = context.expand( '${loadTestData-groupShell#result#$[\'groupShell\'][\'traditional\'][\'HQ\'][\'all\'][\'occupancy\']}' )
+log.info(occupancy);
+testRunner.testCase.setPropertyValue("occupancy",occupancy);
+
+def shipCode = context.expand( '${loadTestData-groupShell#result#$[\'groupShell\'][\'traditional\'][\'HQ\'][\'all\'][\'ship\']}' )
+log.info(shipCode);
+testRunner.testCase.setPropertyValue("shipCode",shipCode);
+
+def sailDate = context.expand( '${loadTestData-groupShell#result#$[\'groupShell\'][\'traditional\'][\'HQ\'][\'all\'][\'sailDate\']}' )
+log.info(sailDate);
+testRunner.testCase.setPropertyValue("sailDate",sailDate);
+
+def packageCode = context.expand( '${loadTestData-groupShell#result#$[\'groupShell\'][\'traditional\'][\'HQ\'][\'all\'][\'packageCode\']}' )
+log.info(packageCode);
+testRunner.testCase.setPropertyValue("packageCode",packageCode);
+
+
+def officeCode = context.expand( '${loadTestData-groupShell#result#$[\'groupShell\'][\'traditional\'][\'HQ\'][\'all\'][\'officeCode\']}' )
+log.info(officeCode);
+testRunner.testCase.setPropertyValue("officeCode",officeCode);
+
+def countryCode = context.expand( '${loadTestData-groupShell#result#$[\'groupShell\'][\'traditional\'][\'HQ\'][\'all\'][\'countryCode\']}' )
+log.info(countryCode);
+testRunner.testCase.setPropertyValue("countryCode",countryCode);
+
+def currencyCode = context.expand( '${loadTestData-groupShell#result#$[\'groupShell\'][\'traditional\'][\'HQ\'][\'all\'][\'currencyCode\']}' )
+log.info(currencyCode);
+testRunner.testCase.setPropertyValue("currencyCode",currencyCode);
+
+
+//get data from TestData-guestPreference
+
+def lifeStageCode = context.expand( '${loadTestData-guestPreferences#result#$[\'guestPreferences\'][0][\'lifeStageCode\']}' )
+log.info(lifeStageCode);
+testRunner.testCase.setPropertyValue("lifeStageCode",lifeStageCode);
+
+def guestAge = context.expand( '${loadTestData-guestPreferences#result#$[\'guestPreferences\'][0][\'age\']}' )
+log.info(guestAge);
+testRunner.testCase.setPropertyValue("guestAge",guestAge);</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="restrequest" name="groupBestPricesBefore" id="ac99631b-f7d8-46e6-bdcc-2e57f0d78f0a">
+    <con:settings/>
+    <con:config service="Pricing" resourcePath="/v1/group-best-prices" methodName="group-best-prices" xsi:type="con:RestRequestStep">
+      <con:restRequest name="groupBestPricesBefore" id="0caec742-2174-409e-a2c6-687fdef2b214" mediaType="application/json" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+        </con:settings>
+        <con:request>{
+	"agencyId": "${#TestCase#agencyId}",
+	"commonParameters": {
+		"bookingChannel": "PI",
+		"bookingType": "G",
+		"occupancy": "${#TestCase#occupancy}",
+		"shipCode": "${#TestCase#shipCode}",
+		"sailDate": "${#TestCase#sailDate}",
+		"packageCode": "${#TestCase#packageCode}",
+		"officeCode": "${#TestCase#officeCode}",
+		"countryCode": "${#TestCase#countryCode}",
+		"currencyCode": "${#TestCase#currencyCode}"
+	},
+	"guestInformation": [
+		{
+			"lifeStageCode": "${#TestCase#lifeStageCode}",
+			"guestAge": "${#TestCase#guestAge}"
+		},
+		{
+			"lifeStageCode": "${#TestCase#lifeStageCode}",
+			"guestAge": "${#TestCase#guestAge}"
+		}
+	],
+	"includePromotions": true,
+	"showGuestDetail": true,
+	"includeSoldOut": false
+}</con:request>
+        <con:originalUri>http://vps-stg-a.rccl.com/vps-sierra/pricing/v1/group-best-prices</con:originalUri>
+        <con:assertion type="Valid HTTP Status Codes" id="76f2fb65-21b0-4a9f-adb7-b871a2a71cd1" name="Valid HTTP Status Codes">
+          <con:settings/>
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:assertion type="GroovyScriptAssertion" id="ddacba21-a0bc-4c2f-9a8d-7ddce590a6d9" name="Script Assertion">
+          <con:configuration>
+            <scriptText>def jsonRes = messageExchange.getResponse().contentAsString
+
+def jsonSlurper = new groovy.json.JsonSlurper();
+def parse = jsonSlurper.parseText(jsonRes)
+
+def groupBestPrices = parse.groupBestPrices
+log.info groupBestPrices
+assert groupBestPrices!= null</scriptText>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:parameters/>
+        <con:environmentSpec>
+          <con:entry environmentId="9ba133c3-3cd7-45c8-8561-64ce1c92ea67">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="015736b2-7549-4743-94e6-d64278e45b46">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="e94bb75c-7f53-42a7-9f97-eb5aa3fcaf53">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b2abf588-b45c-4e44-9dd0-8b2249bbc4e7">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="5322014d-43c7-4904-af96-4329a0290c25">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="495bcf82-3dfa-4956-b162-f0b1bfb07f10">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="feba3ebd-aeec-4c25-8b24-4b9e406c22cb">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b3e5490d-8b80-49fe-97a2-a82077345345">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="a98aa22f-37cb-4a0e-84c6-f2de81903489">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+        </con:environmentSpec>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="fetchResponse" id="4dc91432-883c-4f58-b6e1-eb168f2ba940">
+    <con:settings/>
+    <con:config>
+      <script>//fetch the REST response
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+
+def restResponse = context.expand( '${groupBestPricesBefore#Response}' );
+def restResponse2 = new JsonSlurper().parseText(restResponse);
+def prettyJson = new groovy.json.JsonBuilder(restResponse2).toPrettyString();</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="setFolderDirectory" id="cd5b31ea-87e5-4323-b748-af28c44bca39">
+    <con:settings/>
+    <con:config>
+      <script>//set folder directory for storing the response
+
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+String jsonFileName = "groupBestPrices-Traditional HQ-ALL Scope.json"
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsResponseBeforeMigration/" + jsonFileName
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsResponseBeforeMigration/" + jsonFileName // to insert directory for mac
+	}</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="datasink" name="storeResponse" id="117f9a35-3c40-4465-8e67-4618b0fe30a0">
+    <con:settings/>
+    <con:config xsi:type="con:DataSinkStep">
+      <con:dataSink type="File">
+        <con:configuration>
+          <fileName>${setFolderDirectory#result}</fileName>
+          <separator/>
+          <escape/>
+          <quote>false</quote>
+          <trim>true</trim>
+          <append>false</append>
+          <encoding>UTF-8</encoding>
+        </con:configuration>
+      </con:dataSink>
+      <con:properties>
+        <con:property>
+          <con:name>groupBestPrices-Traditional HQ-ALL Scope</con:name>
+          <con:value>${fetchResponse#result}</con:value>
+        </con:property>
+      </con:properties>
+    </con:config>
+  </con:testStep>
+  <con:properties>
+    <con:property>
+      <con:name>agencyId</con:name>
+      <con:value>14006</con:value>
+    </con:property>
+    <con:property>
+      <con:name>occupancy</con:name>
+      <con:value>2</con:value>
+    </con:property>
+    <con:property>
+      <con:name>shipCode</con:name>
+      <con:value>FR</con:value>
+    </con:property>
+    <con:property>
+      <con:name>sailDate</con:name>
+      <con:value>20240708</con:value>
+    </con:property>
+    <con:property>
+      <con:name>packageCode</con:name>
+      <con:value>FR4BH187</con:value>
+    </con:property>
+    <con:property>
+      <con:name>officeCode</con:name>
+      <con:value>MIA</con:value>
+    </con:property>
+    <con:property>
+      <con:name>countryCode</con:name>
+      <con:value>USA</con:value>
+    </con:property>
+    <con:property>
+      <con:name>currencyCode</con:name>
+      <con:value>USD</con:value>
+    </con:property>
+    <con:property>
+      <con:name>lifeStageCode</con:name>
+      <con:value>A</con:value>
+    </con:property>
+    <con:property>
+      <con:name>guestAge</con:name>
+      <con:value>45</con:value>
+    </con:property>
+  </con:properties>
+  <con:reportParameters/>
+</con:testCase>

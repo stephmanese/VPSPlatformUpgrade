@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testCase xmlns:con="http://eviware.com/soapui/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="ee5b4917-4fc5-4ff0-a4be-c42726ef0414" discardOkResults="false" failOnError="false" failTestCaseOnErrors="true" keepSession="false" name="promo-codes:by-loyalty-email|Invalid loyalty ID, email &amp; promo ID" searchProperties="true" timeout="0" disabled="true">
+  <con:settings id="f492e247-00e7-4b49-b047-8cb2cc13fa54">
+    <con:setting id="ee5b4917-4fc5-4ff0-a4be-c42726ef0414fileName">promo-codes%3Aby-loyalty-email%7CInvalid-loyalty-ID%2C-email-%26-promo-ID</con:setting>
+  </con:settings>
+  <con:testStep type="restrequest" name="promo-codes:by-loyalty-emailBefore" id="b8365622-118b-4b4e-a8d8-14bc00946c9c">
+    <con:settings/>
+    <con:config service="promo-code(Ingress)(Used by BRMS)" resourcePath="/v1/promo-codes:by-loyalty-email" methodName="promo-codes:by-loyalty-email" xsi:type="con:RestRequestStep">
+      <con:restRequest name="promo-codes:by-loyalty-emailBefore" id="d03946c4-8773-40ad-94e8-745184ab7221" mediaType="application/json" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+        </con:settings>
+        <con:request>{
+	"loyaltyIds": [
+		"360416000"
+	],
+	"emailAddresses": [
+		"047ED62E89A33FB83C3DB94FFAB26F2ACHJM09E16B4362A6684E0B1C5644460C"
+	],
+	"filters": {
+		"promotionIds": [
+			"XX2338"
+		]}
+}</con:request>
+        <con:originalUri>http://vps-stg-a.rccl.com/vps-sierra/promo-code/v1/promo-codes:by-loyalty-email</con:originalUri>
+        <con:assertion type="Valid HTTP Status Codes" id="daa10987-2fff-4a13-9877-427114f2d37b" name="Valid HTTP Status Codes">
+          <con:settings/>
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:assertion type="Simple Contains" id="63605712-b533-4e76-88aa-0e37ffac0993" name="Contains errorMessage">
+          <con:configuration>
+            <token>resourceType: PROMO_CODE, message: No promo codes meeting search criteria found in datastore</token>
+            <ignoreCase>false</ignoreCase>
+            <useRegEx>false</useRegEx>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:parameters/>
+        <con:environmentSpec>
+          <con:entry environmentId="9ba133c3-3cd7-45c8-8561-64ce1c92ea67">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="015736b2-7549-4743-94e6-d64278e45b46">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="e94bb75c-7f53-42a7-9f97-eb5aa3fcaf53">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b2abf588-b45c-4e44-9dd0-8b2249bbc4e7">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="5322014d-43c7-4904-af96-4329a0290c25">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="495bcf82-3dfa-4956-b162-f0b1bfb07f10">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="feba3ebd-aeec-4c25-8b24-4b9e406c22cb">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b3e5490d-8b80-49fe-97a2-a82077345345">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="a98aa22f-37cb-4a0e-84c6-f2de81903489">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+        </con:environmentSpec>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="fetchResponse" id="1ee9bfcf-3f39-4b73-9319-08e70da81711">
+    <con:settings/>
+    <con:config>
+      <script>//fetch the REST response
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+
+def restResponse = context.expand( '${promo-codes:by-loyalty-emailBefore#Response}' );
+def restResponse2 = new JsonSlurper().parseText(restResponse);
+def prettyJson = new groovy.json.JsonBuilder(restResponse2).toPrettyString();</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="setFolderDirectory" id="28f7ad8d-68e1-4ba5-8dd7-858a64202ab1">
+    <con:settings/>
+    <con:config>
+      <script>//set folder directory for storing the response
+
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+String jsonFileName = "promo-codes-by-loyalty-email-Invalid loyalty ID,emailandpromoID.json"
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsResponseBeforeMigration/" + jsonFileName
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsResponseBeforeMigration/" + jsonFileName // to insert directory for mac
+	}</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="datasink" name="storeResponse" id="fed545c0-e8ed-46f7-8760-1333930742c9">
+    <con:settings/>
+    <con:config xsi:type="con:DataSinkStep">
+      <con:dataSink type="File">
+        <con:configuration>
+          <fileName>${setFolderDirectory#result}</fileName>
+          <separator/>
+          <escape/>
+          <quote>false</quote>
+          <trim>true</trim>
+          <append>false</append>
+          <encoding>UTF-8</encoding>
+        </con:configuration>
+      </con:dataSink>
+      <con:properties>
+        <con:property>
+          <con:name>promo-codes-by-loyalty-email-Invalid loyalty ID,emailandpromoID</con:name>
+          <con:value>${fetchResponse#result}</con:value>
+        </con:property>
+      </con:properties>
+    </con:config>
+  </con:testStep>
+  <con:properties/>
+  <con:reportParameters/>
+</con:testCase>

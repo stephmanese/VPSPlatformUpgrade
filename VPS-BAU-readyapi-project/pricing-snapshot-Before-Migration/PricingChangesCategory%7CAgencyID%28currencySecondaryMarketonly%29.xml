@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testCase xmlns:con="http://eviware.com/soapui/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="364a3d56-8ba5-4223-841b-c3da5cb4682c" discardOkResults="false" failOnError="false" failTestCaseOnErrors="true" keepSession="false" name="PricingChangesCategory|AgencyID(currencySecondaryMarketonly)" searchProperties="true" timeout="0" disabled="true">
+  <con:settings id="42efa3cf-d551-4d29-af25-36209f27b625">
+    <con:setting id="364a3d56-8ba5-4223-841b-c3da5cb4682cfileName">PricingChangesCategory%7CAgencyID%28currencySecondaryMarketonly%29</con:setting>
+  </con:settings>
+  <con:testStep type="groovy" name="loadTestData-agency" id="8163a261-abb5-4491-9e44-c74191b7d0ed">
+    <con:settings/>
+    <con:config>
+      <script>//load/fetch test data from an external json file
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+//get OS and set directory based on OS
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsTestData/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsTestData/" //to insert directory for mac
+	}
+
+	
+def testData = context.expand( '${#Project#testData-agency}' )
+def filePath = directory + testData
+def restResponse = new JsonSlurper().parseText(new File(filePath).text)
+def prettyJson = new groovy.json.JsonBuilder(restResponse).toPrettyString()</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="setVariables" id="b9c7c80c-422a-4385-8d65-36469e650aa0">
+    <con:settings/>
+    <con:config>
+      <script>//set variables from the fetched test data needed for the REST request
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+import java.time.LocalDateTime
+
+def agencyId = context.expand( '${loadTestData-agency#result#$[\'agency\'][\'secondaryMarketAgency\'][\'clientId\']}' )
+log.info(agencyId);
+testRunner.testCase.setPropertyValue("agencyId",agencyId);
+
+
+//to Get the date and convert to TimeZone
+Date dateTimeNow  = LocalDateTime.now().minusHours(47).toDate()
+log.info(dateTimeNow)
+
+def fromDateTime = dateTimeNow.format("yyyy-MM-dd'T'HH:mm:ss", TimeZone.getTimeZone('UTC'))
+log.info(fromDateTime)
+testRunner.testCase.setPropertyValue("fromDateTime",fromDateTime);</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="restrequest" name="priceChanges-categoryBefore" id="6bbcb33d-2100-4eb6-b680-5730dd6fbb8c">
+    <con:settings/>
+    <con:config service="Pricing-Snapshot" resourcePath="/v1/price-changes:category" methodName="price-changes:category" xsi:type="con:RestRequestStep">
+      <con:restRequest name="priceChanges-categoryBefore" id="4ef57705-a16a-4f09-8bee-648b19ffadf0" mediaType="application/json" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+        </con:settings>
+        <con:request>{
+	"client": {
+		"agencyId": "${#TestCase#agencyId}"
+	},
+    "fromDateTime": "${#TestCase#fromDateTime}"
+}</con:request>
+        <con:originalUri>http://vps.rccl.com/vps-echo/pricing-snapshot/v1/price-changes:category</con:originalUri>
+        <con:assertion type="Valid HTTP Status Codes" id="afe464d1-b858-4345-9136-474ee2505b6c" name="Valid HTTP Status Codes">
+          <con:settings/>
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:assertion type="GroovyScriptAssertion" id="94d54893-cf90-4ea4-9f85-ba0f231ad39a" name="Script Assertion">
+          <con:configuration>
+            <scriptText>def jsonRes = messageExchange.getResponse().contentAsString
+
+def jsonSlurper = new groovy.json.JsonSlurper();
+def parse = jsonSlurper.parseText(jsonRes)
+
+def keys = parse.keys[0]
+assert keys!=null</scriptText>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:parameters/>
+        <con:environmentSpec>
+          <con:entry environmentId="9ba133c3-3cd7-45c8-8561-64ce1c92ea67">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="015736b2-7549-4743-94e6-d64278e45b46">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="e94bb75c-7f53-42a7-9f97-eb5aa3fcaf53">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b2abf588-b45c-4e44-9dd0-8b2249bbc4e7">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="5322014d-43c7-4904-af96-4329a0290c25">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="495bcf82-3dfa-4956-b162-f0b1bfb07f10">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="feba3ebd-aeec-4c25-8b24-4b9e406c22cb">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b3e5490d-8b80-49fe-97a2-a82077345345">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="a98aa22f-37cb-4a0e-84c6-f2de81903489">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+        </con:environmentSpec>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="fetchResponse" id="54b0f957-807f-4e13-a4cc-ff962de339e2">
+    <con:settings/>
+    <con:config>
+      <script>//fetch the REST response
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+
+def restResponse = context.expand( '${priceChanges-categoryBefore#Response}' );
+def restResponse2 = new JsonSlurper().parseText(restResponse);
+def prettyJson = new groovy.json.JsonBuilder(restResponse2).toPrettyString();</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="setFolderDirectory" id="2edcdfb3-fde3-4578-95e6-a2fc06c999d7">
+    <con:settings/>
+    <con:config>
+      <script>//set folder directory for storing the response
+
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+String jsonFileName = "PricingChangesCategory-AgencyID-currency SecondaryMarket only.json"
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsResponseBeforeMigration/" + jsonFileName
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsResponseBeforeMigration/" + jsonFileName // to insert directory for mac
+	}</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="datasink" name="storeResponse" id="cb80de4f-4613-455c-82b6-8b3e5000319b">
+    <con:settings/>
+    <con:config xsi:type="con:DataSinkStep">
+      <con:dataSink type="File">
+        <con:configuration>
+          <fileName>${setFolderDirectory#result}</fileName>
+          <separator/>
+          <escape/>
+          <quote>false</quote>
+          <trim>true</trim>
+          <append>false</append>
+          <encoding>UTF-8</encoding>
+        </con:configuration>
+      </con:dataSink>
+      <con:properties>
+        <con:property>
+          <con:name>PricingChangesCategory-AgencyID-currency SecondaryMarket only</con:name>
+          <con:value>${fetchResponse#result}</con:value>
+        </con:property>
+      </con:properties>
+    </con:config>
+  </con:testStep>
+  <con:properties>
+    <con:property>
+      <con:name>agencyId</con:name>
+      <con:value>338408</con:value>
+    </con:property>
+    <con:property>
+      <con:name>fromDateTime</con:name>
+      <con:value>2024-01-13T05:56:49</con:value>
+    </con:property>
+  </con:properties>
+  <con:reportParameters/>
+</con:testCase>

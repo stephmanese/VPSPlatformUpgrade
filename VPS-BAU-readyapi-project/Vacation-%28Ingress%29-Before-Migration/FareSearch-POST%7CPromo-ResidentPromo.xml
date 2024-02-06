@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testCase xmlns:con="http://eviware.com/soapui/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="e1a2523c-d14d-434c-8a5b-ad2d19777e36" discardOkResults="false" failOnError="false" failTestCaseOnErrors="true" keepSession="false" name="FareSearch-POST|Promo-ResidentPromo" searchProperties="true" timeout="0" disabled="true">
+  <con:settings id="f236d5a1-5f5a-478b-b3ca-26ef83363147">
+    <con:setting id="e1a2523c-d14d-434c-8a5b-ad2d19777e36fileName">FareSearch-POST%7CPromo-ResidentPromo</con:setting>
+  </con:settings>
+  <con:testStep type="groovy" name="loadTestData-royal" id="3e5a78a3-1374-4a75-bd56-85dad4d0fb19">
+    <con:settings/>
+    <con:config>
+      <script>//load/fetch test data from an external json file
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+//get OS and set directory based on OS
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsTestData/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsTestData/" //to insert directory for mac
+	}
+
+	
+def testData = context.expand( '${#Project#testData-royal}' )
+def filePath = directory + testData
+def restResponse = new JsonSlurper().parseText(new File(filePath).text)
+def prettyJson = new groovy.json.JsonBuilder(restResponse).toPrettyString()</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="loadTestData-promoSpecifScenario" id="0190fb40-6bbd-4ea0-8a2b-6d60b8f1a14b">
+    <con:settings/>
+    <con:config>
+      <script>//load/fetch test data from an external json file
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+//get OS and set directory based on OS
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsTestData/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsTestData/" //to insert directory for mac
+	}
+
+	
+def testData = context.expand( '${#Project#testData-promoSpecifScenario}' )
+def filePath = directory + testData
+def restResponse = new JsonSlurper().parseText(new File(filePath).text)
+def prettyJson = new groovy.json.JsonBuilder(restResponse).toPrettyString()</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="loadTestData-market" id="82b6d9d0-05c8-4d4e-aae5-f1065a9270c2">
+    <con:settings/>
+    <con:config>
+      <script>//load/fetch test data from an external json file
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+//get OS and set directory based on OS
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsTestData/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsTestData/" //to insert directory for mac
+	}
+
+	
+def testData = context.expand( '${#Project#testData-market}' )
+def filePath = directory + testData
+def restResponse = new JsonSlurper().parseText(new File(filePath).text)
+def prettyJson = new groovy.json.JsonBuilder(restResponse).toPrettyString()</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="setVariables" id="8c0440db-57f8-4db8-aa45-cadf3204942e">
+    <con:settings/>
+    <con:config>
+      <script>//set variables from the fetched test data needed for the REST request
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+
+//get data from TestData-royal
+def brand = context.expand( '${loadTestData-royal#result#$[\'royal\'][\'brandCode\']}' )
+log.info(brand);
+testRunner.testCase.setPropertyValue("brand",brand);
+
+//get data from TestData-promoSpecifScenario
+def ship = context.expand( '${loadTestData-promoSpecifScenario#result#$[\'promoSpecifScenario\'][\'nonTO\'][\'resident\'][\'shipCode\']}' )
+log.info(ship);
+testRunner.testCase.setPropertyValue("ship",ship);
+
+def packageId = context.expand( '${loadTestData-promoSpecifScenario#result#$[\'promoSpecifScenario\'][\'nonTO\'][\'resident\'][\'packageCode\']}' )
+log.info(packageId);
+testRunner.testCase.setPropertyValue("packageId",packageId);
+
+def sailDate_ISO = context.expand( '${loadTestData-promoSpecifScenario#result#$[\'promoSpecifScenario\'][\'nonTO\'][\'resident\'][\'sailDate-ISO\']}' )
+log.info(sailDate_ISO);
+testRunner.testCase.setPropertyValue("sailDate_ISO",sailDate_ISO);
+
+def residenceStateProvinceCode = context.expand( '${loadTestData-promoSpecifScenario#result#$[\'promoSpecifScenario\'][\'nonTO\'][\'resident\'][\'guestPreferences\'][0][\'residenceStateProvinceCode\']}' )
+log.info(residenceStateProvinceCode);
+testRunner.testCase.setPropertyValue("residenceStateProvinceCode",residenceStateProvinceCode);
+
+def loyaltyTierCode = context.expand( '${loadTestData-promoSpecifScenario#result#$[\'promoSpecifScenario\'][\'nonTO\'][\'resident\'][\'guestPreferences\'][0][\'loyaltyTierCode\']}' )
+log.info(loyaltyTierCode);
+testRunner.testCase.setPropertyValue("loyaltyTierCode",loyaltyTierCode);
+
+def loyaltyId = context.expand( '${loadTestData-promoSpecifScenario#result#$[\'promoSpecifScenario\'][\'nonTO\'][\'resident\'][\'guestPreferences\'][0][\'loyaltyId\']}' )
+log.info(loyaltyId);
+testRunner.testCase.setPropertyValue("loyaltyId",loyaltyId);
+
+//get data from TestData-market
+def office = context.expand( '${loadTestData-market#result#$[\'market\'][\'USA\'][\'officeCode\']}' )
+log.info(office);
+testRunner.testCase.setPropertyValue("office",office);
+
+def country = context.expand( '${loadTestData-market#result#$[\'market\'][\'USA\'][\'countryCode\']}' )
+log.info(country);
+testRunner.testCase.setPropertyValue("country",country);
+
+def currency = context.expand( '${loadTestData-market#result#$[\'market\'][\'USA\'][\'currencyCode\']}' )
+log.info(currency);
+testRunner.testCase.setPropertyValue("currency",currency);</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="restrequest" name="FareSearch-POST|Promo-ResidentPromo-Before" id="fcf14a2f-01b9-4fe4-ba76-bf7bf37b2f84">
+    <con:settings/>
+    <con:config service="Vacation(Ingress)" resourcePath="/v1/fare-search" methodName="fare-search" xsi:type="con:RestRequestStep">
+      <con:restRequest name="FareSearch-POST|Promo-ResidentPromo-Before" id="dfa731a1-71b9-4f12-893a-9c2f88fd830c" mediaType="application/json" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+        </con:settings>
+        <con:request>{
+	"header": {
+		"application": "royalcaribbean.com",
+		"language": "US"
+	},
+	"criteria": {
+		"office": "${#TestCase#office}",
+		"country": "${#TestCase#country}",
+		"currency": "${#TestCase#currency}",
+		"channel": "VP",
+		"bookingType": "FIT",
+		"cruiseType": {
+			"value": [
+				"CO"
+			]
+		},
+		"brand": {
+			"value": [
+				"${#TestCase#brand}"
+			]
+		},
+		"ship": {
+			"value": [
+				"${#TestCase#ship}"
+			]
+		},
+		"packageId": {
+			"value": [
+				"${#TestCase#packageId}"
+			]
+		},
+		"sailingDate": {
+			"date": [
+				"${#TestCase#sailDate_ISO}"
+			]
+		},
+		"occupancy": {
+			"adult": 2,
+			"child": 0,
+			"infant": 0
+		},
+		"accessibleCabins": false
+	},
+	"qualifiers": {
+		"residentType": [
+			{
+				"state": [
+					"${#TestCase#residenceStateProvinceCode}"
+				]
+			}
+		],
+		"loyaltyType": [
+			{
+				"loyaltyTier": [
+					{
+						"name": "${#TestCase#loyaltyTierCode}",
+						"value": "${#TestCase#brand}"
+					}
+				],
+				"loyaltyId": "${#TestCase#loyaltyId}"
+			}
+		]
+	},
+	"resultsPreference": {
+		"groupBy": "PACKAGE",
+		"strictSearch": true,
+		"includeOnlyIfPriceAvailable": true,
+		"pagination": {
+			"count": 10,
+			"offset": 0
+		}
+	}
+}</con:request>
+        <con:assertion type="Valid HTTP Status Codes" id="c0e4c2a8-632b-48b5-abfc-91bdda1365b5" name="Valid HTTP Status Codes">
+          <con:settings/>
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:assertion type="GroovyScriptAssertion" id="129dfcba-a06c-41c2-addc-b53f0b093dcb" name="Script Assertion">
+          <con:configuration>
+            <scriptText>//fetching request data
+def request_packageId = context.expand( '${#TestCase#packageId}' )
+log.info(request_packageId)
+
+def request_sailDate = context.expand( '${#TestCase#sailDate_ISO}' )
+log.info(request_sailDate)
+
+//fetching response
+def jsonRes = messageExchange.getResponse().contentAsString
+
+def jsonSlurper = new groovy.json.JsonSlurper();
+def parse = jsonSlurper.parseText(jsonRes)
+
+def response_packageId = parse.resultsByPackage.packageSummaryWithClassLevelPricing[0].packageReference.code
+log.info(response_packageId)
+
+def response_sailDate = parse.resultsByPackage.packageSummaryWithClassLevelPricing[0].cabinClassPriceBySailing[0].sailingRef.saildate
+log.info(response_sailDate)
+
+
+def packageSummaryWithClassLevelPricing = parse.resultsByPackage.packageSummaryWithClassLevelPricing[0]
+log.info(packageSummaryWithClassLevelPricing)
+
+//assertion
+assert request_packageId == response_packageId
+assert request_sailDate == response_sailDate
+assert packageSummaryWithClassLevelPricing != null</scriptText>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:parameters/>
+        <con:environmentSpec>
+          <con:entry environmentId="9ba133c3-3cd7-45c8-8561-64ce1c92ea67">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="015736b2-7549-4743-94e6-d64278e45b46">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="e94bb75c-7f53-42a7-9f97-eb5aa3fcaf53">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b2abf588-b45c-4e44-9dd0-8b2249bbc4e7">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="5322014d-43c7-4904-af96-4329a0290c25">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="495bcf82-3dfa-4956-b162-f0b1bfb07f10">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="feba3ebd-aeec-4c25-8b24-4b9e406c22cb">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b3e5490d-8b80-49fe-97a2-a82077345345">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="a98aa22f-37cb-4a0e-84c6-f2de81903489">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+        </con:environmentSpec>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="fetchResponse" id="34003ed3-b8f2-4bdd-b22d-ec683ed4d960">
+    <con:settings/>
+    <con:config>
+      <script>//fetch the REST response
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+
+def restResponse = context.expand( '${FareSearch-POST|Promo-ResidentPromo-Before#Response}' );
+def restResponse2 = new JsonSlurper().parseText(restResponse);
+def prettyJson = new groovy.json.JsonBuilder(restResponse2).toPrettyString();</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="setFolderDirectory" id="850df01d-45d0-4636-b57b-598571d7d5c2">
+    <con:settings/>
+    <con:config>
+      <script>//set folder directory for storing the response
+
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+String jsonFileName = "FareSearch-POST-Promo-ResidentPromo.json"
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsResponseBeforeMigration/" + jsonFileName
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsResponseBeforeMigration/" + jsonFileName // to insert directory for mac
+	}</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="datasink" name="storeResponse" id="c90085ac-1fda-46e5-9025-294e0a4378c9">
+    <con:settings/>
+    <con:config xsi:type="con:DataSinkStep">
+      <con:dataSink type="File">
+        <con:configuration>
+          <fileName>${setFolderDirectory#result}</fileName>
+          <separator/>
+          <escape/>
+          <quote>false</quote>
+          <trim>true</trim>
+          <append>false</append>
+          <encoding>UTF-8</encoding>
+        </con:configuration>
+      </con:dataSink>
+      <con:properties>
+        <con:property>
+          <con:name>FareSearch-POST-Promo-ResidentPromo</con:name>
+          <con:value>${fetchResponse#result}</con:value>
+        </con:property>
+      </con:properties>
+    </con:config>
+  </con:testStep>
+  <con:properties/>
+  <con:reportParameters/>
+</con:testCase>

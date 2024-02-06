@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testCase xmlns:con="http://eviware.com/soapui/config" id="4eeabfb6-d878-46fd-8268-1c4a30ff72f6" discardOkResults="false" failOnError="false" failTestCaseOnErrors="true" keepSession="false" name="categoryBestPrices|TO-Unrestricted" searchProperties="true" timeout="0" disabled="true">
+  <con:settings id="6bcba822-d056-4f87-bd55-c6f51793df8e">
+    <con:setting id="4eeabfb6-d878-46fd-8268-1c4a30ff72f6fileName">categoryBestPrices%7CTO-Unrestricted</con:setting>
+  </con:settings>
+  <con:testStep xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="groovy" name="loadTestData-promoSpecifScenario" id="cbf841a2-ea32-4b49-b4f0-0a96b8dc1ac6">
+    <con:settings/>
+    <con:config>
+      <script>//load/fetch test data from local source
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+//get user's device OS and set directory
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsTestData/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsTestData/" //directory for mac
+	}
+
+	
+def testData = context.expand( '${#Project#testData-promoSpecifScenario}' ) //modify this based on test case
+def filePath = directory + testData
+def restResponse = new JsonSlurper().parseText(new File(filePath).text)
+def prettyJson = new groovy.json.JsonBuilder(restResponse).toPrettyString()</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="groovy" name="loadTestData-market" id="dd1497aa-eafd-40be-9595-516058a23913">
+    <con:settings/>
+    <con:config>
+      <script>//load/fetch test data from an external json file
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+//get OS and set directory based on OS
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsTestData/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsTestData/" //to insert directory for mac
+	}
+
+	
+def testData = context.expand( '${#Project#testData-market}' )
+def filePath = directory + testData
+def restResponse = new JsonSlurper().parseText(new File(filePath).text)
+def prettyJson = new groovy.json.JsonBuilder(restResponse).toPrettyString()</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="groovy" name="setVariables" id="7bf20c47-a20c-4f75-b45f-d4712caa7fa6">
+    <con:settings/>
+    <con:config>
+      <script>//set variables from the fetched test data needed for the REST request
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+
+//get data from TestDate-market
+def countryCode = context.expand( '${loadTestData-market#result#$[\'market\'][\'USA\'][\'countryCode\']}' )
+log.info(countryCode);
+testRunner.testCase.setPropertyValue("countryCode",countryCode);
+
+def officeCode = context.expand( '${loadTestData-market#result#$[\'market\'][\'USA\'][\'officeCode\']}' )
+log.info(officeCode);
+testRunner.testCase.setPropertyValue("officeCode",officeCode);
+
+def currencyCode = context.expand( '${loadTestData-market#result#$[\'market\'][\'USA\'][\'currencyCode\']}' )
+log.info(currencyCode);
+testRunner.testCase.setPropertyValue("currencyCode",currencyCode);
+
+//get data from TestDate-promoSpecificScenario
+def shipCode = context.expand( '${loadTestData-promoSpecifScenario#result#$[\'promoSpecifScenario\'][\'TO\'][\'TOUnrestricted\'][\'shipCode\']}' )
+log.info(shipCode);
+testRunner.testCase.setPropertyValue("shipCode",shipCode);
+
+def sailDate = context.expand( '${loadTestData-promoSpecifScenario#result#$[\'promoSpecifScenario\'][\'TO\'][\'TOUnrestricted\'][\'sailDate\']}' )
+log.info(sailDate);
+testRunner.testCase.setPropertyValue("sailDate",sailDate);
+
+def packageCode = context.expand( '${loadTestData-promoSpecifScenario#result#$[\'promoSpecifScenario\'][\'TO\'][\'TOUnrestricted\'][\'packageCode\']}' )
+log.info(packageCode);
+testRunner.testCase.setPropertyValue("packageCode",packageCode);
+
+def promoCode = context.expand( '${loadTestData-promoSpecifScenario#result#$[\'promoSpecifScenario\'][\'TO\'][\'TOUnrestricted\'][\'promoCodes\'][0]}' )
+log.info(promoCode);
+testRunner.testCase.setPropertyValue("promoCode",promoCode);
+
+def guestAge = context.expand( '${loadTestData-promoSpecifScenario#result#$[\'promoSpecifScenario\'][\'TO\'][\'TOUnrestricted\'][\'guestPreferences\'][0][\'age\']}' )
+log.info(guestAge);
+testRunner.testCase.setPropertyValue("guestAge",guestAge);
+
+def lifeStageCode = context.expand( '${loadTestData-promoSpecifScenario#result#$[\'promoSpecifScenario\'][\'TO\'][\'TOUnrestricted\'][\'guestPreferences\'][0][\'lifeStageCode\']}' )
+log.info(lifeStageCode);
+testRunner.testCase.setPropertyValue("lifeStageCode",lifeStageCode);</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="restrequest" name="categoryBestPrices|TO-Unrestricted-Before" id="7631a184-9afe-4f17-a1e0-d12dbde12c20">
+    <con:settings/>
+    <con:config service="Pricing" resourcePath="/v1/categoryBestPrices" methodName="categoryBestPrices" xsi:type="con:RestRequestStep">
+      <con:restRequest name="categoryBestPrices|TO-Unrestricted-Before" id="a631b771-6f77-4c27-a712-4f201822d4f8" mediaType="application/json" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+        </con:settings>
+        <con:request>{
+	"commonParameters": {
+		"shipCode": "${#TestCase#shipCode}",
+		"sailDate": "${#TestCase#sailDate}",
+		"packageCode": "${#TestCase#packageCode}",
+		"bookingChannel": "VP",
+		"officeCode": "${#TestCase#officeCode}",
+		"countryCode": "${#TestCase#countryCode}",
+		"currencyCode": "${#TestCase#currencyCode}",
+		"bookingType": "I",
+		"occupancy": 1
+	},
+	"shipCurrencyCode": "USD",
+	"showGuestDetail": true,
+	"guestInformation": [
+		{
+			"guestAge": "${#TestCase#guestAge}",
+			"lifeStageCode": "${#TestCase#lifeStageCode}"
+		}
+	],
+	"promoCodes": [
+		"${#TestCase#promoCode}"
+	],
+	"restrictPriceToPromoCodes": true
+}</con:request>
+        <con:assertion type="Valid HTTP Status Codes" id="0399dbd9-dd09-4b6a-88f1-e5838e10381a" name="Valid HTTP Status Codes">
+          <con:settings/>
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:assertion type="GroovyScriptAssertion" id="414fb8c9-9d38-4a7b-93da-aab1012c99be" name="Script Assertion">
+          <con:configuration>
+            <scriptText>def jsonRes = messageExchange.getResponse().contentAsString
+
+def jsonSlurper = new groovy.json.JsonSlurper();
+def parse = jsonSlurper.parseText(jsonRes)
+
+def categoryBestPrice = parse.categoryBestPrice[0]
+log.info categoryBestPrice
+assert categoryBestPrice != null</scriptText>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:parameters/>
+        <con:environmentSpec>
+          <con:entry environmentId="9ba133c3-3cd7-45c8-8561-64ce1c92ea67">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="015736b2-7549-4743-94e6-d64278e45b46">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="e94bb75c-7f53-42a7-9f97-eb5aa3fcaf53">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b2abf588-b45c-4e44-9dd0-8b2249bbc4e7">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="5322014d-43c7-4904-af96-4329a0290c25">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="495bcf82-3dfa-4956-b162-f0b1bfb07f10">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="feba3ebd-aeec-4c25-8b24-4b9e406c22cb">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b3e5490d-8b80-49fe-97a2-a82077345345">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="a98aa22f-37cb-4a0e-84c6-f2de81903489">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+        </con:environmentSpec>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="groovy" name="fetchResponse" id="7f020ce9-6194-4fd7-95c2-2a0b1128847b">
+    <con:settings/>
+    <con:config>
+      <script>//fetch the REST response
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+
+def restResponse = context.expand( '${categoryBestPrices|TO-Unrestricted-Before#Response}' );
+def restResponse2 = new JsonSlurper().parseText(restResponse);
+def prettyJson = new groovy.json.JsonBuilder(restResponse2).toPrettyString();</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="groovy" name="setFolderDirectory" id="65c544c9-e14a-4610-aa0e-89036f93482e">
+    <con:settings/>
+    <con:config>
+      <script>//set folder directory for storing the response
+
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+String jsonFileName = "categoryBestPrices-TO-Unrestricted.json"
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsResponseBeforeMigration/" + jsonFileName
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsResponseBeforeMigration/" + jsonFileName // to insert directory for mac
+	}</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="datasink" name="storeResponse" id="0e3c5d23-b585-4cdd-a838-b53c59d06dbe">
+    <con:settings/>
+    <con:config xsi:type="con:DataSinkStep">
+      <con:dataSink type="File">
+        <con:configuration>
+          <fileName>${setFolderDirectory#result}</fileName>
+          <separator/>
+          <escape/>
+          <quote>false</quote>
+          <trim>true</trim>
+          <append>false</append>
+          <encoding>UTF-8</encoding>
+        </con:configuration>
+      </con:dataSink>
+      <con:properties>
+        <con:property>
+          <con:name>categoryBestPrices-TO-Unrestricted</con:name>
+          <con:value>${fetchResponse#result}</con:value>
+        </con:property>
+      </con:properties>
+    </con:config>
+  </con:testStep>
+  <con:properties/>
+  <con:reportParameters/>
+</con:testCase>

@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testCase xmlns:con="http://eviware.com/soapui/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="748166e8-c227-4e13-9cee-15bee75140ed" discardOkResults="false" failOnError="false" failTestCaseOnErrors="true" keepSession="false" name="promo-codes:by-loyalty-email|Search both loyalty &amp; email only with promoID filter" searchProperties="true" timeout="0" disabled="true">
+  <con:settings id="68e6c4a1-e32f-4cbe-a58e-1304470a7160">
+    <con:setting id="748166e8-c227-4e13-9cee-15bee75140edfileName">promo-codes%3Aby-loyalty-email%7CSearch-both-loyalty-%26-email-only-with-promoID-filter</con:setting>
+  </con:settings>
+  <con:testStep type="groovy" name="loadTestData-promoSpecificScenario" id="e2717f4a-8348-491a-b6bd-c68c19fc8b4d">
+    <con:settings/>
+    <con:config>
+      <script>//load/fetch test data from an external json file
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+//get OS and set directory based on OS
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsTestData/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsTestData/" //to insert directory for mac
+	}
+
+	
+def testData = context.expand( '${#Project#testData-promoSpecifScenario}' )
+def filePath = directory + testData
+def restResponse = new JsonSlurper().parseText(new File(filePath).text)
+def prettyJson = new groovy.json.JsonBuilder(restResponse).toPrettyString()</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="setVariables" id="7e2d72bc-1c85-42d2-87a8-618f11c1078e">
+    <con:settings/>
+    <con:config>
+      <script>//set variables from the fetched test data needed for the REST request
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+
+def loyaltyId = context.expand( '${loadTestData-promoSpecificScenario#result#$[\'promoSpecifScenario\'][\'TO\'][\'TORestricted\'][\'guestPreferences\'][0][\'loyaltyId\']}' )
+log.info(loyaltyId);
+testRunner.testCase.setPropertyValue("loyaltyId",loyaltyId);
+
+def emailAddress = context.expand( '${loadTestData-promoSpecificScenario#result#$[\'promoSpecifScenario\'][\'TO\'][\'TORestricted\'][\'guestPreferences\'][0][\'email\']}' )
+log.info(emailAddress);
+testRunner.testCase.setPropertyValue("emailAddress",emailAddress);
+
+def promoId = context.expand( '${loadTestData-promoSpecificScenario#result#$[\'promoSpecifScenario\'][\'TO\'][\'TORestricted\'][\'promoID\']}' )
+log.info(promoId);
+testRunner.testCase.setPropertyValue("promoId",promoId);</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="restrequest" name="promo-codes:by-loyalty-emailBefore" id="73506487-92a1-4bcb-91c5-67e7903142c3">
+    <con:settings/>
+    <con:config service="promo-code(Ingress)(Used by BRMS)" resourcePath="/v1/promo-codes:by-loyalty-email" methodName="promo-codes:by-loyalty-email" xsi:type="con:RestRequestStep">
+      <con:restRequest name="promo-codes:by-loyalty-emailBefore" id="d03946c4-8773-40ad-94e8-745184ab7221" mediaType="application/json" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+        </con:settings>
+        <con:request>{
+	"loyaltyIds": [
+		"${#TestCase#loyaltyId}"
+	],
+	"emailAddresses": [
+		"${#TestCase#emailAddress}"
+	],
+	"filters": {
+		"promotionIds": [
+			"${#TestCase#promoId}"
+		]}
+}</con:request>
+        <con:originalUri>http://vps-stg-a.rccl.com/vps-sierra/promo-code/v1/promo-codes:by-loyalty-email</con:originalUri>
+        <con:assertion type="Valid HTTP Status Codes" id="daa10987-2fff-4a13-9877-427114f2d37b" name="Valid HTTP Status Codes">
+          <con:settings/>
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:assertion type="GroovyScriptAssertion" id="4654657a-c9da-4031-b9d8-f9865d275d58" name="Script Assertion">
+          <con:configuration>
+            <scriptText>def jsonRes = messageExchange.getResponse().contentAsString
+
+
+def jsonSlurper = new groovy.json.JsonSlurper();
+def parse = jsonSlurper.parseText(jsonRes)
+
+
+def promoCodes = parse.promoCodes
+log.info promoCodes
+assert promoCodes!=null
+
+
+def email = parse.promoCodes.emailAddress
+log.info email
+assert email!=null
+
+
+def loyaltyId = parse.promoCodes.loyaltyId
+log.info loyaltyId
+assert loyaltyId!=null</scriptText>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:parameters/>
+        <con:environmentSpec>
+          <con:entry environmentId="9ba133c3-3cd7-45c8-8561-64ce1c92ea67">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="015736b2-7549-4743-94e6-d64278e45b46">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="e94bb75c-7f53-42a7-9f97-eb5aa3fcaf53">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b2abf588-b45c-4e44-9dd0-8b2249bbc4e7">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="5322014d-43c7-4904-af96-4329a0290c25">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="495bcf82-3dfa-4956-b162-f0b1bfb07f10">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="feba3ebd-aeec-4c25-8b24-4b9e406c22cb">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b3e5490d-8b80-49fe-97a2-a82077345345">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="a98aa22f-37cb-4a0e-84c6-f2de81903489">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+        </con:environmentSpec>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="fetchResponse" id="caeb3ccb-6a67-4bfe-9b9e-0f3eccaef129">
+    <con:settings/>
+    <con:config>
+      <script>//fetch the REST response
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+
+def restResponse = context.expand( '${promo-codes:by-loyalty-emailBefore#Response}' );
+def restResponse2 = new JsonSlurper().parseText(restResponse);
+def prettyJson = new groovy.json.JsonBuilder(restResponse2).toPrettyString();</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="setFolderDirectory" id="d55ac684-87f6-4eb7-aeb3-76d3546be5e3">
+    <con:settings/>
+    <con:config>
+      <script>//set folder directory for storing the response
+
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+String jsonFileName = "promo-codes-by-loyalty-email-Search both loyaltyandemail only with promoID filter.json"
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsResponseBeforeMigration/" + jsonFileName
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsResponseBeforeMigration/" + jsonFileName // to insert directory for mac
+	}</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="datasink" name="storeResponse" id="275005a8-bdfe-4060-b185-69ebd467a55e">
+    <con:settings/>
+    <con:config xsi:type="con:DataSinkStep">
+      <con:dataSink type="File">
+        <con:configuration>
+          <fileName>${setFolderDirectory#result}</fileName>
+          <separator/>
+          <escape/>
+          <quote>false</quote>
+          <trim>true</trim>
+          <append>false</append>
+          <encoding>UTF-8</encoding>
+        </con:configuration>
+      </con:dataSink>
+      <con:properties>
+        <con:property>
+          <con:name>promo-codes-by-loyalty-email-Search both loyaltyandemail only with promoID filter</con:name>
+          <con:value>${fetchResponse#result}</con:value>
+        </con:property>
+      </con:properties>
+    </con:config>
+  </con:testStep>
+  <con:properties>
+    <con:property>
+      <con:name>loyaltyId</con:name>
+      <con:value>387303535</con:value>
+    </con:property>
+    <con:property>
+      <con:name>emailAddress</con:name>
+      <con:value>047ED62E89A33FB83C3DB94FFAB26F2ACD3E09E16B4362A6684E0B1C5644460C</con:value>
+    </con:property>
+    <con:property>
+      <con:name>promoId</con:name>
+      <con:value>M7392338</con:value>
+    </con:property>
+  </con:properties>
+  <con:reportParameters/>
+</con:testCase>

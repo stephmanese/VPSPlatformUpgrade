@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:interface xmlns:con="http://eviware.com/soapui/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="con:RestService" id="7d4a0fb7-9b53-4a62-8fee-eecbfb5be9b7" name="Vacation(Ingress)" type="rest_ex" wadlVersion="https://swagger.io/openapiv3/specification">
+  <con:settings id="3ff7aa54-c896-4da0-aa95-b5d86c3609ef">
+    <con:setting id="7d4a0fb7-9b53-4a62-8fee-eecbfb5be9b7fileName">Vacation%28Ingress%29</con:setting>
+  </con:settings>
+  <con:definitionCache type="TEXT" rootPart="Vacation(Ingress).json">
+    <con:part>
+      <con:url>Vacation(Ingress).json</con:url>
+      <con:content>{"openapi":"3.0.1","info":{"title":"Vacation(Ingress)","description":"","version":"1.0.0"},"servers":[{"url":"/"}],"paths":{"/v1/cruise-search":{"description":"","post":{"description":"","requestBody":{"content":{"application/json":{}}},"responses":{"default":{"description":"Default response"}}}},"/v1/fare-search":{"description":"","post":{"description":"","requestBody":{"content":{"application/json":{}}},"responses":{"default":{"description":"Default response"}}}},"/v1/promotion-search":{"description":"","post":{"description":"","requestBody":{"content":{"application/json":{}}},"responses":{"default":{"description":"Default response"}}}},"/v1/category-pricing":{"description":"","post":{"description":"","requestBody":{"content":{"application/json":{}}},"responses":{"default":{"description":"Default response"}}}}}}</con:content>
+      <con:type>https://swagger.io/openapiv3/specification</con:type>
+    </con:part>
+  </con:definitionCache>
+  <con:endpoints/>
+</con:interface>

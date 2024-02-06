@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testSuite xmlns:con="http://eviware.com/soapui/config" id="f8190010-a9e5-439b-b25d-bd06f2c8c763" name="Pricing Batch(Ingress)(Routing Rule)-After Migration">
+  <con:settings id="29dcd65a-d5e9-4b3e-9c75-edfd5098045c">
+    <con:setting id="f8190010-a9e5-439b-b25d-bd06f2c8c763fileName">Pricing-Batch%28Ingress%29%28Routing-Rule%29-After-Migration</con:setting>
+  </con:settings>
+  <con:runType>SEQUENTIAL</con:runType>
+  <con:properties/>
+  <con:reportParameters/>
+  <con:tagId>ef2ea71b-2e65-433a-9a02-b2b88d72bbd0</con:tagId>
+</con:testSuite>

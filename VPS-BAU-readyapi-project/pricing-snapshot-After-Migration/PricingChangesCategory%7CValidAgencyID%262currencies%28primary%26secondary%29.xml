@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testCase xmlns:con="http://eviware.com/soapui/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="e7a65b4c-d1f7-40d9-950f-30d8ec04105e" discardOkResults="false" failOnError="false" failTestCaseOnErrors="true" keepSession="false" name="PricingChangesCategory|ValidAgencyID&amp;2currencies(primary&amp;secondary)" searchProperties="true" timeout="0" disabled="true">
+  <con:settings id="44698df2-19d9-4708-ab4e-7a0909d0edaa">
+    <con:setting id="e7a65b4c-d1f7-40d9-950f-30d8ec04105efileName">PricingChangesCategory%7CValidAgencyID%262currencies%28primary%26secondary%29</con:setting>
+  </con:settings>
+  <con:testStep type="groovy" name="loadTestData-agency" id="1d5e6921-333e-4dd6-8c2d-a04ccce46c89" disabled="true">
+    <con:settings/>
+    <con:config>
+      <script>//load/fetch test data from an external json file
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+//get OS and set directory based on OS
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsTestData/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsTestData/" //to insert directory for mac
+	}
+
+	
+def testData = context.expand( '${#Project#testData-agency}' )
+def filePath = directory + testData
+def restResponse = new JsonSlurper().parseText(new File(filePath).text)
+def prettyJson = new groovy.json.JsonBuilder(restResponse).toPrettyString()</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="setVariables" id="8317a48c-2ba2-437d-8373-99c44c09ee47">
+    <con:settings/>
+    <con:config>
+      <script>//set variables from the fetched test data needed for the REST request
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+import java.time.LocalDateTime
+
+//to get the testData-agency
+//def agencyId = context.expand( '${loadTestData-agency#result#$[\'agency\'][\'secondaryMarketAgency\'][\'clientId\']}' )
+//log.info(agencyId);
+//testRunner.testCase.setPropertyValue("agencyId",agencyId);
+
+
+
+
+//to Get the date and convert to TimeZone
+Date dateTimeNow  = LocalDateTime.now().minusHours(47).toDate()
+log.info(dateTimeNow)
+
+def fromDateTime = dateTimeNow.format("yyyy-MM-dd'T'HH:mm:ss", TimeZone.getTimeZone('UTC'))
+log.info(fromDateTime)
+testRunner.testCase.setPropertyValue("fromDateTime",fromDateTime);</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="restrequest" name="priceChanges-categoryAfter" id="5625cd35-7584-4a3a-82b2-5506c73cbad9">
+    <con:settings/>
+    <con:config service="Pricing-Snapshot" resourcePath="/v1/price-changes:category" methodName="price-changes:category" xsi:type="con:RestRequestStep">
+      <con:restRequest name="priceChanges-categoryAfter" id="4ef57705-a16a-4f09-8bee-648b19ffadf0" mediaType="application/json" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+        </con:settings>
+        <con:request>{
+	"client": {
+		"agencyId": "338408"
+	},
+    "fromDateTime": "${#TestCase#fromDateTime}"
+}</con:request>
+        <con:originalUri>http://vps.rccl.com/vps-echo/pricing-snapshot/v1/price-changes:category</con:originalUri>
+        <con:assertion type="Valid HTTP Status Codes" id="afe464d1-b858-4345-9136-474ee2505b6c" name="Valid HTTP Status Codes">
+          <con:settings/>
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:assertion type="GroovyScriptAssertion" id="94d54893-cf90-4ea4-9f85-ba0f231ad39a" name="Script Assertion">
+          <con:configuration>
+            <scriptText>def jsonRes = messageExchange.getResponse().contentAsString
+
+def jsonSlurper = new groovy.json.JsonSlurper();
+def parse = jsonSlurper.parseText(jsonRes)
+
+def keys = parse.keys[0]
+assert keys!=null</scriptText>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:parameters/>
+        <con:environmentSpec>
+          <con:entry environmentId="9ba133c3-3cd7-45c8-8561-64ce1c92ea67">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="015736b2-7549-4743-94e6-d64278e45b46">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="e94bb75c-7f53-42a7-9f97-eb5aa3fcaf53">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b2abf588-b45c-4e44-9dd0-8b2249bbc4e7">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="5322014d-43c7-4904-af96-4329a0290c25">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="495bcf82-3dfa-4956-b162-f0b1bfb07f10">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="feba3ebd-aeec-4c25-8b24-4b9e406c22cb">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b3e5490d-8b80-49fe-97a2-a82077345345">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="a98aa22f-37cb-4a0e-84c6-f2de81903489">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+        </con:environmentSpec>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="compareResponse" id="937b0578-af0e-452a-8848-be305e7f6eb0">
+    <con:settings/>
+    <con:config>
+      <script>import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+//get OS and set directory based on OS
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsResponseBeforeMigration/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsResponseBeforeMigration/" //to insert directory for mac
+	}
+
+//for response before migration
+def filePath = directory + "PricingChangesCategory-ValidAgencyID-2currencies Primary-Secondary.json"; // Retrieving JSON response from a text file
+def jsonObject1 = new JsonSlurper().parseText(new File(filePath).text); // Parsing JSON response into JSON objects
+jsonObject1.status.remove("dateTime"); //Removing specific elements from the JSON objects
+jsonObject1.dateTimeRange.remove("fromDateTime")
+jsonObject1.dateTimeRange.remove("toDateTime")
+def refStr = new groovy.json.JsonBuilder(jsonObject1).toPrettyString(); // Converting JSON objects back to pretty-printed JSON strings
+
+refStr = refStr.replaceAll('}', '');   // without this, there is a close brace whose result is only differentiated by its existance
+refStr = refStr.replaceAll(',', '');
+def refStrList = refStr.split(); // Splitting strings into lists and sorting them
+def refStrListSorted = refStrList.sort(); 
+
+//for response after migration
+def jsonString2 = context.expand( '${priceChanges-categoryAfter#Response}' );
+def jsonObject2 = new groovy.json.JsonSlurper().parseText(jsonString2);
+jsonObject2.status.remove("dateTime");
+jsonObject2.dateTimeRange.remove("fromDateTime")
+jsonObject2.dateTimeRange.remove("toDateTime")
+def compStr = new groovy.json.JsonBuilder(jsonObject2).toPrettyString();
+
+compStr = compStr.replaceAll('}', '');  // without this, there is a close brace whose result is only differentiated by its existance
+compStr = compStr.replaceAll(',', '');
+def compStrList = compStr.split();
+def compStrListSorted = compStrList.sort();
+
+// Sanity check to ensure both lists have the same size
+log.info "refStrList.size()=" + refStrList.size();
+log.info "compStrList.size()=" + compStrList.size();
+assert refStrList.size().equals(compStrList.size()), "Mismatch - There are ${refStrList.size()} reference values and ${compStrList.size()} compare values";
+
+// sorted line by sorted line check...
+refStrListSorted.eachWithIndex { refValue, idx ->
+   def compValue = compStrListSorted[idx];
+   if ( refValue != compValue ) {
+      log.info "refValue=" + refValue + "  " + idx;
+      log.info "compValue=" + compValue + "  " + idx;
+      assert refValue.equals(compValue), "Mismatch - At index $idx the reference value '$refValue' does not match the comparison value '$compValue'";
+   };
+};
+
+// If we get here, then the contents are equal
+log.info "";
+log.info "   ***  Reference and Compare strings are equal  ***";
+
+log.info "";
+log.info 'Test Step "' + testRunner.runContext.currentStep.name + '" done...';</script>
+    </con:config>
+  </con:testStep>
+  <con:properties>
+    <con:property>
+      <con:name>fromDateTime</con:name>
+      <con:value>2024-01-13T05:58:50</con:value>
+    </con:property>
+  </con:properties>
+  <con:reportParameters/>
+</con:testCase>

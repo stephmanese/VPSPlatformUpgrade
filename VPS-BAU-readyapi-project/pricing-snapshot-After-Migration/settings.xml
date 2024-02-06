@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testSuite xmlns:con="http://eviware.com/soapui/config" id="a18c51d3-59aa-43c2-a4c7-7900fc84ce43" name="pricing-snapshot-After Migration">
+  <con:settings id="5566ae06-ee3b-4380-90b1-6e5284e72244">
+    <con:setting id="a18c51d3-59aa-43c2-a4c7-7900fc84ce43fileName">pricing-snapshot-After-Migration</con:setting>
+  </con:settings>
+  <con:runType>SEQUENTIAL</con:runType>
+  <con:properties/>
+  <con:reportParameters/>
+  <con:tagId>35a74599-b6eb-4985-b3da-38c16113df95</con:tagId>
+</con:testSuite>

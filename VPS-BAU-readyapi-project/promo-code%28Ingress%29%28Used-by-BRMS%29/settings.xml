@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:interface xmlns:con="http://eviware.com/soapui/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="con:RestService" id="3db93756-e740-46e6-bdac-0eef7058a670" name="promo-code(Ingress)(Used by BRMS)" type="rest_ex" wadlVersion="https://swagger.io/openapiv3/specification">
+  <con:settings id="2fc34eba-304c-4c8c-99fb-3412831ca9c2">
+    <con:setting id="3db93756-e740-46e6-bdac-0eef7058a670fileName">promo-code%28Ingress%29%28Used-by-BRMS%29</con:setting>
+  </con:settings>
+  <con:definitionCache type="TEXT" rootPart="promo-code(Ingress)(Used by BRMS).json">
+    <con:part>
+      <con:url>promo-code(Ingress)(Used by BRMS).json</con:url>
+      <con:content>{"openapi":"3.0.1","info":{"title":"promo-code(Ingress)(Used by BRMS)","description":"","version":"1.0.0"},"servers":[{"url":"/"}],"paths":{"/v1/promo-codes:by-promo-codes":{"description":"","post":{"description":"","requestBody":{"content":{"application/json":{}}},"responses":{"default":{"description":"Default response"}}}},"/v1/promo-codes:by-loyalty-email":{"description":"","post":{"description":"","requestBody":{"content":{"application/json":{}}},"responses":{"default":{"description":"Default response"}}}}}}</con:content>
+      <con:type>https://swagger.io/openapiv3/specification</con:type>
+    </con:part>
+  </con:definitionCache>
+  <con:endpoints/>
+</con:interface>

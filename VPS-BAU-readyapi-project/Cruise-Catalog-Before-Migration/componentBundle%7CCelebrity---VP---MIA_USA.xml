@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testCase xmlns:con="http://eviware.com/soapui/config" id="17de0be1-2f9a-4c48-87d6-94e5231ac988" discardOkResults="false" failOnError="false" failTestCaseOnErrors="true" keepSession="false" name="componentBundle|Celebrity - VP - MIA_USA" searchProperties="true" timeout="0" disabled="true">
+  <con:settings id="9a171da9-468d-40e4-8400-790311e62c29">
+    <con:setting id="17de0be1-2f9a-4c48-87d6-94e5231ac988fileName">componentBundle%7CCelebrity---VP---MIA_USA</con:setting>
+  </con:settings>
+  <con:testStep type="groovy" name="loadTestData-celebrity" id="5bba5192-3f27-4e65-89d2-c22b2420fd3e">
+    <con:settings/>
+    <con:config>
+      <script>//load/fetch test data from local source
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+//get user's device OS and set directory
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsTestData/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsTestData/" //directory for mac
+	}
+
+	
+def testData = context.expand( '${#Project#testData-celebrity}' ) //modify this based on test case
+def filePath = directory + testData
+def restResponse = new JsonSlurper().parseText(new File(filePath).text)
+def prettyJson = new groovy.json.JsonBuilder(restResponse).toPrettyString()</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="loadTestData-market" id="7f0fb66a-5561-4af7-baef-acd5b4498b92">
+    <con:settings/>
+    <con:config>
+      <script>//load/fetch test data from local source
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+//get user's device OS and set directory
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsTestData/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsTestData/" //directory for mac
+	}
+
+	
+def testData = context.expand( '${#Project#testData-market}' ) //modify this based on test case
+def filePath = directory + testData
+def restResponse = new JsonSlurper().parseText(new File(filePath).text)
+def prettyJson = new groovy.json.JsonBuilder(restResponse).toPrettyString()</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="setVariables" id="8c8dbe3b-fcff-4c83-8d63-b03cceb61f3a">
+    <con:settings/>
+    <con:config>
+      <script>//set variables from the fetched test data needed for the REST request
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+
+def brandCode = context.expand( '${loadTestData-celebrity#result#$[\'celebrity\'][\'brandCode\']}' )
+log.info(brandCode);
+testRunner.testCase.setPropertyValue("brandCode",brandCode);
+
+def countryCode = context.expand( '${loadTestData-market#result#$[\'market\'][\'USA\'][\'countryCode\']}' )
+log.info(countryCode);
+testRunner.testCase.setPropertyValue("countryCode",countryCode);
+
+def officeCode = context.expand( '${loadTestData-market#result#$[\'market\'][\'USA\'][\'officeCode\']}' )
+log.info(officeCode);
+testRunner.testCase.setPropertyValue("officeCode",officeCode);</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="restrequest" name="componentBundle|Celebrity-VP-MIA_USA-Before" id="44c75bcd-bdf8-4f46-88a0-0b69bad8eeb3">
+    <con:settings/>
+    <con:config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" service="CruiseCatalog-ComponentBundle" resourcePath="/v1/componentBundle" methodName="componentBundle" xsi:type="con:RestRequestStep">
+      <con:restRequest name="componentBundle|Celebrity-VP-MIA_USA-Before" id="8896cb57-ddc7-43a3-8ec7-bbe1115b5285" mediaType="application/json" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;con:entry key="Content-Type" value="application/json" xmlns:con="http://eviware.com/soapui/config"/></con:setting>
+        </con:settings>
+        <con:request>{
+	"brandCode": "${#TestCase#brandCode}",
+	"officeCode": "${#TestCase#officeCode}",
+	"countryCode": "${#TestCase#countryCode}",
+	"bookingChannel": "VP",
+	"effectiveDateTime": "${#Project#effectiveDateTime}"
+}</con:request>
+        <con:assertion type="Valid HTTP Status Codes" id="ff89188a-5672-46e7-b411-6e9d33080fce" name="Valid HTTP Status Codes">
+          <con:settings/>
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:assertion type="GroovyScriptAssertion" id="1f680eee-1e4c-4d71-bb12-f0e3e13b6745" name="Script Assertion">
+          <con:configuration>
+            <scriptText>def jsonRes = messageExchange.getResponse().contentAsString
+
+
+def jsonSlurper = new groovy.json.JsonSlurper();
+def parse = jsonSlurper.parseText(jsonRes)
+
+
+def componentBundle = parse.componentBundle
+log.info componentBundle
+assert componentBundle != null
+
+def brand = parse.componentBundle.brand
+log.info brand
+assert brand == "C"
+
+def revenueOfficeCode = parse.componentBundle.revenueOfficeCode
+log.info revenueOfficeCode
+assert revenueOfficeCode == "MIA"
+
+def countryCode = parse.componentBundle.countryCode
+log.info countryCode
+assert countryCode == "USA"</scriptText>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:parameters/>
+        <con:environmentSpec>
+          <con:entry environmentId="9ba133c3-3cd7-45c8-8561-64ce1c92ea67">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="015736b2-7549-4743-94e6-d64278e45b46">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="e94bb75c-7f53-42a7-9f97-eb5aa3fcaf53">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b2abf588-b45c-4e44-9dd0-8b2249bbc4e7">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="5322014d-43c7-4904-af96-4329a0290c25">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="495bcf82-3dfa-4956-b162-f0b1bfb07f10">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="feba3ebd-aeec-4c25-8b24-4b9e406c22cb">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b3e5490d-8b80-49fe-97a2-a82077345345">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="a98aa22f-37cb-4a0e-84c6-f2de81903489">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+        </con:environmentSpec>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="fetchResponse" id="81902cd9-d2b5-4bdb-acd6-7ed1baeaf3fb">
+    <con:settings/>
+    <con:config>
+      <script>//fetch the REST response
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+
+def restResponse = context.expand( '${componentBundle|Celebrity-VP-MIA_USA-Before#Response}' ); //modify this based on test case
+def restResponse2 = new JsonSlurper().parseText(restResponse);
+def prettyJson = new groovy.json.JsonBuilder(restResponse2).toPrettyString();</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="setFolderDirectory" id="5ebea2de-a7e2-4a39-9bf7-dac68686770b">
+    <con:settings/>
+    <con:config>
+      <script>//set folder directory for storing the response and create json file for storing REST response
+
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+String jsonFileName = "componentBundle-Celebrity-VP-MIA_USA.json" //modify this based on test case
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsResponseBeforeMigration/" + jsonFileName
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsResponseBeforeMigration/" + jsonFileName // directory for mac
+	}</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="datasink" name="storeResponse" id="9fe11384-be50-40dc-b90b-9ee24c20a763">
+    <con:settings/>
+    <con:config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="con:DataSinkStep">
+      <con:dataSink type="File">
+        <con:configuration>
+          <fileName>${setFolderDirectory#result}</fileName>
+          <separator/>
+          <escape/>
+          <quote>false</quote>
+          <trim>true</trim>
+          <append>false</append>
+          <encoding>UTF-8</encoding>
+        </con:configuration>
+      </con:dataSink>
+      <con:properties>
+        <con:property>
+          <con:name>componentBundle-Celebrity-VP-MIA_USA</con:name>
+          <con:value>${fetchResponse#result}</con:value>
+        </con:property>
+      </con:properties>
+    </con:config>
+  </con:testStep>
+  <con:properties/>
+  <con:reportParameters/>
+</con:testCase>

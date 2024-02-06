@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:interface xmlns:con="http://eviware.com/soapui/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="con:RestService" id="332160da-89f4-46c3-99a4-8ad36cea4113" name="Partner Pricing(Ingress)" type="rest_ex" wadlVersion="https://swagger.io/openapiv3/specification">
+  <con:settings id="2e9064e0-bc6e-4cfc-a0ce-9c1e1b5eb990">
+    <con:setting id="332160da-89f4-46c3-99a4-8ad36cea4113fileName">Partner-Pricing%28Ingress%29</con:setting>
+  </con:settings>
+  <con:definitionCache type="TEXT" rootPart="Partner Pricing (Ingress).json">
+    <con:part>
+      <con:url>Partner Pricing (Ingress).json</con:url>
+      <con:content>{"openapi":"3.0.1","info":{"title":"Partner Pricing (Ingress)","description":"","version":"1.0.0"},"servers":[{"url":"/"}],"paths":{"/v1/category-pricing":{"description":"","post":{"description":"","requestBody":{"content":{"application/json":{"example":"{\n\t\"clients\": [\n\t\t{\n\t\t\t\"clientContext\": \"AGENCY_1\",\n\t\t\t\"clientId\": \"${#TestCase#clientId}\"\n\t\t}\n\t],\n\t\"companyShortName\": \"EXPEDIA\",\n\t\"brandCode\": \"R\",\n\t\"shipCode\": \"${#TestCase#shipCode}\",\n\t\"sailDate\": \"${#TestCase#sailDate}\",\n\t\"packageCode\": \"${#TestCase#packageCode}\",\n\t\"officeCode\": \"${#TestCase#officeCode}\",\n\t\"countryCode\": \"${#TestCase#countryCode}\",\n\t\"currencyCode\": \"${#TestCase#currencyCode}\",\n\t\"occupancy\": 1,\n\t\"bookingTypeCode\": \"I\",\n\t\"pricingPreference\": {\n\t\t\"includeGuestLevelDetail\": true,\n\t\t\"includeGratuity\": true,\n\t\t\"depositFareType\": \"BOTH\",\n\t\t\"promoCodes\": [\n\t\t\t\"${#TestCase#promoCode}\"\n\t\t]\n\t},\n\t\"guestPreferences\": [\n\t\t{\n\t\t\t\"age\": \"${#TestCase#guestAge}\",\n\t\t\t\"lifeStageCode\": \"${#TestCase#lifeStageCode}\",\n\t\t\t\"loyaltyTierCode\": \"${#TestCase#loyaltyTierCode}\",\n\t\t\t\"residenceStateProvinceCode\": \"${#TestCase#residenceStateProvinceCode}\",\n\t\t\t\"loyaltyId\": \"${#TestCase#loyaltyId}\"\n\t\t}\n\t]\n}"}}},"responses":{"default":{"description":"Default response"}}}},"/v1/super-category-pricing":{"description":"","post":{"description":"","requestBody":{"content":{"application/json":{}}},"responses":{"default":{"description":"Default response"}}}},"/v1/group-pricing":{"description":"","post":{"description":"","requestBody":{"content":{"application/json":{}}},"responses":{"default":{"description":"Default response"}}}}}}</con:content>
+      <con:type>https://swagger.io/openapiv3/specification</con:type>
+    </con:part>
+  </con:definitionCache>
+  <con:endpoints/>
+</con:interface>

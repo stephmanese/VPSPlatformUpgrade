@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testCase xmlns:con="http://eviware.com/soapui/config" id="7dfa355b-c631-439c-82b1-e0c6556b18b8" discardOkResults="false" failOnError="false" failTestCaseOnErrors="true" keepSession="false" name="promotion-details|Secondary Market" searchProperties="true" timeout="0" disabled="true">
+  <con:settings id="a345d7d4-c773-470c-9b0b-18e90b854cd0">
+    <con:setting id="7dfa355b-c631-439c-82b1-e0c6556b18b8fileName">promotion-details%7CSecondary-Market</con:setting>
+  </con:settings>
+  <con:testStep xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="groovy" name="loadTestData-market" id="0405f78f-3a54-4954-84eb-09ebef7ea55d">
+    <con:settings/>
+    <con:config>
+      <script>//load/fetch test data from an external json file
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+//get OS and set directory based on OS
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsTestData/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsTestData/" //to insert directory for mac
+	}
+
+	
+def testData = context.expand( '${#Project#testData-market}' )
+def filePath = directory + testData
+def restResponse = new JsonSlurper().parseText(new File(filePath).text)
+def prettyJson = new groovy.json.JsonBuilder(restResponse).toPrettyString()</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="groovy" name="loadTestData-celebrity" id="8fe08373-af28-42a2-b95e-0ab65ea9f23b">
+    <con:settings/>
+    <con:config>
+      <script>//load/fetch test data from an external json file
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+//get OS and set directory based on OS
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsTestData/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsTestData/" //to insert directory for mac
+	}
+
+	
+def testData = context.expand( '${#Project#testData-celebrity}' )
+def filePath = directory + testData
+def restResponse = new JsonSlurper().parseText(new File(filePath).text)
+def prettyJson = new groovy.json.JsonBuilder(restResponse).toPrettyString()</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="groovy" name="setVariables" id="58c3e65a-0e7f-4c7c-9451-2ee1f4d378ce">
+    <con:settings/>
+    <con:config>
+      <script>//set variables from the fetched test data needed for the REST request
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+//get data from TestData-Market
+def officeCode = context.expand( '${loadTestData-market#result#$[\'market\'][\'GBR\'][\'officeCode\']}' )
+log.info(officeCode);
+testRunner.testCase.setPropertyValue("officeCode",officeCode);
+
+def countryCode = context.expand( '${loadTestData-market#result#$[\'market\'][\'GBR\'][\'countryCode\']}' )
+log.info(countryCode);
+testRunner.testCase.setPropertyValue("countryCode",countryCode);
+
+def currencyCode = context.expand( '${loadTestData-market#result#$[\'market\'][\'GBR\'][\'currencyCodes\'][1]}' )
+log.info(currencyCode);
+testRunner.testCase.setPropertyValue("currencyCode",currencyCode);
+
+//get data from TestData-celebrity
+def brand = context.expand( '${loadTestData-celebrity#result#$[\'celebrity\'][\'brandCode\']}' )
+log.info(brand);
+testRunner.testCase.setPropertyValue("brand",brand);</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="restrequest" name="promotionDetailsAfter" id="49e166e7-b8d4-4b8f-96d8-54ec47fd7453">
+    <con:settings/>
+    <con:config service="Promotion(Ingress)(Used by ESL)" resourcePath="/v1/promotion-details" methodName="promotion-details" xsi:type="con:RestRequestStep">
+      <con:restRequest name="promotionDetailsAfter" id="a5081298-cef5-49a9-ad27-28dc27ed9c7a" mediaType="application/json" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+        </con:settings>
+        <con:request>{
+ "market": {
+    "officeCode": "${#TestCase#officeCode}",
+    "countryCode": "${#TestCase#countryCode}",
+    "currencyCodes": [
+      "${#TestCase#currencyCode}"
+    ]
+  },
+	"brand": "${#TestCase#brand}"
+}</con:request>
+        <con:originalUri>http://vps-stg-a.rccl.com/vps-sierra/promotion/v1/promotion-details</con:originalUri>
+        <con:assertion type="Valid HTTP Status Codes" id="29722d23-f327-43d1-b0c5-7dbeb4444fac" name="Valid HTTP Status Codes">
+          <con:settings/>
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:assertion type="GroovyScriptAssertion" id="240762c1-a276-4ba8-bb82-9de41acc03f4" name="Script Assertion">
+          <con:configuration>
+            <scriptText>def jsonRes = messageExchange.getResponse().contentAsString
+
+
+def jsonSlurper = new groovy.json.JsonSlurper();
+def parse = jsonSlurper.parseText(jsonRes)
+
+
+def promotions = parse.promotions[0]
+log.info promotions
+assert promotions!=null</scriptText>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:parameters/>
+        <con:environmentSpec>
+          <con:entry environmentId="9ba133c3-3cd7-45c8-8561-64ce1c92ea67">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="015736b2-7549-4743-94e6-d64278e45b46">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="e94bb75c-7f53-42a7-9f97-eb5aa3fcaf53">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b2abf588-b45c-4e44-9dd0-8b2249bbc4e7">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="5322014d-43c7-4904-af96-4329a0290c25">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="495bcf82-3dfa-4956-b162-f0b1bfb07f10">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="feba3ebd-aeec-4c25-8b24-4b9e406c22cb">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b3e5490d-8b80-49fe-97a2-a82077345345">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="a98aa22f-37cb-4a0e-84c6-f2de81903489">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+        </con:environmentSpec>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="groovy" name="compareResponse" id="de8c0e82-8901-4561-8360-cc609afa2c5f">
+    <con:settings/>
+    <con:config>
+      <script>import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+//get OS and set directory based on OS
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsResponseBeforeMigration/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsResponseBeforeMigration/" //to insert directory for mac
+	}
+
+//for response before migration
+def filePath = directory + "promotionDetailsSecondaryMarketBefore.json"; // Retrieving JSON response from a text file
+def jsonObject1 = new JsonSlurper().parseText(new File(filePath).text); // Parsing JSON response into JSON objects
+jsonObject1.status.remove("dateTime"); //Removing specific elements from the JSON objects
+//jsonObject1.metaInfo.remove("effectiveDateTime");
+def refStr = new groovy.json.JsonBuilder(jsonObject1).toPrettyString(); // Converting JSON objects back to pretty-printed JSON strings
+
+refStr = refStr.replaceAll('}', '');   // without this, there is a close brace whose result is only differentiated by its existance
+refStr = refStr.replaceAll(',', '');
+def refStrList = refStr.split(); // Splitting strings into lists and sorting them
+def refStrListSorted = refStrList.sort(); 
+
+//for response after migration
+def jsonString2 = context.expand( '${promotionDetailsAfter#Response}' );
+def jsonObject2 = new groovy.json.JsonSlurper().parseText(jsonString2);
+jsonObject2.status.remove("dateTime");
+//jsonObject2.metaInfo.remove("effectiveDateTime");
+def compStr = new groovy.json.JsonBuilder(jsonObject2).toPrettyString();
+
+compStr = compStr.replaceAll('}', '');  // without this, there is a close brace whose result is only differentiated by its existance
+compStr = compStr.replaceAll(',', '');
+def compStrList = compStr.split();
+def compStrListSorted = compStrList.sort();
+
+// Sanity check to ensure both lists have the same size
+log.info "refStrList.size()=" + refStrList.size();
+log.info "compStrList.size()=" + compStrList.size();
+assert refStrList.size().equals(compStrList.size()), "Mismatch - There are ${refStrList.size()} reference values and ${compStrList.size()} compare values";
+
+// sorted line by sorted line check...
+refStrListSorted.eachWithIndex { refValue, idx ->
+   def compValue = compStrListSorted[idx];
+   if ( refValue != compValue ) {
+      log.info "refValue=" + refValue + "  " + idx;
+      log.info "compValue=" + compValue + "  " + idx;
+      assert refValue.equals(compValue), "Mismatch - At index $idx the reference value '$refValue' does not match the comparison value '$compValue'";
+   };
+};
+
+// If we get here, then the contents are equal
+log.info "";
+log.info "   ***  Reference and Compare strings are equal  ***";
+
+log.info "";
+log.info 'Test Step "' + testRunner.runContext.currentStep.name + '" done...';</script>
+    </con:config>
+  </con:testStep>
+  <con:properties>
+    <con:property>
+      <con:name>officeCode</con:name>
+      <con:value>LON</con:value>
+    </con:property>
+    <con:property>
+      <con:name>countryCode</con:name>
+      <con:value>GBR</con:value>
+    </con:property>
+    <con:property>
+      <con:name>currencyCode</con:name>
+      <con:value>EUR</con:value>
+    </con:property>
+    <con:property>
+      <con:name>brand</con:name>
+      <con:value>C</con:value>
+    </con:property>
+  </con:properties>
+  <con:reportParameters/>
+</con:testCase>

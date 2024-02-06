@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testSuite xmlns:con="http://eviware.com/soapui/config" id="88b90089-5fae-43af-97e9-d018186a9e24" name="promo-code(Ingress)(Used by BRMS)-After Migration">
+  <con:settings id="58931a6a-c84b-408f-a61e-324652a49b8e">
+    <con:setting id="88b90089-5fae-43af-97e9-d018186a9e24fileName">promo-code%28Ingress%29%28Used-by-BRMS%29-After-Migration</con:setting>
+  </con:settings>
+  <con:runType>SEQUENTIAL</con:runType>
+  <con:properties/>
+  <con:reportParameters/>
+  <con:tagId>ef2ea71b-2e65-433a-9a02-b2b88d72bbd0</con:tagId>
+</con:testSuite>

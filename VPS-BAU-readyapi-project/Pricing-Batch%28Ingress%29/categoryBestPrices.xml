@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:con="http://eviware.com/soapui/config" name="categoryBestPrices" path="/v1/categoryBestPrices" id="798bbe67-c80e-4cfe-84da-828dd35440de">
+  <con:settings id="c41cb319-7e6e-4765-90e6-d07e3f95a824">
+    <con:setting id="798bbe67-c80e-4cfe-84da-828dd35440defileName">categoryBestPrices</con:setting>
+  </con:settings>
+  <con:parameters/>
+  <con:method name="categoryBestPrices" id="68534776-7b20-49a7-970a-121407445724" method="POST">
+    <con:settings/>
+    <con:parameters/>
+    <con:request name="categoryBestPrices" id="dc41ca00-b968-4a2f-8432-c0bf85f0b9fd" mediaType="application/json" postQueryString="false">
+      <con:settings>
+        <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+      </con:settings>
+      <con:request>{
+	"commonParameters": {
+		"shipCode": "${#TestCase#shipCode}",
+		"sailDate": "${#TestCase#sailDate}",
+		"packageCode": "${#TestCase#packageCode}",
+		"bookingChannel": "VP",
+		"officeCode": "${#TestCase#officeCode}",
+		"countryCode": "${#TestCase#countryCode}",
+		"currencyCode": "${#TestCase#currencyCode}",
+		"bookingType": "I",
+		"occupancy": 1
+	},
+	"shipCurrencyCode": "USD",
+	"showGuestDetail": true,
+	"guestInformation": [
+		{
+			"guestAge": "${#TestCase#guestAge}",
+			"lifeStageCode": "${#TestCase#lifeStageCode}",
+			"loyaltyTierCode": "${#TestCase#loyaltyTierCode}",
+			"loyaltyId": "${#TestCase#loyaltyId}",
+			"residenceStateProvinceCode": "${#TestCase#residenceStateProvinceCode}"
+		}
+	],
+	"promoCodes": [
+		"${#TestCase#promoCode}"
+	]
+}</con:request>
+      <con:credentials>
+        <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+        <con:authType>No Authorization</con:authType>
+      </con:credentials>
+      <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+      <con:parameters/>
+      <con:environmentSpec>
+        <con:entry environmentId="9ba133c3-3cd7-45c8-8561-64ce1c92ea67">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="015736b2-7549-4743-94e6-d64278e45b46">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="e94bb75c-7f53-42a7-9f97-eb5aa3fcaf53">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="b2abf588-b45c-4e44-9dd0-8b2249bbc4e7">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="5322014d-43c7-4904-af96-4329a0290c25">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="495bcf82-3dfa-4956-b162-f0b1bfb07f10">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="feba3ebd-aeec-4c25-8b24-4b9e406c22cb">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="b3e5490d-8b80-49fe-97a2-a82077345345">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="a98aa22f-37cb-4a0e-84c6-f2de81903489">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+      </con:environmentSpec>
+    </con:request>
+  </con:method>
+</con:resource>

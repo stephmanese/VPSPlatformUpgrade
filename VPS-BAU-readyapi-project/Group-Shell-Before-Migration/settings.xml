@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testSuite xmlns:con="http://eviware.com/soapui/config" id="3219528c-45b0-4071-8fe8-fc3822712d42" name="Group Shell-Before Migration">
+  <con:settings id="2cfaa2e3-e096-492a-ae29-bbe1cf6070d6">
+    <con:setting id="3219528c-45b0-4071-8fe8-fc3822712d42fileName">Group-Shell-Before-Migration</con:setting>
+  </con:settings>
+  <con:runType>SEQUENTIAL</con:runType>
+  <con:properties/>
+  <con:reportParameters/>
+  <con:tagId>b51ba806-3b4d-4a61-9811-ac4f12dc1a04</con:tagId>
+</con:testSuite>

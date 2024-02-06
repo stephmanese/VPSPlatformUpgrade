@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:con="http://eviware.com/soapui/config" name="sailing-package" path="/v1/sailing-package" id="b1c9164c-e499-40c3-af41-a185c5a79462">
+  <con:settings id="24887377-0f91-43b9-9ed2-037fc52f6f75">
+    <con:setting id="b1c9164c-e499-40c3-af41-a185c5a79462fileName">sailing-package</con:setting>
+  </con:settings>
+  <con:parameters/>
+  <con:method name="sailing-package" id="ca0df83d-f1c7-4bc5-b83f-2b87c2561765" method="GET">
+    <con:settings/>
+    <con:parameters>
+      <con:parameter required="true">
+        <con:name>brandCode</con:name>
+        <con:style>QUERY</con:style>
+      </con:parameter>
+      <con:parameter required="true">
+        <con:name>shipCodes</con:name>
+        <con:style>QUERY</con:style>
+      </con:parameter>
+      <con:parameter required="true">
+        <con:name>fromSailDate</con:name>
+        <con:style>QUERY</con:style>
+      </con:parameter>
+      <con:parameter required="true">
+        <con:name>toSailDate</con:name>
+        <con:style>QUERY</con:style>
+      </con:parameter>
+      <con:parameter required="true">
+        <con:name>includeTourPackages</con:name>
+        <con:style>QUERY</con:style>
+      </con:parameter>
+    </con:parameters>
+    <con:request name="sailing-package" id="f89d7ba0-d197-460a-8d15-d450b962d3d4" mediaType="application/json" postQueryString="false">
+      <con:settings>
+        <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;con:entry key="X-API-key" value="${#Project#X-API-key}" xmlns:con="http://eviware.com/soapui/config"/></con:setting>
+      </con:settings>
+      <con:request/>
+      <con:credentials>
+        <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+        <con:authType>No Authorization</con:authType>
+      </con:credentials>
+      <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+      <con:parameters>
+        <con:entry key="shipCodes" value="${#TestCase#shipCode}"/>
+        <con:entry key="toSailDate" value="${#TestCase#toSailDate}"/>
+        <con:entry key="includeTourPackages" value="false"/>
+        <con:entry key="fromSailDate" value="${#TestCase#fromSailDate}"/>
+        <con:entry key="brandCode" value="${#TestCase#brand}"/>
+      </con:parameters>
+      <con:parameterOrder>
+        <con:entry>brandCode</con:entry>
+        <con:entry>shipCodes</con:entry>
+        <con:entry>fromSailDate</con:entry>
+        <con:entry>toSailDate</con:entry>
+        <con:entry>includeTourPackages</con:entry>
+      </con:parameterOrder>
+      <con:environmentSpec>
+        <con:entry environmentId="9ba133c3-3cd7-45c8-8561-64ce1c92ea67">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="015736b2-7549-4743-94e6-d64278e45b46">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="e94bb75c-7f53-42a7-9f97-eb5aa3fcaf53">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="b2abf588-b45c-4e44-9dd0-8b2249bbc4e7">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="5322014d-43c7-4904-af96-4329a0290c25">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="495bcf82-3dfa-4956-b162-f0b1bfb07f10">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="feba3ebd-aeec-4c25-8b24-4b9e406c22cb">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="b3e5490d-8b80-49fe-97a2-a82077345345">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="a98aa22f-37cb-4a0e-84c6-f2de81903489">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+      </con:environmentSpec>
+    </con:request>
+  </con:method>
+</con:resource>

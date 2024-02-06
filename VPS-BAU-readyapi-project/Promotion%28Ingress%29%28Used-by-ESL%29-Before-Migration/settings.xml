@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testSuite xmlns:con="http://eviware.com/soapui/config" id="ebd35f97-c06c-4aed-aff8-555c8e6ed1bf" name="Promotion(Ingress)(Used by ESL)-Before Migration">
+  <con:settings id="fab9550b-da08-4171-bc0f-71790d6dfdec">
+    <con:setting id="ebd35f97-c06c-4aed-aff8-555c8e6ed1bffileName">Promotion%28Ingress%29%28Used-by-ESL%29-Before-Migration</con:setting>
+  </con:settings>
+  <con:runType>SEQUENTIAL</con:runType>
+  <con:properties/>
+  <con:reportParameters/>
+  <con:tagId>ed78df25-e257-4d79-af09-c927ef7374cb</con:tagId>
+</con:testSuite>

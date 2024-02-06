@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testCase xmlns:con="http://eviware.com/soapui/config" id="cade48df-0815-4d78-b218-a823f1ae51e3" discardOkResults="false" failOnError="false" failTestCaseOnErrors="true" keepSession="false" name="pricing | R - CO - Non-Galapagos" searchProperties="true" timeout="0" disabled="true">
+  <con:settings id="d9b6ff09-cc86-438a-970c-4acc4edc3524">
+    <con:setting id="cade48df-0815-4d78-b218-a823f1ae51e3fileName">pricing-%7C-R---CO---Non-Galapagos</con:setting>
+  </con:settings>
+  <con:testStep type="groovy" name="loadTestData-agency" id="9f137b51-0787-4596-a528-32dbc0a149c2">
+    <con:settings/>
+    <con:config>
+      <script>//load/fetch test data from local source
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+//get user's device OS and set directory
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsTestData/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsTestData/" //directory for mac
+	}
+
+	
+def testData = context.expand( '${#Project#testData-agency}' ) //modify this based on test case
+def filePath = directory + testData
+def restResponse = new JsonSlurper().parseText(new File(filePath).text)
+def prettyJson = new groovy.json.JsonBuilder(restResponse).toPrettyString()</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="loadTestData-royal" id="7beead8f-67eb-4a67-a202-1e4db5a61e73">
+    <con:settings/>
+    <con:config>
+      <script>//load/fetch test data from local source
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+//get user's device OS and set directory
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsTestData/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsTestData/" //directory for mac
+	}
+
+	
+def testData = context.expand( '${#Project#testData-royal}' ) //modify this based on test case
+def filePath = directory + testData
+def restResponse = new JsonSlurper().parseText(new File(filePath).text)
+def prettyJson = new groovy.json.JsonBuilder(restResponse).toPrettyString()</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="loadTestData-market" id="bb7364b7-04e1-488b-b5e5-fdfed66be36a">
+    <con:settings/>
+    <con:config>
+      <script>//load/fetch test data from local source
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+//get user's device OS and set directory
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsTestData/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsTestData/" //directory for mac
+	}
+
+	
+def testData = context.expand( '${#Project#testData-market}' ) //modify this based on test case
+def filePath = directory + testData
+def restResponse = new JsonSlurper().parseText(new File(filePath).text)
+def prettyJson = new groovy.json.JsonBuilder(restResponse).toPrettyString()</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="loadTestData-guestPreferences" id="f352c4f9-1647-4368-8c25-d6f0e5558f56">
+    <con:settings/>
+    <con:config>
+      <script>//load/fetch test data from local source
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+//get user's device OS and set directory
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsTestData/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsTestData/" //directory for mac
+	}
+
+	
+def testData = context.expand( '${#Project#testData-guestPreferences}' ) //modify this based on test case
+def filePath = directory + testData
+def restResponse = new JsonSlurper().parseText(new File(filePath).text)
+def prettyJson = new groovy.json.JsonBuilder(restResponse).toPrettyString()</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="setVariables" id="4aa03db6-70b1-4ec0-88fe-d15c25930ac5">
+    <con:settings/>
+    <con:config>
+      <script>//set variables from the fetched test data needed for the REST request
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+def agencyId = context.expand( '${loadTestData-agency#result#$[\'agency\'][\'odysseus\'][\'clientId\']}' )
+log.info(agencyId);
+testRunner.testCase.setPropertyValue("agencyId",agencyId);
+
+def brandCode = context.expand( '${loadTestData-royal#result#$[\'royal\'][\'brandCode\']}' )
+log.info(brandCode);
+testRunner.testCase.setPropertyValue("brandCode",brandCode);
+
+def shipCode = context.expand( '${loadTestData-royal#result#$[\'royal\'][\'CO\'][\'shipCode\']}' )
+log.info(shipCode);
+testRunner.testCase.setPropertyValue("shipCode",shipCode);
+
+def packageCode = context.expand( '${loadTestData-royal#result#$[\'royal\'][\'CO\'][\'packageCode\']}' )
+log.info(packageCode);
+testRunner.testCase.setPropertyValue("packageCode",packageCode);
+
+def sailDate = context.expand( '${loadTestData-royal#result#$[\'royal\'][\'CO\'][\'fromSailDate\']}' )
+log.info(sailDate);
+testRunner.testCase.setPropertyValue("sailDate",sailDate);
+
+def officeCode = context.expand( '${loadTestData-market#result#$[\'market\'][\'USA\'][\'officeCode\']}' )
+log.info(officeCode);
+testRunner.testCase.setPropertyValue("officeCode",officeCode);
+
+def countryCode = context.expand( '${loadTestData-market#result#$[\'market\'][\'USA\'][\'countryCode\']}' )
+log.info(countryCode);
+testRunner.testCase.setPropertyValue("countryCode",countryCode);
+
+def currencyCode = context.expand( '${loadTestData-market#result#$[\'market\'][\'USA\'][\'currencyCode\']}' )
+log.info(currencyCode);
+testRunner.testCase.setPropertyValue("currencyCode",currencyCode);
+
+def lifeStageCode = context.expand( '${loadTestData-guestPreferences#result#$[\'guestPreferences\'][0][\'lifeStageCode\']}' )
+log.info(lifeStageCode);
+testRunner.testCase.setPropertyValue("lifeStageCode",lifeStageCode);
+
+def age = context.expand( '${loadTestData-guestPreferences#result#$[\'guestPreferences\'][0][\'age\']}' )
+log.info(age);
+testRunner.testCase.setPropertyValue("age",age);</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="restrequest" name="pricing | R - CO - Non-Galapagos-After" id="64aba341-9d3f-4720-8058-9b3229b988a3">
+    <con:settings/>
+    <con:config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" service="External Services(Ingress-Pricing Batch)" resourcePath="/v1/pricing" methodName="pricing" xsi:type="con:RestRequestStep">
+      <con:restRequest name="pricing | R - CO - Non-Galapagos-After" id="961191e1-fd85-46cf-8b83-c920fea7cd5d" mediaType="application/json" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment>&lt;con:entry key="apiKey" value="${#Project#apiKey}" xmlns:con="http://eviware.com/soapui/config"/>&lt;con:entry key="Content-Type" value="application/json" xmlns:con="http://eviware.com/soapui/config"/>&lt;/xml-fragment></con:setting>
+        </con:settings>
+        <con:request>{
+	"agencyId": "${#TestCase#agencyId}",
+	"sailings": [
+		{
+			"brandCode": "${#TestCase#brandCode}",
+			"shipCode": "${#TestCase#shipCode}",
+			"packageCode": "${#TestCase#packageCode}",
+			"sailDate": "${#TestCase#sailDate}"
+		}
+	],
+	"pricingMarket": {
+		"officeCode": "${#TestCase#officeCode}",
+		"countryCode": "${#TestCase#countryCode}",
+		"currencyCode": "${#TestCase#currencyCode}"
+	},
+	"pricingPreference": {
+		"bookingChannelCode": "VP",
+		"bookingTypeCode": "I",
+		"accessibleStateRoomsOnly": false,
+		"includeSoldOut": false,
+		"depositFareType": "R",
+		"bestPriceType": "B",
+		"includeGuestDetail": true
+	},
+	"occupancy": 2,
+	"guestPreferences": [
+		{
+			"lifeStageCode": "${#TestCase#lifeStageCode}",
+			"age": "${#TestCase#age}"
+		},
+		{
+			"lifeStageCode": "${#TestCase#lifeStageCode}",
+			"age": "${#TestCase#age}"
+		}
+	]
+}</con:request>
+        <con:assertion type="Valid HTTP Status Codes" id="24e4ea41-ecbb-45ea-b346-06f2e3126b5e" name="Valid HTTP Status Codes">
+          <con:settings/>
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:assertion type="GroovyScriptAssertion" id="e0483530-e149-4c15-8e25-96cbf575acc0" name="Script Assertion">
+          <con:configuration>
+            <scriptText>def jsonRes = messageExchange.getResponse().contentAsString
+
+
+def jsonSlurper = new groovy.json.JsonSlurper();
+def parse = jsonSlurper.parseText(jsonRes)
+
+
+def sailing = parse.prices[0].sailing
+log.info sailing
+assert sailing != null
+
+def brand = parse.prices[0].sailing.brandCode
+log.info brand
+assert brand == "R"
+
+def shipCode = parse.prices[0].sailing.shipCode
+log.info shipCode
+assert shipCode == "NV"
+
+def packageCode = parse.prices[0].sailing.packageCode
+log.info packageCode
+assert packageCode == "NV03X023"
+
+def sailDate = parse.prices[0].sailing.sailDate
+log.info sailDate
+assert sailDate == "2025-01-03"</scriptText>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:parameters/>
+        <con:environmentSpec>
+          <con:entry environmentId="9ba133c3-3cd7-45c8-8561-64ce1c92ea67">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="015736b2-7549-4743-94e6-d64278e45b46">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="e94bb75c-7f53-42a7-9f97-eb5aa3fcaf53">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b2abf588-b45c-4e44-9dd0-8b2249bbc4e7">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="5322014d-43c7-4904-af96-4329a0290c25">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="495bcf82-3dfa-4956-b162-f0b1bfb07f10">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="feba3ebd-aeec-4c25-8b24-4b9e406c22cb">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b3e5490d-8b80-49fe-97a2-a82077345345">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="a98aa22f-37cb-4a0e-84c6-f2de81903489">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+        </con:environmentSpec>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="compareResponse" id="6a749b7a-c2b7-4bae-b3bb-a1baede2f3c3">
+    <con:settings/>
+    <con:config>
+      <script><![CDATA[//reference: https://support.smartbear.com/readyapi/faq/how-do-i-compare-two-dynamic-json-responses/
+//compare before and after migration response
+import groovy.json.*
+import com.eviware.soapui.support.JsonPathValueNode
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.node.ArrayNode
+import com.fasterxml.jackson.databind.node.ObjectNode
+import com.jayway.jsonpath.Configuration
+import com.jayway.jsonpath.JsonPath
+import com.jayway.jsonpath.spi.json.JacksonJsonNodeJsonProvider
+import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider
+import com.eviware.soapui.model.testsuite.*;
+
+def responseIsSame = true  //flag for validation
+
+//get user's device OS and set directory
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsResponseBeforeMigration/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsResponseBeforeMigration/" //directory for mac
+	}
+
+
+
+//baseline response
+def filePath = directory + "pricing-R-CO-Non-Galapagos.json"
+def baselineResp = new JsonSlurper().parseText(new File(filePath).text)
+baselineResp.status.remove("dateTime")
+def modifiedBaselineResp = JsonOutput.toJson(baselineResp)
+
+//current response
+def currentJsonResp = context.expand('${pricing | R - CO - Non-Galapagos-After#Response}') 
+def outputOfCurrentResp = new JsonSlurper().parseText(currentJsonResp)
+outputOfCurrentResp.status.remove("dateTime")
+def modifiedOutputOfCurrentResp = JsonOutput.toJson(outputOfCurrentResp)
+
+log.info("Baseline Response: " + modifiedBaselineResp)
+log.info("Output of CurrentResponse: " + modifiedOutputOfCurrentResp)
+
+mapper = new ObjectMapper()
+JsonNode responseBefore = mapper.readTree(modifiedBaselineResp);
+JsonNode responseAfter = mapper.readTree(modifiedOutputOfCurrentResp);
+
+Set<JsonPathValueNode> pathValues = listLeafValues(responseBefore, '$');
+Set<JsonPathValueNode> pathValues2 = listLeafValues(responseAfter, '$');
+Configuration configuration = Configuration.builder()
+        .jsonProvider(new JacksonJsonNodeJsonProvider())
+        .mappingProvider(new JacksonMappingProvider(mapper))
+        .build();
+
+pathValues.each {
+    try {
+        JsonPath jsonPath = JsonPath.compile(it.path);
+        JsonNode result = jsonPath.read(responseAfter, configuration);
+        
+        if (result != it.valueNode) {
+            log.info('Node with path ' + it.path + ' and value ' + it.valueNode + ' are not matched')
+            responseIsSame = false
+        }
+    } catch (Exception e) {
+        log.info('Node with path ' + it.path + ' and value ' + it.valueNode + ' are not matched')
+        responseIsSame = false
+    }
+}
+
+pathValues2.each {
+    try {
+        JsonPath jsonPath = JsonPath.compile(it.path);
+        JsonNode result = jsonPath.read(responseBefore, configuration);
+        
+        if (result != it.valueNode) {
+            log.info('Node with path ' + it.path + ' and value ' + it.valueNode + ' are not matched')
+            responseIsSame = false
+        }
+    } catch (Exception e) {
+        log.info('Node with path ' + it.path + ' and value ' + it.valueNode + ' are not matched')
+        responseIsSame = false
+    }
+}
+
+Set<JsonPathValueNode> listLeafValues(JsonNode jsonObject, String path) {
+    if (jsonObject.isObject()) {
+        return getValuesFrom((ObjectNode) jsonObject, path);
+    } else if (jsonObject.isArray()) {
+        return getValuesFrom((ArrayNode) jsonObject, path);
+    } else {
+    }
+}
+
+Set<JsonPathValueNode> getValuesFrom(ObjectNode jsonObject, String path) {
+    Set<JsonPathValueNode> values = new LinkedHashSet<>();
+    Iterator<Map.Entry<String, JsonNode>> fields = jsonObject.fields();
+    while (fields.hasNext()) {
+        Map.Entry<String, JsonNode> field = fields.next();
+        JsonNode value = field.getValue();
+        String nodePath = path + "." + field.getKey();
+        addValue(values, value, nodePath);
+    }
+    return values;
+}
+
+Set<JsonPathValueNode> getValuesFrom(ArrayNode array, String nodePath) {
+    Set<JsonPathValueNode> values = new LinkedHashSet<>();
+    int index = 0;
+    for (JsonNode value : array) {
+        addValue(values, value, nodePath + "[" + index + "]");
+        index++;
+    }
+    return values;
+}
+
+def addValue(Set<JsonPathValueNode> values, JsonNode value, String nodePath) {
+    if (value.isObject()) {
+        values.addAll(getValuesFrom((ObjectNode) value, nodePath));
+    } else if (value.isArray()) {
+        values.addAll(getValuesFrom((ArrayNode) value, nodePath));
+    } else if (value.isValueNode()) {
+        values.add(new JsonPathValueNode(nodePath, value));
+    }
+}
+
+assert responseIsSame == true
+log.info("Before Migration and After Migration Responses are matched")]]></script>
+    </con:config>
+  </con:testStep>
+  <con:properties/>
+  <con:reportParameters/>
+</con:testCase>

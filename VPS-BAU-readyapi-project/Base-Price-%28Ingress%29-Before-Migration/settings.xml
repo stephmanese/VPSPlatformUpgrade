@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testSuite xmlns:con="http://eviware.com/soapui/config" id="06927b2b-437d-4b7d-9a80-c4557ab1aeec" name="Base Price (Ingress)-Before Migration">
+  <con:settings id="94e1cd39-6293-4771-b2d0-9f4fdf5d5f07">
+    <con:setting id="06927b2b-437d-4b7d-9a80-c4557ab1aeecfileName">Base-Price-%28Ingress%29-Before-Migration</con:setting>
+  </con:settings>
+  <con:runType>SEQUENTIAL</con:runType>
+  <con:properties/>
+  <con:reportParameters/>
+  <con:tagId>ed78df25-e257-4d79-af09-c927ef7374cb</con:tagId>
+</con:testSuite>

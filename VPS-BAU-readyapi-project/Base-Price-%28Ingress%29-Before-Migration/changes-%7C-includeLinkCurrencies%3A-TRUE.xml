@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testCase xmlns:con="http://eviware.com/soapui/config" id="21c2c9ea-9166-4428-9dbe-c21d2ef98441" discardOkResults="false" failOnError="false" failTestCaseOnErrors="true" keepSession="false" name="changes | includeLinkCurrencies: TRUE" searchProperties="true" timeout="0">
+  <con:settings id="ea453286-bed5-4b82-831f-acf6ef316316">
+    <con:setting id="21c2c9ea-9166-4428-9dbe-c21d2ef98441fileName">changes-%7C-includeLinkCurrencies%3A-TRUE</con:setting>
+  </con:settings>
+  <con:testStep type="groovy" name="loadTestData-market" id="42c11356-48fa-49d5-bfb9-511e46eb46f8">
+    <con:settings/>
+    <con:config>
+      <script>//load/fetch test data from an external json file
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+//get OS and set directory based on OS
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsTestData/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsTestData/" //to insert directory for mac
+	}
+
+	
+def testData = context.expand( '${#Project#testData-market}' )
+def filePath = directory + testData
+def restResponse = new JsonSlurper().parseText(new File(filePath).text)
+def prettyJson = new groovy.json.JsonBuilder(restResponse).toPrettyString()</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="setVariables" id="9dc06277-6348-493c-bfdd-660f37e2dc15">
+    <con:settings/>
+    <con:config>
+      <script>//set variables from the fetched test data needed for the REST request
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+import java.time.LocalDateTime
+import java.text.SimpleDateFormat
+
+//get data from TestDate-market
+def officeCode = context.expand( '${loadTestData-market#result#$[\'market\'][\'AUS\'][\'officeCode\']}' )
+log.info(officeCode);
+testRunner.testCase.setPropertyValue("officeCode",officeCode);
+
+def countryCode = context.expand( '${loadTestData-market#result#$[\'market\'][\'AUS\'][\'countryCode\']}' )
+log.info(countryCode);
+testRunner.testCase.setPropertyValue("countryCode",countryCode);
+
+def currencyCode = context.expand( '${loadTestData-market#result#$[\'market\'][\'USA\'][\'currencyCode\']}' )
+log.info(currencyCode);
+testRunner.testCase.setPropertyValue("currencyCode",currencyCode);
+
+//to Get the date and convert to TimeZone
+Date now = new Date()
+log.info(now)
+
+def fromDateTime = now.format("yyyy-MM-dd'T'HH:mm:ss.SSS", TimeZone.getTimeZone('EST'))
+log.info(fromDateTime)
+testRunner.testCase.setPropertyValue("fromDateTime",fromDateTime);</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="restrequest" name="changesBefore" id="9f973046-bac9-41c7-826c-e039c0e76445">
+    <con:settings/>
+    <con:config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" service="Base Price (Ingress)" resourcePath="/v1/changes" methodName="changes" xsi:type="con:RestRequestStep">
+      <con:restRequest name="changesBefore" id="00c39734-b88f-49cd-8d16-3c11a3a6bb86" mediaType="application/json" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;con:entry key="Content-Type" value="application/json" xmlns:con="http://eviware.com/soapui/config"/></con:setting>
+        </con:settings>
+        <con:request>{
+	"market": {
+		"officeCode": "${#TestCase#officeCode}",
+		"countryCode": "${#TestCase#countryCode}",
+		"baseCurrencyCode": "${#TestCase#currencyCode}",
+		"includeLinkCurrencies": true
+	},
+	"fromDateTime": "${#TestCase#fromDateTime}"
+}</con:request>
+        <con:originalUri>http://vps-stg-a.rccl.com/vps-sierra/basePrice/v1/changes</con:originalUri>
+        <con:assertion type="Valid HTTP Status Codes" id="e50c4d23-9cb8-4081-a32b-a7aca8b617d3" name="Valid HTTP Status Codes">
+          <con:settings/>
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:assertion type="GroovyScriptAssertion" id="bf499fa7-9065-42f8-94c6-68c06b685043" name="Script Assertion (If the keys are not present, check Open Search)">
+          <con:configuration>
+            <scriptText>def jsonRes = messageExchange.getResponse().contentAsString
+
+
+def jsonSlurper = new groovy.json.JsonSlurper();
+def parse = jsonSlurper.parseText(jsonRes)
+
+
+def keys = parse.keys[0]
+log.info keys
+assert keys!=null</scriptText>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:parameters/>
+        <con:environmentSpec>
+          <con:entry environmentId="9ba133c3-3cd7-45c8-8561-64ce1c92ea67">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="015736b2-7549-4743-94e6-d64278e45b46">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="e94bb75c-7f53-42a7-9f97-eb5aa3fcaf53">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b2abf588-b45c-4e44-9dd0-8b2249bbc4e7">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="5322014d-43c7-4904-af96-4329a0290c25">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="495bcf82-3dfa-4956-b162-f0b1bfb07f10">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="feba3ebd-aeec-4c25-8b24-4b9e406c22cb">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b3e5490d-8b80-49fe-97a2-a82077345345">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="a98aa22f-37cb-4a0e-84c6-f2de81903489">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+        </con:environmentSpec>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="fetchResponse" id="83832f19-290e-4e37-ace4-357a1bd14602">
+    <con:settings/>
+    <con:config>
+      <script>//fetch the REST response
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+def changesBeforeResponse = context.expand( '${changesBefore#Response}' ) 
+def changesBeforeResponse2 = new JsonSlurper().parseText(changesBeforeResponse); 
+def prettyJson = new groovy.json.JsonBuilder(changesBeforeResponse2).toPrettyString(); //to beautify your JSON</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="setFolderDirectory" id="3a62bea1-66a8-4e20-99e0-3d0ca1a878ba">
+    <con:settings/>
+    <con:config>
+      <script>//set folder directory for storing the response
+
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+String jsonFileName = "changesIncludeLinkCurrenciesTRUE.json"
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsResponseBeforeMigration/" + jsonFileName
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsResponseBeforeMigration/" + jsonFileName // to insert directory for mac
+	}</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="datasink" name="storeResponse" id="12b0bb7f-33bd-4e44-9ac0-f63072a3a905">
+    <con:settings/>
+    <con:config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="con:DataSinkStep">
+      <con:dataSink type="File">
+        <con:configuration>
+          <fileName>${setFolderDirectory#result}</fileName>
+          <separator/>
+          <escape/>
+          <quote>false</quote>
+          <trim>true</trim>
+          <append>false</append>
+          <encoding>UTF-8</encoding>
+        </con:configuration>
+      </con:dataSink>
+      <con:properties>
+        <con:property>
+          <con:name>changesIncludeLinkCurrenciesTRUE</con:name>
+          <con:value>${fetchResponse#result}</con:value>
+        </con:property>
+      </con:properties>
+    </con:config>
+  </con:testStep>
+  <con:properties>
+    <con:property>
+      <con:name>agencyId</con:name>
+      <con:value>160719</con:value>
+    </con:property>
+    <con:property>
+      <con:name>shipCode</con:name>
+      <con:value>AX</con:value>
+    </con:property>
+    <con:property>
+      <con:name>sailDate</con:name>
+      <con:value>20240203</con:value>
+    </con:property>
+    <con:property>
+      <con:name>packageCode</con:name>
+      <con:value>AX07W518</con:value>
+    </con:property>
+    <con:property>
+      <con:name>officeCode</con:name>
+      <con:value>AUS</con:value>
+    </con:property>
+    <con:property>
+      <con:name>countryCode</con:name>
+      <con:value>AUS</con:value>
+    </con:property>
+    <con:property>
+      <con:name>currencyCode</con:name>
+      <con:value>USD</con:value>
+    </con:property>
+    <con:property>
+      <con:name>age</con:name>
+      <con:value>45</con:value>
+    </con:property>
+    <con:property>
+      <con:name>lifeStageCode</con:name>
+      <con:value>A</con:value>
+    </con:property>
+    <con:property>
+      <con:name>guestAge</con:name>
+      <con:value>45</con:value>
+    </con:property>
+    <con:property>
+      <con:name>FUTURE_TIME</con:name>
+      <con:value>2023-12-01T10:15:46</con:value>
+    </con:property>
+    <con:property>
+      <con:name>dateString</con:name>
+      <con:value>2023-12-05T02:57:40.020Z</con:value>
+    </con:property>
+    <con:property>
+      <con:name>updatedTime</con:name>
+      <con:value>2023-12-01T10:15:46</con:value>
+    </con:property>
+    <con:property>
+      <con:name>fromDateTime</con:name>
+      <con:value>2024-02-05T02:00:50.688</con:value>
+    </con:property>
+  </con:properties>
+  <con:reportParameters/>
+</con:testCase>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testSuite xmlns:con="http://eviware.com/soapui/config" id="eb5486e6-0196-44ce-856a-4bd572e3413b" name="pricing-snapshot-Vacation Index-After Migration">
+  <con:settings id="c24acf36-1bd7-4976-b29a-f629e94af674">
+    <con:setting id="eb5486e6-0196-44ce-856a-4bd572e3413bfileName">pricing-snapshot-Vacation-Index-After-Migration</con:setting>
+  </con:settings>
+  <con:runType>SEQUENTIAL</con:runType>
+  <con:properties/>
+  <con:reportParameters/>
+  <con:tagId>35a74599-b6eb-4985-b3da-38c16113df95</con:tagId>
+</con:testSuite>

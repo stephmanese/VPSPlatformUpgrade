@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testCase xmlns:con="http://eviware.com/soapui/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="dcae759a-ec20-46f9-927a-f2f8a97da0f8" discardOkResults="false" failOnError="false" failTestCaseOnErrors="true" keepSession="false" name="targetedOffer|Loyalty ID w/ Targeted Offer" searchProperties="true" timeout="0">
+  <con:settings id="82f85730-9383-4752-8c8f-bcc511440522">
+    <con:setting id="dcae759a-ec20-46f9-927a-f2f8a97da0f8fileName">targetedOffer%7CLoyalty-ID-w%2F-Targeted-Offer</con:setting>
+  </con:settings>
+  <con:testStep type="groovy" name="loadTestData-loyaltyId" id="6f2c3667-ce01-4d07-984a-0da0feb55649">
+    <con:settings/>
+    <con:config>
+      <script>//load/fetch test data from an external json file
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+//get OS and set directory based on OS
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsTestData/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsTestData/" //to insert directory for mac
+	}
+
+	
+def testData = context.expand( '${#Project#testData-targetedOffersByLoyalty}' )
+def filePath = directory + testData
+def restResponse = new JsonSlurper().parseText(new File(filePath).text)
+def prettyJson = new groovy.json.JsonBuilder(restResponse).toPrettyString()</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="setVariables" id="d2100dec-62a5-4d40-b1e5-ccb4e8b5a261">
+    <con:settings/>
+    <con:config>
+      <script>//set variables from the fetched test data needed for the REST request
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+
+//get data from TestDate-loyaltyId
+def loyaltyId = context.expand( '${loadTestData-loyaltyId#result#$[\'targetedOffersByLoyalty\'][\'withTO\'][\'loyaltyId\']}' )
+log.info(loyaltyId);
+testRunner.testCase.setPropertyValue("loyaltyId",loyaltyId);</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="restrequest" name="loyaltyIdBefore" id="e4f5cef9-27c9-45d5-bccf-ab33ee2d5565">
+    <con:settings/>
+    <con:config service="Targeted Offer" resourcePath="/v1/targetedOffer" methodName="targetedOffer" xsi:type="con:RestRequestStep">
+      <con:restRequest name="loyaltyIdBefore" id="9d30309d-ab52-4f49-b7f8-b0e7d30357e2" mediaType="application/json" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+        </con:settings>
+        <con:request>{
+	"loyaltyIds": [
+		"${#TestCase#loyaltyId}"
+	],
+	"effectiveDateTime": "${#Project#effectiveDateTime}"
+}</con:request>
+        <con:originalUri>http://vps-stg-a.rccl.com/vps-sierra/targetedOffer/v1/targetedOffer</con:originalUri>
+        <con:assertion type="Valid HTTP Status Codes" id="d0ea74c4-6229-4c18-bf92-a4097dd3de95" name="Valid HTTP Status Codes">
+          <con:settings/>
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:assertion type="GroovyScriptAssertion" id="eb027c18-2122-40eb-8b12-6784d9f46e30" name="Script Assertion">
+          <con:configuration>
+            <scriptText>def jsonRes = messageExchange.getResponse().contentAsString
+
+
+def jsonSlurper = new groovy.json.JsonSlurper();
+def parse = jsonSlurper.parseText(jsonRes)
+
+
+def targetedOffersByLoyalty = parse.targetedOffersByLoyalty[0]
+log.info targetedOffersByLoyalty
+assert targetedOffersByLoyalty!=null</scriptText>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:parameters/>
+        <con:environmentSpec>
+          <con:entry environmentId="9ba133c3-3cd7-45c8-8561-64ce1c92ea67">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="015736b2-7549-4743-94e6-d64278e45b46">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="e94bb75c-7f53-42a7-9f97-eb5aa3fcaf53">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b2abf588-b45c-4e44-9dd0-8b2249bbc4e7">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="5322014d-43c7-4904-af96-4329a0290c25">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="495bcf82-3dfa-4956-b162-f0b1bfb07f10">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="feba3ebd-aeec-4c25-8b24-4b9e406c22cb">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b3e5490d-8b80-49fe-97a2-a82077345345">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="a98aa22f-37cb-4a0e-84c6-f2de81903489">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+        </con:environmentSpec>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="fetchResponse" id="6816e5bb-fac0-412e-8e53-b05bc6f7d286">
+    <con:settings/>
+    <con:config>
+      <script>//fetch the REST response
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+def loyaltyIdBeforeResponse = context.expand( '${loyaltyIdBefore#Response}' ) 
+def loyaltyIdBeforeResponse2 = new JsonSlurper().parseText(loyaltyIdBeforeResponse); 
+def prettyJson = new groovy.json.JsonBuilder(loyaltyIdBeforeResponse2).toPrettyString(); //to beautify your JSON</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="setFolderDirectory" id="7d71444e-508b-4cdb-9a43-2b8af030ef3a">
+    <con:settings/>
+    <con:config>
+      <script>//set folder directory for storing the response
+
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+String jsonFileName = "loyaltyIdwithTargetedOfferBefore.json"
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsResponseBeforeMigration/" + jsonFileName
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsResponseBeforeMigration/" + jsonFileName // to insert directory for mac
+	}</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="datasink" name="storeResponse" id="0e2cc33c-6e4e-4637-ad31-eb27305d6285">
+    <con:settings/>
+    <con:config xsi:type="con:DataSinkStep">
+      <con:dataSink type="File">
+        <con:configuration>
+          <fileName>${setFolderDirectory#result}</fileName>
+          <separator/>
+          <escape/>
+          <quote>false</quote>
+          <trim>true</trim>
+          <append>false</append>
+          <encoding>UTF-8</encoding>
+        </con:configuration>
+      </con:dataSink>
+      <con:properties>
+        <con:property>
+          <con:name>loyaltyIdwithTargetedOfferBefore</con:name>
+          <con:value>${fetchResponse#result}</con:value>
+        </con:property>
+      </con:properties>
+    </con:config>
+  </con:testStep>
+  <con:properties>
+    <con:property>
+      <con:name>loyaltyId</con:name>
+      <con:value>700255300</con:value>
+    </con:property>
+  </con:properties>
+  <con:reportParameters/>
+</con:testCase>

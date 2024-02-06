@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testCase xmlns:con="http://eviware.com/soapui/config" id="f9a31a9c-7c58-4517-95da-2bcff7cd6df2" discardOkResults="false" failOnError="false" failTestCaseOnErrors="true" keepSession="false" name="sailings-package-changes | fromDateTime future date" searchProperties="true" timeout="0" disabled="true">
+  <con:settings id="1175f336-f1ff-489d-ae42-001bc070a165">
+    <con:setting id="f9a31a9c-7c58-4517-95da-2bcff7cd6df2fileName">sailings-package-changes-%7C-fromDateTime-future-date</con:setting>
+  </con:settings>
+  <con:testStep type="groovy" name="loadTestData" id="548e4db3-6776-4843-b519-57a8ba0609fa">
+    <con:settings/>
+    <con:config>
+      <script>//load/fetch test data from an external json file
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+//get OS and set directory based on OS
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsTestData/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsTestData/" //to insert directory for mac
+	}
+
+	
+def testData = context.expand( '${#Project#testData-agency}' )
+def filePath = directory + testData
+def restResponse = new JsonSlurper().parseText(new File(filePath).text)
+def prettyJson = new groovy.json.JsonBuilder(restResponse).toPrettyString()</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="setVariables" id="09643d42-151b-4e6c-89d4-fa4e36a0a88f">
+    <con:settings/>
+    <con:config>
+      <script>//set variables from the fetched test data needed for the REST request
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+import java.time.LocalDateTime
+
+def agencyId = context.expand( '${loadTestData#result#$[\'agency\'][\'odysseus\'][\'clientId\']}' )
+log.info(agencyId);
+testRunner.testCase.setPropertyValue("agencyId",agencyId);
+
+
+
+//to Get the date and convert to TimeZone
+
+Date futureDate = LocalDateTime.now().plusHours(72).toDate()
+log.info(futureDate)
+def fromDateTime = futureDate.format("yyyy-MM-dd'T'HH:mm:ss", TimeZone.getTimeZone('UTC'))
+log.info(fromDateTime)
+testRunner.testCase.setPropertyValue("fromDateTime",fromDateTime);</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="restrequest" name="sailings-package-changesBefore" id="b41447eb-1bc2-419c-be98-fc12c4717dfa">
+    <con:settings/>
+    <con:config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" service="Catalog" resourcePath="/v1/sailing-package-changes" methodName="sailing-package-changes" xsi:type="con:RestRequestStep">
+      <con:restRequest name="sailings-package-changesBefore" id="4bd80fd7-2cf5-4ac4-8cd6-5fbf78a27e5e" mediaType="application/json" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;con:entry key="Content-Type" value="application/json" xmlns:con="http://eviware.com/soapui/config"/></con:setting>
+        </con:settings>
+        <con:request>{
+  "agencyId": "${#TestCase#agencyId}",
+  "fromDateTime": "${#TestCase#fromDateTime}"
+}</con:request>
+        <con:originalUri>http://vps-stg-a.rccl.com/vps-sierra/catalog/v1/sailing-package-changes</con:originalUri>
+        <con:assertion type="Valid HTTP Status Codes" id="84d11ef8-57aa-40c4-81e0-9a7c5dbc7175" name="Valid HTTP Status Codes">
+          <con:settings/>
+          <con:configuration>
+            <codes>400</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:assertion type="Simple Contains" id="71a8e301-1baf-4112-b928-32fe62698ffb" name="Contains error message">
+          <con:configuration>
+            <token>From can not be after to</token>
+            <ignoreCase>false</ignoreCase>
+            <useRegEx>false</useRegEx>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:parameters/>
+        <con:environmentSpec>
+          <con:entry environmentId="9ba133c3-3cd7-45c8-8561-64ce1c92ea67">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="015736b2-7549-4743-94e6-d64278e45b46">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="e94bb75c-7f53-42a7-9f97-eb5aa3fcaf53">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b2abf588-b45c-4e44-9dd0-8b2249bbc4e7">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="5322014d-43c7-4904-af96-4329a0290c25">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="495bcf82-3dfa-4956-b162-f0b1bfb07f10">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="feba3ebd-aeec-4c25-8b24-4b9e406c22cb">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b3e5490d-8b80-49fe-97a2-a82077345345">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="a98aa22f-37cb-4a0e-84c6-f2de81903489">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+        </con:environmentSpec>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="fetchResponse" id="28058f49-0822-4ee5-aeb6-4852b3429f7c">
+    <con:settings/>
+    <con:config>
+      <script>//fetch the REST response
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+
+def restResponse = context.expand( '${sailings-package-changesBefore#Response}' );
+def restResponse2 = new JsonSlurper().parseText(restResponse);
+def prettyJson = new groovy.json.JsonBuilder(restResponse2).toPrettyString();</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="setFolderDirectory" id="4001483f-feac-4398-beb3-b8f5509dc57c">
+    <con:settings/>
+    <con:config>
+      <script>//set folder directory for storing the response
+
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+String jsonFileName = "sailings-package-change-fromDaTeTimeFutureDate.json"
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsResponseBeforeMigration/" + jsonFileName
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsResponseBeforeMigration/" + jsonFileName // to insert directory for mac
+	}</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="datasink" name="storeResponse" id="f04ccd9a-ed23-4ad3-82be-b54d90e6441b">
+    <con:settings/>
+    <con:config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="con:DataSinkStep">
+      <con:dataSink type="File">
+        <con:configuration>
+          <fileName>${setFolderDirectory#result}</fileName>
+          <separator/>
+          <escape/>
+          <quote>false</quote>
+          <trim>true</trim>
+          <append>false</append>
+          <encoding>UTF-8</encoding>
+        </con:configuration>
+      </con:dataSink>
+      <con:properties>
+        <con:property>
+          <con:name>sailings-package-change-fromDaTeTimeFutureDate</con:name>
+          <con:value>${fetchResponse#result}</con:value>
+        </con:property>
+      </con:properties>
+    </con:config>
+  </con:testStep>
+  <con:properties>
+    <con:property>
+      <con:name>agencyId</con:name>
+      <con:value>355510</con:value>
+    </con:property>
+    <con:property>
+      <con:name>fromDateTime</con:name>
+      <con:value>2023-12-08T06:15:17</con:value>
+    </con:property>
+  </con:properties>
+  <con:reportParameters/>
+</con:testCase>

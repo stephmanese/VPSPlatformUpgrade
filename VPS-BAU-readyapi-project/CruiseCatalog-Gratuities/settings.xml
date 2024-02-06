@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:interface xmlns:con="http://eviware.com/soapui/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="con:RestService" id="068d2dcc-3610-48bf-b232-de534abb49a8" name="CruiseCatalog-Gratuities" type="rest_ex" wadlVersion="https://swagger.io/openapiv3/specification">
+  <con:settings id="952074fc-9de2-41a8-a702-063ff7ea917a">
+    <con:setting id="068d2dcc-3610-48bf-b232-de534abb49a8fileName">CruiseCatalog-Gratuities</con:setting>
+  </con:settings>
+  <con:definitionCache type="TEXT" rootPart="CruiseCatalog-Gratuities.json">
+    <con:part>
+      <con:url>CruiseCatalog-Gratuities.json</con:url>
+      <con:content>{"openapi":"3.0.1","info":{"title":"CruiseCatalog-Gratuities","version":"1.0.0"},"servers":[{"url":"/"}],"paths":{"/v1/gratuities":{"post":{"requestBody":{"content":{"application/json":{}}},"responses":{"default":{"description":"Default response"}}}}}}</con:content>
+      <con:type>https://swagger.io/openapiv3/specification</con:type>
+    </con:part>
+  </con:definitionCache>
+  <con:endpoints/>
+</con:interface>

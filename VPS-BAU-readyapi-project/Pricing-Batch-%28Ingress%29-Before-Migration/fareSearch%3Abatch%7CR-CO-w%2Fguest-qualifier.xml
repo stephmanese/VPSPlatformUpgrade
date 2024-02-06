@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testCase xmlns:con="http://eviware.com/soapui/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="3a3567a9-90d0-485f-852f-ca305a094ae6" discardOkResults="false" failOnError="false" failTestCaseOnErrors="true" keepSession="false" name="fareSearch:batch|R-CO-w/guest qualifier" searchProperties="true" timeout="0" disabled="true">
+  <con:settings id="f013abbe-2c65-4e1d-a0a5-9a31c55b2025">
+    <con:setting id="3a3567a9-90d0-485f-852f-ca305a094ae6fileName">fareSearch%3Abatch%7CR-CO-w%2Fguest-qualifier</con:setting>
+  </con:settings>
+  <con:testStep type="groovy" name="loadTestData-royal" id="a3db2e47-1bfa-421e-b398-54c82d9cb49f">
+    <con:settings/>
+    <con:config>
+      <script>//load/fetch test data from an external json file
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+//get OS and set directory based on OS
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsTestData/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsTestData/" //to insert directory for mac
+	}
+
+	
+def testData = context.expand( '${#Project#testData-royal}' )
+def filePath = directory + testData
+def restResponse = new JsonSlurper().parseText(new File(filePath).text)
+def prettyJson = new groovy.json.JsonBuilder(restResponse).toPrettyString()</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="loadTestData-celebrity" id="e946dc30-c9de-4aa6-b9f3-ede939cda689">
+    <con:settings/>
+    <con:config>
+      <script>//load/fetch test data from an external json file
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+//get OS and set directory based on OS
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsTestData/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsTestData/" //to insert directory for mac
+	}
+
+	
+def testData = context.expand( '${#Project#testData-celebrity}' )
+def filePath = directory + testData
+def restResponse = new JsonSlurper().parseText(new File(filePath).text)
+def prettyJson = new groovy.json.JsonBuilder(restResponse).toPrettyString()</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="loadTestData-market" id="d3791c61-4204-498f-8e03-08c1e9facc88">
+    <con:settings/>
+    <con:config>
+      <script>//load/fetch test data from an external json file
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+//get OS and set directory based on OS
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsTestData/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsTestData/" //to insert directory for mac
+	}
+
+	
+def testData = context.expand( '${#Project#testData-market}' )
+def filePath = directory + testData
+def restResponse = new JsonSlurper().parseText(new File(filePath).text)
+def prettyJson = new groovy.json.JsonBuilder(restResponse).toPrettyString()</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="loadTestData-guestPreferences" id="1b0f2d27-adac-4514-8ce2-2c3953453f2e">
+    <con:settings/>
+    <con:config>
+      <script>//load/fetch test data from an external json file
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+//get OS and set directory based on OS
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsTestData/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsTestData/" //to insert directory for mac
+	}
+
+	
+def testData = context.expand( '${#Project#testData-guestPreferences}' )
+def filePath = directory + testData
+def restResponse = new JsonSlurper().parseText(new File(filePath).text)
+def prettyJson = new groovy.json.JsonBuilder(restResponse).toPrettyString()</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="setVariables" id="a026493c-8633-4e2b-84df-6681f2cb71a4">
+    <con:settings/>
+    <con:config>
+      <script>//set variables from the fetched test data needed for the REST request
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+
+//get data from TestData-royal
+def shipCode1 = context.expand( '${loadTestData-royal#result#$[\'royal\'][\'CO\'][\'shipCode\']}' )
+log.info(shipCode1);
+testRunner.testCase.setPropertyValue("shipCode1",shipCode1);
+
+def sailDate1 = context.expand( '${loadTestData-royal#result#$[\'royal\'][\'CO\'][\'sailDate\']}' )
+log.info(sailDate1);
+testRunner.testCase.setPropertyValue("sailDate1",sailDate1);
+
+def packageCode1 = context.expand( '${loadTestData-royal#result#$[\'royal\'][\'CO\'][\'packageCode\']}' )
+log.info(packageCode1);
+testRunner.testCase.setPropertyValue("packageCode1",packageCode1);
+
+
+def shipCode2 = context.expand( '${loadTestData-celebrity#result#$[\'celebrity\'][\'nonGalapagos\'][\'shipCode\']}' )
+log.info(shipCode2);
+testRunner.testCase.setPropertyValue("shipCode2",shipCode2);
+
+def sailDate2 = context.expand( '${loadTestData-celebrity#result#$[\'celebrity\'][\'nonGalapagos\'][\'sailDate\']}' )
+log.info(sailDate2);
+testRunner.testCase.setPropertyValue("sailDate2",sailDate2);
+
+def packageCode2 = context.expand( '${loadTestData-celebrity#result#$[\'celebrity\'][\'nonGalapagos\'][\'packageCode\']}' )
+log.info(packageCode2);
+testRunner.testCase.setPropertyValue("packageCode2",packageCode2);
+
+def lifeStageCode = context.expand( '${loadTestData-royal#result#$[\'royal\'][\'CO\'][\'promotionGuestQualifier\'][\'guestPreferences\'][0][\'lifeStageCode\']}' )
+log.info(lifeStageCode);
+testRunner.testCase.setPropertyValue("lifeStageCode",lifeStageCode);
+
+def guestAge = context.expand( '${loadTestData-royal#result#$[\'royal\'][\'CO\'][\'promotionGuestQualifier\'][\'guestPreferences\'][0][\'age\']}' )
+log.info(guestAge);
+testRunner.testCase.setPropertyValue("guestAge",guestAge);
+
+def loyaltyTierCode = context.expand( '${loadTestData-royal#result#$[\'royal\'][\'CO\'][\'promotionGuestQualifier\'][\'guestPreferences\'][0][\'loyaltyTierCode\']}' )
+log.info(loyaltyTierCode);
+testRunner.testCase.setPropertyValue("loyaltyTierCode",loyaltyTierCode);
+
+def loyaltyId = context.expand( '${loadTestData-royal#result#$[\'royal\'][\'CO\'][\'promotionGuestQualifier\'][\'guestPreferences\'][0][\'loyaltyId\']}' )
+log.info(loyaltyId);
+testRunner.testCase.setPropertyValue("loyaltyId",loyaltyId);
+
+def residenceStateProvinceCode = context.expand( '${loadTestData-royal#result#$[\'royal\'][\'CO\'][\'promotionGuestQualifier\'][\'guestPreferences\'][0][\'residenceStateProvinceCode\']}' )
+log.info(residenceStateProvinceCode);
+testRunner.testCase.setPropertyValue("residenceStateProvinceCode",residenceStateProvinceCode);
+
+def promoCode = context.expand( '${loadTestData-royal#result#$[\'royal\'][\'CO\'][\'promotionGuestQualifier\'][\'promoCodes\'][0]}' )
+log.info(promoCode);
+testRunner.testCase.setPropertyValue("promoCode",promoCode);
+
+def brandCode = context.expand( '${loadTestData-royal#result#$[\'royal\'][\'brandCode\']}' )
+log.info(brandCode);
+testRunner.testCase.setPropertyValue("brandCode",brandCode);
+
+//get data from TestDate-market
+def countryCode = context.expand( '${loadTestData-market#result#$[\'market\'][\'USA\'][\'countryCode\']}' )
+log.info(countryCode);
+testRunner.testCase.setPropertyValue("countryCode",countryCode);
+
+def officeCode = context.expand( '${loadTestData-market#result#$[\'market\'][\'USA\'][\'officeCode\']}' )
+log.info(officeCode);
+testRunner.testCase.setPropertyValue("officeCode",officeCode);
+
+def currencyCode = context.expand( '${loadTestData-market#result#$[\'market\'][\'USA\'][\'currencyCode\']}' )
+log.info(currencyCode);
+testRunner.testCase.setPropertyValue("currencyCode",currencyCode);
+
+
+//get data from TestDate-guestPreferences
+def lifeStageCode1 = context.expand( '${loadTestData-guestPreferences#result#$[\'guestPreferences\'][0][\'lifeStageCode\']}' )
+log.info(lifeStageCode1);
+testRunner.testCase.setPropertyValue("lifeStageCode1",lifeStageCode1);
+
+def guestAge1 = context.expand( '${loadTestData-guestPreferences#result#$[\'guestPreferences\'][0][\'age\']}' )
+log.info(guestAge1);
+testRunner.testCase.setPropertyValue("guestAge1",guestAge1);</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="restrequest" name="fareSearchBatchBefore" id="cd674938-c498-4593-b479-173d182b2cce">
+    <con:settings/>
+    <con:config service="Pricing Batch(Ingress)" resourcePath="/v1/fareSearch:batch" methodName="fareSearch:batch" xsi:type="con:RestRequestStep">
+      <con:restRequest name="fareSearchBatchBefore" id="d0228373-d6bf-48d2-9744-82ad8fa17f19" mediaType="application/json" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+        </con:settings>
+        <con:request>{
+	"requests": [
+		{
+			"commonParameters": {
+				"shipCode": "${#TestCase#shipCode1}",
+				"sailDate": "${#TestCase#sailDate1}",
+				"packageCode": "${#TestCase#packageCode1}",
+				"bookingChannel": "VP",
+				"officeCode": "${#TestCase#officeCode}",
+				"countryCode": "${#TestCase#countryCode}",
+				"currencyCode": "${#TestCase#currencyCode}",
+				"bookingType": "I",
+				"occupancy": 1
+			},
+			"shipCurrencyCode": "USD",
+			"showGuestDetail": true,
+			"guestInformation": [
+				{
+					"guestAge": "${#TestCase#guestAge}",
+					"lifeStageCode": "${#TestCase#lifeStageCode}",
+					"loyaltyTierCode": "${#TestCase#loyaltyTierCode}",
+					"loyaltyId": "${#TestCase#loyaltyId}",
+					"residenceStateProvinceCode": "${#TestCase#residenceStateProvinceCode}"
+				}
+			],
+			"promoCodes": [
+					"${#TestCase#promoCode}"
+				]
+		},
+		{
+			"commonParameters": {
+				"shipCode": "${#TestCase#shipCode2}",
+				"sailDate": "${#TestCase#sailDate2}",
+				"packageCode": "${#TestCase#packageCode2}",
+				"officeCode": "${#TestCase#officeCode}",
+				"bookingChannel": "VP",
+				"countryCode": "${#TestCase#countryCode}",
+				"currencyCode": "${#TestCase#currencyCode}",
+				"bookingType": "I",
+				"occupancy": 2,
+				"effectiveDateTime": "${#Project#effectiveDateTime}"
+			},
+			"shipCurrencyCode": "USD",
+			"showGuestDetail": true,
+			"guestInformation": [
+				{
+					"guestAge": "${#TestCase#guestAge1}",
+					"lifeStageCode": "${#TestCase#lifeStageCode1}",
+					"sequenceId": 1
+				},
+				{
+					"guestAge": "${#TestCase#guestAge1}",
+					"lifeStageCode": "${#TestCase#lifeStageCode1}",
+					"sequenceId": 2
+				}
+			]
+		}
+	]
+}</con:request>
+        <con:originalUri>http://vps-stg-a.rccl.com/vps-sierra/pricing-batch/v1/fareSearch:batch</con:originalUri>
+        <con:assertion type="Valid HTTP Status Codes" id="c88fa7b6-f7c2-494b-88f4-1452519db29b" name="Valid HTTP Status Codes">
+          <con:settings/>
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:assertion type="GroovyScriptAssertion" name="Script Assertion" id="7acc923a-121b-4ce6-8df9-452570a5e6df">
+          <con:configuration>
+            <scriptText>def jsonRes = messageExchange.getResponse().contentAsString
+
+def jsonSlurper = new groovy.json.JsonSlurper();
+def parse = jsonSlurper.parseText(jsonRes)
+
+
+def promotionBestPrice = parse.fareSearchResponses.promotionBestPrice
+log.info promotionBestPrice
+assert promotionBestPrice!=null</scriptText>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:parameters/>
+        <con:environmentSpec>
+          <con:entry environmentId="9ba133c3-3cd7-45c8-8561-64ce1c92ea67">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="015736b2-7549-4743-94e6-d64278e45b46">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="e94bb75c-7f53-42a7-9f97-eb5aa3fcaf53">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b2abf588-b45c-4e44-9dd0-8b2249bbc4e7">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="5322014d-43c7-4904-af96-4329a0290c25">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="495bcf82-3dfa-4956-b162-f0b1bfb07f10">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="feba3ebd-aeec-4c25-8b24-4b9e406c22cb">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b3e5490d-8b80-49fe-97a2-a82077345345">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="a98aa22f-37cb-4a0e-84c6-f2de81903489">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+        </con:environmentSpec>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="fetchResponse" id="a8f0281e-3da3-464a-9d47-48ef72348573">
+    <con:settings/>
+    <con:config>
+      <script>//fetch the REST response
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+
+def restResponse = context.expand( '${fareSearchBatchBefore#Response}' );
+def restResponse2 = new JsonSlurper().parseText(restResponse);
+def prettyJson = new groovy.json.JsonBuilder(restResponse2).toPrettyString();</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="setFolderDirectory" id="cd8f213e-dc13-4cd8-98ce-aec9845c7b16">
+    <con:settings/>
+    <con:config>
+      <script>//set folder directory for storing the response
+
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+String jsonFileName = "fareSearch-batch-R-CO-w guestqualifier.json"
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsResponseBeforeMigration/" + jsonFileName
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsResponseBeforeMigration/" + jsonFileName // to insert directory for mac
+	}</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="datasink" name="storeResponse" id="16c275cc-1b33-4787-b771-73ac2067e921">
+    <con:settings/>
+    <con:config xsi:type="con:DataSinkStep">
+      <con:dataSink type="File">
+        <con:configuration>
+          <fileName>${setFolderDirectory#result}</fileName>
+          <separator/>
+          <escape/>
+          <quote>false</quote>
+          <trim>true</trim>
+          <append>false</append>
+          <encoding>UTF-8</encoding>
+        </con:configuration>
+      </con:dataSink>
+      <con:properties>
+        <con:property>
+          <con:name>fareSearch-batch-R-CO-w guestqualifier</con:name>
+          <con:value>${fetchResponse#result}</con:value>
+        </con:property>
+      </con:properties>
+    </con:config>
+  </con:testStep>
+  <con:properties>
+    <con:property>
+      <con:name>shipCode1</con:name>
+      <con:value>NV</con:value>
+    </con:property>
+    <con:property>
+      <con:name>sailDate1</con:name>
+      <con:value>20250103</con:value>
+    </con:property>
+    <con:property>
+      <con:name>packageCode1</con:name>
+      <con:value>NV03X023</con:value>
+    </con:property>
+    <con:property>
+      <con:name>shipCode2</con:name>
+      <con:value>AX</con:value>
+    </con:property>
+    <con:property>
+      <con:name>sailDate2</con:name>
+      <con:value>20240203</con:value>
+    </con:property>
+    <con:property>
+      <con:name>packageCode2</con:name>
+      <con:value>AX07W518</con:value>
+    </con:property>
+    <con:property>
+      <con:name>lifeStageCode</con:name>
+      <con:value>S</con:value>
+    </con:property>
+    <con:property>
+      <con:name>guestAge</con:name>
+      <con:value>64</con:value>
+    </con:property>
+    <con:property>
+      <con:name>loyaltyTierCode</con:name>
+      <con:value>L</con:value>
+    </con:property>
+    <con:property>
+      <con:name>loyaltyId</con:name>
+      <con:value>338420899</con:value>
+    </con:property>
+    <con:property>
+      <con:name>residenceStateProvinceCode</con:name>
+      <con:value>FL</con:value>
+    </con:property>
+    <con:property>
+      <con:name>promoCode</con:name>
+      <con:value>DP340</con:value>
+    </con:property>
+    <con:property>
+      <con:name>brandCode</con:name>
+      <con:value>R</con:value>
+    </con:property>
+    <con:property>
+      <con:name>countryCode</con:name>
+      <con:value>USA</con:value>
+    </con:property>
+    <con:property>
+      <con:name>officeCode</con:name>
+      <con:value>MIA</con:value>
+    </con:property>
+    <con:property>
+      <con:name>currencyCode</con:name>
+      <con:value>USD</con:value>
+    </con:property>
+    <con:property>
+      <con:name>lifeStageCode1</con:name>
+      <con:value>A</con:value>
+    </con:property>
+    <con:property>
+      <con:name>guestAge1</con:name>
+      <con:value>45</con:value>
+    </con:property>
+  </con:properties>
+  <con:reportParameters/>
+</con:testCase>

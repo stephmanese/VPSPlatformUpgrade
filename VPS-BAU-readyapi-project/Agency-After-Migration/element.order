@@ -1,0 +1,14 @@
+agency.xml
+agency%7CHeadquarters.xml
+agency%7CBranch.xml
+agency%7CIndependent-Agent.xml
+agency%7CTour-Operator.xml
+agency%7CIR-Branch.xml
+agency%7CHome-Based-Agency-Branch.xml
+validateAgencies%7CAgency-1-%28Headquarters%29.xml
+validateAgencies%7CAgency-1-%28Branch%29.xml
+validateAgencies%7CAgency-1-%28Independent-Agent%29.xml
+validateAgencies%7CAgency-1-%28Tour-Operator%29.xml
+validateAgencies%7CPseudo-City-only.xml
+validateAgencies%7CAgency-1-%28HQ%29%3EAgency-2-%28Branch%29.xml
+validateAgencies%7CAgency-1-%28HQ%29%3EAgency-2-%28Branch%29%3EPseudo-City-%28of-Agency-2%29.xml

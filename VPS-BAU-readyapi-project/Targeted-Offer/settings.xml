@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:interface xmlns:con="http://eviware.com/soapui/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="con:RestService" id="b554040b-e2fd-465d-aecb-627d9856cd37" name="Targeted Offer" type="rest_ex" wadlVersion="https://swagger.io/openapiv3/specification">
+  <con:settings id="6e225601-8841-463b-b51d-805f800c4e2c">
+    <con:setting id="b554040b-e2fd-465d-aecb-627d9856cd37fileName">Targeted-Offer</con:setting>
+  </con:settings>
+  <con:definitionCache type="TEXT" rootPart="Targeted Offer.json">
+    <con:part>
+      <con:url>Targeted Offer.json</con:url>
+      <con:content>{"openapi":"3.0.1","info":{"title":"Targeted Offer","description":"","version":"1.0.0"},"servers":[{"url":"/"}],"paths":{"/v1/targetedOffer":{"description":"","post":{"description":"","requestBody":{"content":{"application/json":{"example":"{\n\t\"loyaltyIds\": [\n\t\t\"${#TestCase#loyaltyId}\"\n\t],\n\t\"effectiveDateTime\": \"${#Project#effectiveDateTime}\""}}},"responses":{"default":{"description":"Default response"}}}}}}</con:content>
+      <con:type>https://swagger.io/openapiv3/specification</con:type>
+    </con:part>
+  </con:definitionCache>
+  <con:endpoints/>
+</con:interface>

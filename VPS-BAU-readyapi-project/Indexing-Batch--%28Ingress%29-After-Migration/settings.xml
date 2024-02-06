@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testSuite xmlns:con="http://eviware.com/soapui/config" id="e5fafc02-41bf-482e-95db-5017cdd0696b" name="Indexing Batch  (Ingress)-After Migration">
+  <con:settings id="09061e7b-9e7d-4260-a1f8-937b0362f968">
+    <con:setting id="e5fafc02-41bf-482e-95db-5017cdd0696bfileName">Indexing-Batch--%28Ingress%29-After-Migration</con:setting>
+  </con:settings>
+  <con:runType>SEQUENTIAL</con:runType>
+  <con:properties/>
+  <con:reportParameters/>
+  <con:tagId>ef2ea71b-2e65-433a-9a02-b2b88d72bbd0</con:tagId>
+</con:testSuite>

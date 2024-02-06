@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testSuite xmlns:con="http://eviware.com/soapui/config" id="f5a220f6-1dda-496b-8819-93047f197222" name="Partner Pricing (Ingress)-After Migration">
+  <con:settings id="916a9cfd-bab0-418c-8db2-e637711ae7bc">
+    <con:setting id="f5a220f6-1dda-496b-8819-93047f197222fileName">Partner-Pricing-%28Ingress%29-After-Migration</con:setting>
+  </con:settings>
+  <con:runType>SEQUENTIAL</con:runType>
+  <con:properties/>
+  <con:reportParameters/>
+  <con:tagId>ef2ea71b-2e65-433a-9a02-b2b88d72bbd0</con:tagId>
+</con:testSuite>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:con="http://eviware.com/soapui/config" name="vacation-index" path="/v1/vacation-index" id="fc6d49ae-c6ee-4125-91ff-c4cec3fe06e4">
+  <con:settings id="bd3843d4-5eb6-494c-a93e-dd290f41f8c9">
+    <con:setting id="fc6d49ae-c6ee-4125-91ff-c4cec3fe06e4fileName">vacation-index</con:setting>
+  </con:settings>
+  <con:parameters/>
+  <con:method name="vacation-index" id="e67c4a17-73df-4ea0-bb9c-35c46b15c0e9" method="POST">
+    <con:settings/>
+    <con:parameters/>
+    <con:request name="vacation-index" id="cd044b28-834c-493e-b675-742260dadbd0" mediaType="application/json" postQueryString="false">
+      <con:settings>
+        <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+      </con:settings>
+      <con:request>{
+  "shipCode": "${#TestCase#shipCode}",
+  "sailDate": "${#TestCase#sailDate}",
+  "packageCode": "${#TestCase#packageCode}",
+  "market": {
+    "officeCode": "${#TestCase#officeCode}",
+    "countryCode": "${#TestCase#countryCode}",
+    "currencyCode": "${#TestCase#currencyCode}"
+  },
+  "bookingChannels": [
+    "RZ"
+  ]
+}</con:request>
+      <con:credentials>
+        <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+        <con:authType>No Authorization</con:authType>
+      </con:credentials>
+      <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+      <con:parameters/>
+      <con:environmentSpec>
+        <con:entry environmentId="5322014d-43c7-4904-af96-4329a0290c25">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="495bcf82-3dfa-4956-b162-f0b1bfb07f10">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="feba3ebd-aeec-4c25-8b24-4b9e406c22cb">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="b3e5490d-8b80-49fe-97a2-a82077345345">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="a98aa22f-37cb-4a0e-84c6-f2de81903489">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+      </con:environmentSpec>
+    </con:request>
+  </con:method>
+</con:resource>

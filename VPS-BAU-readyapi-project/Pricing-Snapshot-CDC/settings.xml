@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:interface xmlns:con="http://eviware.com/soapui/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="con:RestService" id="25d2587c-77ff-435c-9092-df23e280ab10" name="Pricing-Snapshot-CDC" type="rest_ex" wadlVersion="https://swagger.io/openapiv3/specification">
+  <con:settings id="786389af-76b8-4739-9f1e-49c40f7121f8">
+    <con:setting id="25d2587c-77ff-435c-9092-df23e280ab10fileName">Pricing-Snapshot-CDC</con:setting>
+  </con:settings>
+  <con:definitionCache type="TEXT" rootPart="Pricing-Snapshot-CDC.json">
+    <con:part>
+      <con:url>Pricing-Snapshot-CDC.json</con:url>
+      <con:content>{"openapi":"3.0.1","info":{"title":"Pricing-Snapshot-CDC","description":"","version":"1.0.0"},"servers":[{"url":"/"}],"paths":{"/v1/vacation-index":{"description":"","post":{"description":"","requestBody":{"content":{"application/json":{}}},"responses":{"default":{"description":"Default response"}}}}}}</con:content>
+      <con:type>https://swagger.io/openapiv3/specification</con:type>
+    </con:part>
+  </con:definitionCache>
+  <con:endpoints/>
+</con:interface>

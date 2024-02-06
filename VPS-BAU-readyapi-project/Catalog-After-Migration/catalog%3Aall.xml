@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testCase xmlns:con="http://eviware.com/soapui/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="95ba9ea0-c439-471a-a236-3be3dfe207d9" discardOkResults="false" failOnError="false" failTestCaseOnErrors="true" keepSession="false" name="catalog:all" searchProperties="true" timeout="0" disabled="true">
+  <con:settings id="554944d9-f7f8-4d43-b5c4-d13f89c174b6">
+    <con:setting id="95ba9ea0-c439-471a-a236-3be3dfe207d9fileName">catalog%3Aall</con:setting>
+  </con:settings>
+  <con:testStep type="restrequest" name="catalogAllAfter" id="d882f4b9-6189-4042-9100-512fc712bb7e">
+    <con:settings/>
+    <con:config service="Catalog" resourcePath="/v1/catalog:all" methodName="catalog:all" xsi:type="con:RestRequestStep">
+      <con:restRequest name="catalogAllAfter" id="fbe5e3c0-2504-4598-9e08-182f3f29c197" mediaType="application/json" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+        </con:settings>
+        <con:request>{}</con:request>
+        <con:originalUri>http://vps-stg-a.rccl.com/vps-sierra/catalog/v1/catalog:all</con:originalUri>
+        <con:assertion type="Valid HTTP Status Codes" id="b0c43aa9-1c3e-4a62-ba0e-12b4d8091bd5" name="Valid HTTP Status Codes">
+          <con:settings/>
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:parameters/>
+        <con:environmentSpec>
+          <con:entry environmentId="9ba133c3-3cd7-45c8-8561-64ce1c92ea67">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="015736b2-7549-4743-94e6-d64278e45b46">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="e94bb75c-7f53-42a7-9f97-eb5aa3fcaf53">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b2abf588-b45c-4e44-9dd0-8b2249bbc4e7">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="5322014d-43c7-4904-af96-4329a0290c25">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="495bcf82-3dfa-4956-b162-f0b1bfb07f10">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="feba3ebd-aeec-4c25-8b24-4b9e406c22cb">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b3e5490d-8b80-49fe-97a2-a82077345345">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="a98aa22f-37cb-4a0e-84c6-f2de81903489">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+        </con:environmentSpec>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="compareResponse" id="cdf1bbe3-7858-4f62-8818-3ace658f54b5">
+    <con:settings/>
+    <con:config>
+      <script>//reference: https://support.smartbear.com/readyapi/faq/how-do-i-compare-two-dynamic-json-responses/
+//compare before and after migration response
+import groovy.json.*
+import com.eviware.soapui.support.JsonPathValueNode
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.node.ArrayNode
+import com.fasterxml.jackson.databind.node.ObjectNode
+import com.jayway.jsonpath.Configuration
+import com.jayway.jsonpath.JsonPath
+import com.jayway.jsonpath.spi.json.JacksonJsonNodeJsonProvider
+import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider
+import com.eviware.soapui.model.testsuite.*;
+
+def responseIsSame = true  //flag for validation
+
+//get OS and set directory based on OS
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsResponseBeforeMigration/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsResponseBeforeMigration/" //to insert directory for mac
+	}
+
+
+
+//baseline response
+//Modify JSON Name
+def filePath = directory + "catalogAll.json"
+def baselineResp = new JsonSlurper().parseText(new File(filePath).text)
+
+def BRstatus = baselineResp.status.size()
+log.info(BRstatus)
+
+for(i=0; i&lt;=BRstatus-1;i++){
+	
+baselineResp.status.remove("dateTime")
+def modifiedBaselineResp = JsonOutput.toJson(baselineResp)
+}
+
+//Modify JSON Response
+//current response
+def currentJsonResp = context.expand('${catalogAllAfter#Response}') 
+def outputOfCurrentResp = new JsonSlurper().parseText(currentJsonResp)
+
+def CRstatus = baselineResp.status.size()
+log.info(CRstatus)
+
+for(i=0; i&lt;=CRstatus-1;i++){
+outputOfCurrentResp.status.remove("dateTime")
+}</script>
+    </con:config>
+  </con:testStep>
+  <con:properties/>
+  <con:reportParameters/>
+</con:testCase>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:interface xmlns:con="http://eviware.com/soapui/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="con:RestService" id="e092cc8e-27bb-4287-99f7-f3942eeac9c4" name="CruiseCatalog-Charges and Fees" type="rest_ex" wadlVersion="https://swagger.io/openapiv3/specification">
+  <con:settings id="2f7f2c6a-2081-47d2-a723-b25b4bfd6459">
+    <con:setting id="e092cc8e-27bb-4287-99f7-f3942eeac9c4fileName">CruiseCatalog-Charges-and-Fees</con:setting>
+  </con:settings>
+  <con:definitionCache type="TEXT" rootPart="CruiseCatalog-Charges and Fees.json">
+    <con:part>
+      <con:url>CruiseCatalog-Charges and Fees.json</con:url>
+      <con:content>{"openapi":"3.0.1","info":{"title":"CruiseCatalog-Charges and Fees","version":"1.0.0"},"servers":[{"url":"/"}],"paths":{"/v1/chargesAndFees":{"description":"","post":{"description":"","requestBody":{"content":{"application/json":{"example":"{\n\t\"shipCode\": \"${#TestCase#shipCode}\",\n\t\"itineraryCode\": \"${#TestCase#itineraryCode}\",\n\t\"currencyCode\": \"${#TestCase#currencyCode}\",\n\t\"sailDate\": \"${#TestCase#sailDate}\",\n\t\"bookDate\": \"\"\n}"}}},"responses":{"default":{"description":"Default response"}}}}}}</con:content>
+      <con:type>https://swagger.io/openapiv3/specification</con:type>
+    </con:part>
+  </con:definitionCache>
+  <con:endpoints/>
+</con:interface>

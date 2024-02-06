@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:con="http://eviware.com/soapui/config" name="price-changes:super-category" path="/v1/price-changes:super-category" id="3662c799-7e73-4fe1-9823-1fad50725f18">
+  <con:settings id="8e85cedd-0b64-416c-91f2-613eb94edfa2">
+    <con:setting id="3662c799-7e73-4fe1-9823-1fad50725f18fileName">price-changes%3Asuper-category</con:setting>
+  </con:settings>
+  <con:parameters/>
+  <con:method name="price-changes:super-category" id="5845a965-3fdb-4cd9-b16e-ac4ee4ad7da9" method="POST">
+    <con:settings/>
+    <con:parameters/>
+    <con:request name="price-changes:super-category-Agency" id="c7834ed0-d806-4121-8c13-8ebad21758bb" mediaType="application/json" postQueryString="false">
+      <con:settings>
+        <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+      </con:settings>
+      <con:request>{
+	"client": {
+		"agencyId": "${#TestCase#agencyId}",
+		"currencyCodes": [
+			"${#TestCase#currencyCode}"
+		]
+	},
+    "fromDateTime": "2023-08-30T07:00:00"
+}</con:request>
+      <con:credentials>
+        <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+        <con:authType>No Authorization</con:authType>
+      </con:credentials>
+      <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+      <con:parameters/>
+      <con:environmentSpec>
+        <con:entry environmentId="9ba133c3-3cd7-45c8-8561-64ce1c92ea67">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="015736b2-7549-4743-94e6-d64278e45b46">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="e94bb75c-7f53-42a7-9f97-eb5aa3fcaf53">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="b2abf588-b45c-4e44-9dd0-8b2249bbc4e7">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="5322014d-43c7-4904-af96-4329a0290c25">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="495bcf82-3dfa-4956-b162-f0b1bfb07f10">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="feba3ebd-aeec-4c25-8b24-4b9e406c22cb">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="b3e5490d-8b80-49fe-97a2-a82077345345">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="a98aa22f-37cb-4a0e-84c6-f2de81903489">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+      </con:environmentSpec>
+    </con:request>
+    <con:request name="price-changes:super-category-Market" id="fb1ed1e0-0c8c-4b1a-92a3-fcccfc83f47a" mediaType="application/json" postQueryString="false">
+      <con:settings>
+        <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+      </con:settings>
+      <con:request>{
+  "market": {
+    "officeCode": "${#TestCase#officeCode}",
+    "countryCode": "${#TestCase#countryCode}",
+    "currencyCodes": [
+    "${#TestCase#currencyCode1}", "${#TestCase#currencyCode2}"
+    ]
+  },
+    "fromDateTime": "2023-08-30T07:00:00"
+}</con:request>
+      <con:credentials>
+        <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+        <con:authType>No Authorization</con:authType>
+      </con:credentials>
+      <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+      <con:parameters/>
+      <con:environmentSpec>
+        <con:entry environmentId="9ba133c3-3cd7-45c8-8561-64ce1c92ea67">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="015736b2-7549-4743-94e6-d64278e45b46">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="e94bb75c-7f53-42a7-9f97-eb5aa3fcaf53">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="b2abf588-b45c-4e44-9dd0-8b2249bbc4e7">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="5322014d-43c7-4904-af96-4329a0290c25">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="495bcf82-3dfa-4956-b162-f0b1bfb07f10">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="feba3ebd-aeec-4c25-8b24-4b9e406c22cb">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="b3e5490d-8b80-49fe-97a2-a82077345345">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="a98aa22f-37cb-4a0e-84c6-f2de81903489">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+      </con:environmentSpec>
+    </con:request>
+  </con:method>
+</con:resource>

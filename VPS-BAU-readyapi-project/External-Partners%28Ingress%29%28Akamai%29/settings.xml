@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:interface xmlns:con="http://eviware.com/soapui/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="con:RestService" id="7e18b9e4-ac72-4421-81f9-0eb9d7f94ee3" name="External Partners(Ingress)(Akamai)" type="rest_ex" wadlVersion="https://swagger.io/openapiv3/specification">
+  <con:settings id="75298635-7fd7-4c77-a544-5600a24a932a">
+    <con:setting id="7e18b9e4-ac72-4421-81f9-0eb9d7f94ee3fileName">External-Partners%28Ingress%29%28Akamai%29</con:setting>
+  </con:settings>
+  <con:definitionCache type="TEXT" rootPart="http://vps-stg-a.rccl.com/vps-echo/partner-pricing.json">
+    <con:part>
+      <con:url>http://vps-stg-a.rccl.com/vps-echo/partner-pricing.json</con:url>
+      <con:content>{"openapi":"3.0.1","info":{"title":"http://vps-stg-a.rccl.com/vps-echo/partner-pricing","description":"","version":"1.0.0"},"servers":[{"url":"/"}],"paths":{"/v1/category-pricing":{"description":"","post":{"description":"","requestBody":{"content":{"application/json":{"example":"{\n\t\"clients\": [\n\t\t{\n\t\t\t\"clientContext\": \"AGENCY_1\",\n\t\t\t\"clientId\": \"${#TestCase#clientId}\"\n\t\t}\n\t],\n\t\"companyShortName\": \"ODYSSEUS\",\n\t\"brandCode\": \"${#TestCase#brand}\",\n\t\"shipCode\": \"${#TestCase#shipCode}\",\n\t\"sailDate\": \"${#TestCase#sailDate}\",\n\t\"packageCode\": \"${#TestCase#packageCode}\",\n\t\"officeCode\": \"${#TestCase#officeCode}\",\n\t\"countryCode\": \"${#TestCase#countryCode}\",\n\t\"currencyCode\": \"${#TestCase#currencyCode}\",\n\t\"occupancy\": 2,\n\t\"bookingTypeCode\": \"I\",\n\t\"pricingPreference\": {\n\t\t\"includeGuestLevelDetail\": true,\n\t\t\"includeGratuity\": true,\n\t\t\"depositFareType\": \"BOTH\"\n\t},\n\t\"guestPreferences\": [\n\t\t{\n\t\t\t\"age\": \"${#TestCase#guestAge}\",\n\t\t\t\"lifeStageCode\": \"${#TestCase#lifeStageCode}\"\n\t\t},\n\t\t{\n\t\t\t\"age\": \"${#TestCase#guestAge}\",\n\t\t\t\"lifeStageCode\": \"${#TestCase#lifeStageCode}\"\n\t\t}\n\t]\n}"}}},"responses":{"default":{"description":"Default response"}}}},"/v1/super-category-pricing":{"description":"","post":{"description":"","requestBody":{"content":{"application/json":{}}},"responses":{"default":{"description":"Default response"}}}},"/v1/group-pricing":{"description":"","post":{"description":"","requestBody":{"content":{"application/json":{}}},"responses":{"default":{"description":"Default response"}}}}}}</con:content>
+      <con:type>https://swagger.io/openapiv3/specification</con:type>
+    </con:part>
+  </con:definitionCache>
+  <con:endpoints/>
+</con:interface>

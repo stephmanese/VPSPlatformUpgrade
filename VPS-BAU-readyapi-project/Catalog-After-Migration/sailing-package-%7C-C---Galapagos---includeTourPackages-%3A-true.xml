@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testCase xmlns:con="http://eviware.com/soapui/config" id="320f0784-2463-4167-8705-54adfe1e850e" discardOkResults="false" failOnError="false" failTestCaseOnErrors="true" keepSession="false" name="sailing-package | C - Galapagos - includeTourPackages : true" searchProperties="true" timeout="0">
+  <con:settings id="d224a658-6f10-4226-90e9-251658e0846b">
+    <con:setting id="320f0784-2463-4167-8705-54adfe1e850efileName">sailing-package-%7C-C---Galapagos---includeTourPackages-%3A-true</con:setting>
+  </con:settings>
+  <con:testStep type="groovy" name="loadTestData" id="7d4ed83b-608d-4c90-8060-d46b793570f2">
+    <con:settings/>
+    <con:config>
+      <script>//load/fetch test data from an external json file
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+//get OS and set directory based on OS
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsTestData/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsTestData/" //to insert directory for mac
+	}
+
+	
+def testData = context.expand( '${#Project#testData-celebrity}' )
+def filePath = directory + testData
+def restResponse = new JsonSlurper().parseText(new File(filePath).text)
+def prettyJson = new groovy.json.JsonBuilder(restResponse).toPrettyString()</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="setVariables" id="61d6d043-403c-4891-aa25-e468248e04d3">
+    <con:settings/>
+    <con:config>
+      <script>//set variables from the fetched test data needed for the REST request
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+
+def brandCode = context.expand( '${loadTestData#result#$[\'celebrity\'][\'brandCode\']}' )
+log.info(brandCode);
+testRunner.testCase.setPropertyValue("brandCode",brandCode);
+
+def shipCode = context.expand( '${loadTestData#result#$[\'celebrity\'][\'galapagos\'][\'CT\'][\'shipCode\']}' )
+log.info(shipCode);
+testRunner.testCase.setPropertyValue("shipCode",shipCode);
+
+def fromSailDate = context.expand( '${loadTestData#result#$[\'celebrity\'][\'galapagos\'][\'CT\'][\'fromSailDate\']}' )
+log.info(fromSailDate);
+testRunner.testCase.setPropertyValue("fromSailDate",fromSailDate);
+
+def toSailDate = context.expand( '${loadTestData#result#$[\'celebrity\'][\'galapagos\'][\'CT\'][\'toSailDate\']}' )
+log.info(toSailDate);
+testRunner.testCase.setPropertyValue("toSailDate",toSailDate);</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="restrequest" name="sailing-packageAfter" id="6e273a2e-5ac7-4ca3-b048-97e75240cf58">
+    <con:settings/>
+    <con:config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" service="Catalog" resourcePath="/v1/sailing-package" methodName="sailing-package" xsi:type="con:RestRequestStep">
+      <con:restRequest name="sailing-packageAfter" id="7b73aa86-05d5-4faa-9b1b-809d1de63128" mediaType="application/json">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;con:entry key="accept" value="*/*" xmlns:con="http://eviware.com/soapui/config"/></con:setting>
+        </con:settings>
+        <con:request/>
+        <con:originalUri>http://vps-stg-a.rccl.com/vps-sierra/catalog/v1/sailing-package</con:originalUri>
+        <con:assertion type="Valid HTTP Status Codes" id="421bec49-7e47-45e3-9ae3-7797fb9f9244" name="Valid HTTP Status Codes">
+          <con:settings/>
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:assertion type="GroovyScriptAssertion" name="Script Assertion" id="cdd2e6e9-c0f1-4673-b815-e5884949a827">
+          <con:configuration>
+            <scriptText>def jsonRes = messageExchange.getResponse().contentAsString
+
+
+def jsonSlurper = new groovy.json.JsonSlurper();
+def parse = jsonSlurper.parseText(jsonRes)
+
+
+def sailingPackages = parse.sailingPackages
+log.info sailingPackages
+assert sailingPackages!=null</scriptText>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:parameters>
+          <con:entry key="shipCodes" value="${#TestCase#shipCode}"/>
+          <con:entry key="toSailDate" value="${#TestCase#toSailDate}"/>
+          <con:entry key="includeTourPackages" value="true"/>
+          <con:entry key="fromSailDate" value="${#TestCase#fromSailDate}"/>
+          <con:entry key="brandCode" value="${#TestCase#brandCode}"/>
+        </con:parameters>
+        <con:parameterOrder>
+          <con:entry>brandCode</con:entry>
+          <con:entry>shipCodes</con:entry>
+          <con:entry>fromSailDate</con:entry>
+          <con:entry>toSailDate</con:entry>
+          <con:entry>includeTourPackages</con:entry>
+        </con:parameterOrder>
+        <con:environmentSpec>
+          <con:entry environmentId="9ba133c3-3cd7-45c8-8561-64ce1c92ea67">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="015736b2-7549-4743-94e6-d64278e45b46">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="e94bb75c-7f53-42a7-9f97-eb5aa3fcaf53">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b2abf588-b45c-4e44-9dd0-8b2249bbc4e7">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="5322014d-43c7-4904-af96-4329a0290c25">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="495bcf82-3dfa-4956-b162-f0b1bfb07f10">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="feba3ebd-aeec-4c25-8b24-4b9e406c22cb">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b3e5490d-8b80-49fe-97a2-a82077345345">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="a98aa22f-37cb-4a0e-84c6-f2de81903489">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+        </con:environmentSpec>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="compareResponse" id="e7a916c4-47b5-4d4e-8328-9bb9b9fb0951">
+    <con:settings/>
+    <con:config>
+      <script><![CDATA[//reference: https://support.smartbear.com/readyapi/faq/how-do-i-compare-two-dynamic-json-responses/
+//compare before and after migration response
+import groovy.json.*
+import com.eviware.soapui.support.JsonPathValueNode
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.node.ArrayNode
+import com.fasterxml.jackson.databind.node.ObjectNode
+import com.jayway.jsonpath.Configuration
+import com.jayway.jsonpath.JsonPath
+import com.jayway.jsonpath.spi.json.JacksonJsonNodeJsonProvider
+import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider
+import com.eviware.soapui.model.testsuite.*;
+
+def responseIsSame = true  //flag for validation
+
+//get OS and set directory based on OS
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsResponseBeforeMigration/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsResponseBeforeMigration/" //to insert directory for mac
+	}
+
+
+
+//baseline response
+//Modify JSON Name
+def filePath = directory + "sailing-package-R-Galapagos-includeTourPackages-T.json"
+def baselineResp = new JsonSlurper().parseText(new File(filePath).text)
+baselineResp.status.remove("dateTime")
+def modifiedBaselineResp = JsonOutput.toJson(baselineResp)
+
+//Modify JSON Response
+//current response
+def currentJsonResp = context.expand('${sailing-packageAfter#Response}') 
+def outputOfCurrentResp = new JsonSlurper().parseText(currentJsonResp)
+outputOfCurrentResp.status.remove("dateTime")
+def modifiedOutputOfCurrentResp = JsonOutput.toJson(outputOfCurrentResp)
+
+log.info("Baseline Response: " + modifiedBaselineResp)
+log.info("Output of CurrentResponse: " + modifiedOutputOfCurrentResp)
+
+mapper = new ObjectMapper()
+JsonNode CBP = mapper.readTree(modifiedBaselineResp);
+JsonNode CBP2 = mapper.readTree(modifiedOutputOfCurrentResp);
+
+Set<JsonPathValueNode> pathValues = listLeafValues(CBP, '$');
+Set<JsonPathValueNode> pathValues2 = listLeafValues(CBP2, '$');
+Configuration configuration = Configuration.builder()
+        .jsonProvider(new JacksonJsonNodeJsonProvider())
+        .mappingProvider(new JacksonMappingProvider(mapper))
+        .build();
+
+pathValues.each {
+    try {
+        JsonPath jsonPath = JsonPath.compile(it.path);
+        JsonNode result = jsonPath.read(CBP2, configuration);
+        
+        if (result != it.valueNode) {
+            log.info('Node with path ' + it.path + ' and value ' + it.valueNode + ' are not matched')
+            responseIsSame = false
+        }
+    } catch (Exception e) {
+        log.info('Node with path ' + it.path + ' and value ' + it.valueNode + ' are not matched')
+        responseIsSame = false
+    }
+}
+
+pathValues2.each {
+    try {
+        JsonPath jsonPath = JsonPath.compile(it.path);
+        JsonNode result = jsonPath.read(CBP, configuration);
+        
+        if (result != it.valueNode) {
+            log.info('Node with path ' + it.path + ' and value ' + it.valueNode + ' are not matched')
+            responseIsSame = false
+        }
+    } catch (Exception e) {
+        log.info('Node with path ' + it.path + ' and value ' + it.valueNode + ' are not matched')
+        responseIsSame = false
+    }
+}
+
+Set<JsonPathValueNode> listLeafValues(JsonNode jsonObject, String path) {
+    if (jsonObject.isObject()) {
+        return getValuesFrom((ObjectNode) jsonObject, path);
+    } else if (jsonObject.isArray()) {
+        return getValuesFrom((ArrayNode) jsonObject, path);
+    } else {
+    }
+}
+
+Set<JsonPathValueNode> getValuesFrom(ObjectNode jsonObject, String path) {
+    Set<JsonPathValueNode> values = new LinkedHashSet<>();
+    Iterator<Map.Entry<String, JsonNode>> fields = jsonObject.fields();
+    while (fields.hasNext()) {
+        Map.Entry<String, JsonNode> field = fields.next();
+        JsonNode value = field.getValue();
+        String nodePath = path + "." + field.getKey();
+        addValue(values, value, nodePath);
+    }
+    return values;
+}
+
+Set<JsonPathValueNode> getValuesFrom(ArrayNode array, String nodePath) {
+    Set<JsonPathValueNode> values = new LinkedHashSet<>();
+    int index = 0;
+    for (JsonNode value : array) {
+        addValue(values, value, nodePath + "[" + index + "]");
+        index++;
+    }
+    return values;
+}
+
+def addValue(Set<JsonPathValueNode> values, JsonNode value, String nodePath) {
+    if (value.isObject()) {
+        values.addAll(getValuesFrom((ObjectNode) value, nodePath));
+    } else if (value.isArray()) {
+        values.addAll(getValuesFrom((ArrayNode) value, nodePath));
+    } else if (value.isValueNode()) {
+        values.add(new JsonPathValueNode(nodePath, value));
+    }
+}
+
+assert responseIsSame == true
+log.info("Before Migration and After Migration Responses are matched")]]></script>
+    </con:config>
+  </con:testStep>
+  <con:properties>
+    <con:property>
+      <con:name>brandCode</con:name>
+      <con:value>C</con:value>
+    </con:property>
+    <con:property>
+      <con:name>shipCode</con:name>
+      <con:value>XP</con:value>
+    </con:property>
+    <con:property>
+      <con:name>fromSailDate</con:name>
+      <con:value>2024-12-28</con:value>
+    </con:property>
+    <con:property>
+      <con:name>toSailDate</con:name>
+      <con:value>2024-12-28</con:value>
+    </con:property>
+  </con:properties>
+  <con:reportParameters/>
+</con:testCase>

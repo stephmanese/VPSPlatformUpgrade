@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:interface xmlns:con="http://eviware.com/soapui/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="con:RestService" id="4ce5b95e-af42-4877-a47d-be0ea8c8fd2e" name="Pricing-Snapshot" type="rest_ex" wadlVersion="https://swagger.io/openapiv3/specification">
+  <con:settings id="9e212a0a-b706-4231-ba8c-b95118230003">
+    <con:setting id="4ce5b95e-af42-4877-a47d-be0ea8c8fd2efileName">Pricing-Snapshot</con:setting>
+  </con:settings>
+  <con:definitionCache type="TEXT" rootPart="Pricing-Snapshot.json">
+    <con:part>
+      <con:url>Pricing-Snapshot.json</con:url>
+      <con:content>{"openapi":"3.0.1","info":{"title":"Pricing-Snapshot","description":"","version":"1.0.0"},"servers":[{"url":"/"}],"paths":{"/v1/pricing-snapshot:by-id":{"description":"","post":{"description":"","requestBody":{"content":{"application/json":{}}},"responses":{"default":{"description":"Default response"}}}},"/v1/price-changes:super-category":{"description":"","post":{"description":"","requestBody":{"content":{"application/json":{"example":"{\n\t\"client\": {\n\t\t\"agencyId\": \"${#TestCase#agencyId}\",\n\t\t\"currencyCodes\": [\n\t\t\t\"${#TestCase#countryCode}\"\n\t\t]\n\t},\n    \"fromDateTime\": \"2023-08-30T07:00:00\"\n}"}}},"responses":{"default":{"description":"Default response"}}}},"/v1/market-mapping:by-id":{"description":"","post":{"description":"","requestBody":{"content":{"application/json":{}}},"responses":{"default":{"description":"Default response"}}}},"/v1/primary-markets:all":{"description":"","get":{"description":"","responses":{"default":{"description":"Default response"}}}},"/v1/market-mappings:all":{"description":"","get":{"description":"","responses":{"default":{"description":"Default response"}}}},"/v1/pricing-snapshot:by-string-id":{"description":"","get":{"description":"","responses":{"default":{"description":"Default response"}}}},"/v1/price-changes:category":{"description":"","post":{"description":"","requestBody":{"content":{"application/json":{"example":"{\n\t\"client\": {\n\t\t\"agencyId\": \"${#TestCase#agencyId}\",\n\t\t\"currencyCodes\": [\n\t\t\t\"${#TestCase#currencyCode}\"\n\t\t]\n\t},\n    \"fromDateTime\": \"2023-08-30T07:00:00\"\n}"}}},"responses":{"default":{"description":"Default response"}}}}}}</con:content>
+      <con:type>https://swagger.io/openapiv3/specification</con:type>
+    </con:part>
+  </con:definitionCache>
+  <con:endpoints/>
+</con:interface>

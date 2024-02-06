@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:interface xmlns:con="http://eviware.com/soapui/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="con:RestService" id="e5588798-8ef3-4e7e-9599-8f6cbdd866a9" name="Pricing Batch(Ingress)" type="rest_ex" wadlVersion="https://swagger.io/openapiv3/specification">
+  <con:settings id="9578c6d3-c190-450b-8f00-6f0d63dfff51">
+    <con:setting id="e5588798-8ef3-4e7e-9599-8f6cbdd866a9fileName">Pricing-Batch%28Ingress%29</con:setting>
+  </con:settings>
+  <con:definitionCache type="TEXT" rootPart="Pricing Batch (Ingress).json">
+    <con:part>
+      <con:url>Pricing Batch (Ingress).json</con:url>
+      <con:content>{"openapi":"3.0.1","info":{"title":"Pricing Batch (Ingress)","description":"","version":"1.0.0"},"servers":[{"url":"/"}],"paths":{"/v1/index":{"description":"","post":{"description":"","requestBody":{"content":{"application/json":{}}},"responses":{"default":{"description":"Default response"}}}},"/v1/superCategoryBestPrices:batch":{"description":"","post":{"description":"","requestBody":{"content":{"application/json":{}}},"responses":{"default":{"description":"Default response"}}}},"/v1/fareSearch:batch":{"description":"","post":{"description":"","requestBody":{"content":{"application/json":{}}},"responses":{"default":{"description":"Default response"}}}},"/v1/promotionSearch:batch":{"description":"","post":{"description":"","requestBody":{"content":{"application/json":{}}},"responses":{"default":{"description":"Default response"}}}},"/v1/categoryBestPrices":{"description":"","post":{"description":"","requestBody":{"content":{"application/json":{"example":"{\n\t\"commonParameters\": {\n\t\t\"shipCode\": \"${#TestCase#shipCode}\",\n\t\t\"sailDate\": \"${#TestCase#sailDate}\",\n\t\t\"packageCode\": \"${#TestCase#packageCode}\",\n\t\t\"bookingChannel\": \"VP\",\n\t\t\"officeCode\": \"${#TestCase#officeCode}\",\n\t\t\"countryCode\": \"${#TestCase#countryCode}\",\n\t\t\"currencyCode\": \"${#TestCase#currencyCode}\",\n\t\t\"bookingType\": \"I\",\n\t\t\"occupancy\": 1\n\t},\n\t\"shipCurrencyCode\": \"USD\",\n\t\"showGuestDetail\": true,\n\t\"guestInformation\": [\n\t\t{\n\t\t\t\"guestAge\": \"${#TestCase#guestAge}\",\n\t\t\t\"lifeStageCode\": \"${#TestCase#lifeStageCode}\",\n\t\t\t\"loyaltyTierCode\": \"${#TestCase#loyaltyTierCode}\",\n\t\t\t\"loyaltyId\": \"${#TestCase#loyaltyId}\",\n\t\t\t\"residenceStateProvinceCode\": \"${#TestCase#residenceStateProvinceCode}\"\n\t\t}\n\t],\n\t\"promoCodes\": [\n\t\t\"${#TestCase#promoCode}\"\n\t]\n}"}}},"responses":{"default":{"description":"Default response"}}}}}}</con:content>
+      <con:type>https://swagger.io/openapiv3/specification</con:type>
+    </con:part>
+  </con:definitionCache>
+  <con:endpoints/>
+</con:interface>

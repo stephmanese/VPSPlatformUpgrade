@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testSuite xmlns:con="http://eviware.com/soapui/config" id="f9eef035-edad-47de-b4bb-fb60653907cf" name="Pricing Batch (Ingress)-After Migration">
+  <con:settings id="9073175b-a204-4025-8eea-daa0e099fe4d">
+    <con:setting id="f9eef035-edad-47de-b4bb-fb60653907cffileName">Pricing-Batch-%28Ingress%29-After-Migration</con:setting>
+  </con:settings>
+  <con:runType>SEQUENTIAL</con:runType>
+  <con:properties/>
+  <con:reportParameters/>
+  <con:tagId>ef2ea71b-2e65-433a-9a02-b2b88d72bbd0</con:tagId>
+</con:testSuite>

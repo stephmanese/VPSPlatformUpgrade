@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testCase xmlns:con="http://eviware.com/soapui/config" id="77ea0a42-957d-44f5-aca9-93ad0826c00c" discardOkResults="false" failOnError="false" failTestCaseOnErrors="true" keepSession="false" name="group-shells|Headquarter - HQ - ALL" searchProperties="true" timeout="0" disabled="true">
+  <con:settings id="cc3e3feb-8d60-44c6-abaf-00bdfee6bc74">
+    <con:setting id="77ea0a42-957d-44f5-aca9-93ad0826c00cfileName">group-shells%7CHeadquarter---HQ---ALL</con:setting>
+  </con:settings>
+  <con:testStep xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="groovy" name="loadTestData-groupShell" id="5642f545-8a60-4716-a7f4-1719aac9ac58">
+    <con:settings/>
+    <con:config>
+      <script>//load/fetch test data from an external json file
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+//get OS and set directory based on OS
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsTestData/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsTestData/" //to insert directory for mac
+	}
+
+	
+def testData = context.expand( '${#Project#testData-groupShell}' )
+def filePath = directory + testData
+def restResponse = new JsonSlurper().parseText(new File(filePath).text)
+def prettyJson = new groovy.json.JsonBuilder(restResponse).toPrettyString()</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="groovy" name="setVariables" id="ef130d96-d847-43ff-b645-83c4ab8809af">
+    <con:settings/>
+    <con:config>
+      <script>//set variables from the fetched test data needed for the REST request
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+
+//get data from TestData-groupShell
+def agencyId = context.expand( '${loadTestData-groupShell#result#$[\'groupShell\'][\'headquarter\'][\'HQ\'][\'all\'][\'ownerAgencyId\']}' )
+log.info(agencyId);
+testRunner.testCase.setPropertyValue("agencyId",agencyId);
+
+def masterHeadquarterId = context.expand( '${loadTestData-groupShell#result#$[\'groupShell\'][\'headquarter\'][\'HQ\'][\'all\'][\'ownerMasterHqId\']}' )
+log.info(masterHeadquarterId);
+testRunner.testCase.setPropertyValue("masterHeadquarterId",masterHeadquarterId);
+
+def alternateHierarchyHQId = context.expand( '${loadTestData-groupShell#result#$[\'groupShell\'][\'headquarter\'][\'HQ\'][\'all\'][\'ownerAlternateHierarchyHqId\']}' )
+log.info(alternateHierarchyHQId);
+testRunner.testCase.setPropertyValue("alternateHierarchyHQId",alternateHierarchyHQId);
+
+def commonOwnershipHQId = context.expand( '${loadTestData-groupShell#result#$[\'groupShell\'][\'headquarter\'][\'HQ\'][\'all\'][\'ownerCommonOwnershipHqId\']}' )
+log.info(commonOwnershipHQId);
+testRunner.testCase.setPropertyValue("commonOwnershipHQId",commonOwnershipHQId);
+
+def sailDate = context.expand( '${loadTestData-groupShell#result#$[\'groupShell\'][\'headquarter\'][\'HQ\'][\'all\'][\'sailDate\']}' )
+log.info(sailDate);
+testRunner.testCase.setPropertyValue("sailDate",sailDate);
+
+def packageCode = context.expand( '${loadTestData-groupShell#result#$[\'groupShell\'][\'headquarter\'][\'HQ\'][\'all\'][\'packageCode\']}' )
+log.info(packageCode);
+testRunner.testCase.setPropertyValue("packageCode",packageCode);
+
+def shipCode = context.expand( '${loadTestData-groupShell#result#$[\'groupShell\'][\'headquarter\'][\'HQ\'][\'all\'][\'ship\']}' )
+log.info(shipCode);
+testRunner.testCase.setPropertyValue("shipCode",shipCode);
+
+def countryCode = context.expand( '${loadTestData-groupShell#result#$[\'groupShell\'][\'headquarter\'][\'HQ\'][\'all\'][\'countryCode\']}' )
+log.info(countryCode);
+testRunner.testCase.setPropertyValue("countryCode",countryCode);
+
+def currency = context.expand( '${loadTestData-groupShell#result#$[\'groupShell\'][\'headquarter\'][\'HQ\'][\'all\'][\'currencyCode\']}' )
+log.info(currency);
+testRunner.testCase.setPropertyValue("currency",currency);
+
+def occupancy = context.expand( '${loadTestData-groupShell#result#$[\'groupShell\'][\'headquarter\'][\'HQ\'][\'all\'][\'occupancy\']}' )
+log.info(occupancy);
+testRunner.testCase.setPropertyValue("occupancy",occupancy);</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="restrequest" name="group-shells|Headquarter - HQ - ALL-Before" id="c56ec85d-46d3-4135-a2d1-766defd5b6cb">
+    <con:settings/>
+    <con:config service="Group Shell" resourcePath="/v1/group-shells" methodName="group-shells" xsi:type="con:RestRequestStep">
+      <con:restRequest name="group-shells|Headquarter - HQ - ALL-Before" id="dbb5d645-70f1-498c-a9f4-929fb7b26953" mediaType="application/json" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+        </con:settings>
+        <con:request>{
+	"agencyId": "${#TestCase#agencyId}",
+	"masterHeadquarterId": "${#TestCase#masterHeadquarterId}",
+	"alternateHierarchyHQId": "${#TestCase#alternateHierarchyHQId}",
+	"commonOwnershipHQId": "${#TestCase#commonOwnershipHQId}",
+	"sailDate": "${#TestCase#sailDate}",
+	"shipCode": "${#TestCase#shipCode}",
+	"packageCode": "${#TestCase#packageCode}",
+	"countryCode": "${#TestCase#countryCode}",
+	"currency": "${#TestCase#currency}",
+	"occupancy": "${#TestCase#occupancy}",
+	"includeSoldOut": true
+}</con:request>
+        <con:assertion type="Valid HTTP Status Codes" id="a7306f1b-de0e-48ed-820c-c970eea1ed4d" name="Valid HTTP Status Codes">
+          <con:settings/>
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:assertion type="GroovyScriptAssertion" id="dbdd9061-88b5-44bf-ab63-8c2fcd0646ac" name="Script Assertion">
+          <con:configuration>
+            <scriptText>def jsonRes = messageExchange.getResponse().contentAsString
+
+def jsonSlurper = new groovy.json.JsonSlurper();
+def parse = jsonSlurper.parseText(jsonRes)
+
+def groupShells = parse.groupShells[0]
+log.info groupShells
+assert groupShells != null</scriptText>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:parameters/>
+        <con:environmentSpec>
+          <con:entry environmentId="9ba133c3-3cd7-45c8-8561-64ce1c92ea67">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="015736b2-7549-4743-94e6-d64278e45b46">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="e94bb75c-7f53-42a7-9f97-eb5aa3fcaf53">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b2abf588-b45c-4e44-9dd0-8b2249bbc4e7">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="5322014d-43c7-4904-af96-4329a0290c25">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="495bcf82-3dfa-4956-b162-f0b1bfb07f10">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="feba3ebd-aeec-4c25-8b24-4b9e406c22cb">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b3e5490d-8b80-49fe-97a2-a82077345345">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="a98aa22f-37cb-4a0e-84c6-f2de81903489">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+        </con:environmentSpec>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="groovy" name="fetchResponse" id="64ab122e-bfb1-4bf8-85fb-67f0bfe8663a">
+    <con:settings/>
+    <con:config>
+      <script>//fetch the REST response
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+
+def restResponse = context.expand( '${group-shells|Headquarter - HQ - ALL-Before#Response}' );
+def restResponse2 = new JsonSlurper().parseText(restResponse);
+def prettyJson = new groovy.json.JsonBuilder(restResponse2).toPrettyString();</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="groovy" name="setFolderDirectory" id="8fdebc2f-ae55-4813-9f38-7b1e9aa58585">
+    <con:settings/>
+    <con:config>
+      <script>//set folder directory for storing the response
+
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+String jsonFileName = "group-shells-Headquarter-HQ-ALL.json"
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsResponseBeforeMigration/" + jsonFileName
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsResponseBeforeMigration/" + jsonFileName // to insert directory for mac
+	}</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="datasink" name="storeResponse" id="5f6f93bd-fe0c-446c-8c0d-72e7e7166b1e">
+    <con:settings/>
+    <con:config xsi:type="con:DataSinkStep">
+      <con:dataSink type="File">
+        <con:configuration>
+          <fileName>${setFolderDirectory#result}</fileName>
+          <separator/>
+          <escape/>
+          <quote>false</quote>
+          <trim>true</trim>
+          <append>false</append>
+          <encoding>UTF-8</encoding>
+        </con:configuration>
+      </con:dataSink>
+      <con:properties>
+        <con:property>
+          <con:name>group-shells-Headquarter-HQ-ALL</con:name>
+          <con:value>${fetchResponse#result}</con:value>
+        </con:property>
+      </con:properties>
+    </con:config>
+  </con:testStep>
+  <con:properties/>
+  <con:reportParameters/>
+</con:testCase>

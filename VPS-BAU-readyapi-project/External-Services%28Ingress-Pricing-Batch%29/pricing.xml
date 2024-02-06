@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:con="http://eviware.com/soapui/config" name="pricing" path="/v1/pricing" id="ab4d5de7-e86b-44cc-a721-fa2453e4018c">
+  <con:settings id="9317a357-647e-4f25-9b83-7db3f8c1375f">
+    <con:setting id="ab4d5de7-e86b-44cc-a721-fa2453e4018cfileName">pricing</con:setting>
+  </con:settings>
+  <con:parameters/>
+  <con:method name="pricing" id="b0307200-86a6-4981-b30c-d3a19890d3a3" method="POST">
+    <con:settings/>
+    <con:parameters/>
+    <con:request name="pricing" id="961191e1-fd85-46cf-8b83-c920fea7cd5d" mediaType="application/json" postQueryString="false">
+      <con:settings>
+        <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment>&lt;con:entry key="apiKey" value="${#Project#apiKey}" xmlns:con="http://eviware.com/soapui/config"/>&lt;con:entry key="Content-Type" value="application/json" xmlns:con="http://eviware.com/soapui/config"/>&lt;/xml-fragment></con:setting>
+      </con:settings>
+      <con:request>{
+	"agencyId": "${#TestCase#agencyId}",
+	"sailings": [
+		{
+			"brandCode": "${#TestCase#brandCode}",
+			"shipCode": "${#TestCase#shipCode}",
+			"packageCode": "${#TestCase#packageCode}",
+			"sailDate": "${#TestCase#sailDate}"
+		}
+	],
+	"pricingMarket": {
+		"officeCode": "${#TestCase#officeCode}",
+		"countryCode": "${#TestCase#countryCode}",
+		"currencyCode": "${#TestCase#currencyCode}"
+	},
+	"pricingPreference": {
+		"bookingChannelCode": "VP",
+		"bookingTypeCode": "I",
+		"accessibleStateRoomsOnly": false,
+		"includeSoldOut": false,
+		"depositFareType": "R",
+		"bestPriceType": "B",
+		"includeGuestDetail": true
+	},
+	"occupancy": 2,
+	"guestPreferences": [
+		{
+			"lifeStageCode": "${#TestCase#lifeStageCode}",
+			"age": "${#TestCase#age}"
+		},
+		{
+			"lifeStageCode": "${#TestCase#lifeStageCode}",
+			"age": "${#TestCase#age}"
+		}
+	]
+}</con:request>
+      <con:credentials>
+        <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+        <con:authType>No Authorization</con:authType>
+      </con:credentials>
+      <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+      <con:parameters/>
+      <con:environmentSpec>
+        <con:entry environmentId="9ba133c3-3cd7-45c8-8561-64ce1c92ea67">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="015736b2-7549-4743-94e6-d64278e45b46">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="e94bb75c-7f53-42a7-9f97-eb5aa3fcaf53">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="b2abf588-b45c-4e44-9dd0-8b2249bbc4e7">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="5322014d-43c7-4904-af96-4329a0290c25">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="495bcf82-3dfa-4956-b162-f0b1bfb07f10">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="feba3ebd-aeec-4c25-8b24-4b9e406c22cb">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="b3e5490d-8b80-49fe-97a2-a82077345345">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+        <con:entry environmentId="a98aa22f-37cb-4a0e-84c6-f2de81903489">
+          <con:authProfile>Inherit From Parent</con:authProfile>
+        </con:entry>
+      </con:environmentSpec>
+    </con:request>
+  </con:method>
+</con:resource>

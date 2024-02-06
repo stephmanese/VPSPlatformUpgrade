@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testSuite xmlns:con="http://eviware.com/soapui/config" id="166b6590-24c8-4aaf-bfc6-80e92f309514" name="Vacation (Ingress)-After Migration">
+  <con:settings id="40b009b7-a0bf-4104-8133-462d678139a7">
+    <con:setting id="166b6590-24c8-4aaf-bfc6-80e92f309514fileName">Vacation-%28Ingress%29-After-Migration</con:setting>
+  </con:settings>
+  <con:runType>SEQUENTIAL</con:runType>
+  <con:properties/>
+  <con:reportParameters/>
+  <con:tagId>ef2ea71b-2e65-433a-9a02-b2b88d72bbd0</con:tagId>
+</con:testSuite>

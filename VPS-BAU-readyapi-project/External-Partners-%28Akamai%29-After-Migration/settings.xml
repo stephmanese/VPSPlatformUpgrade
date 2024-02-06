@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testSuite xmlns:con="http://eviware.com/soapui/config" id="d47d3b6d-8eda-4d4d-96da-681c0fca9804" name="External Partners (Akamai)-After Migration">
+  <con:settings id="c07ee00a-46fb-4db1-b503-bee632dace33">
+    <con:setting id="d47d3b6d-8eda-4d4d-96da-681c0fca9804fileName">External-Partners-%28Akamai%29-After-Migration</con:setting>
+  </con:settings>
+  <con:runType>SEQUENTIAL</con:runType>
+  <con:properties/>
+  <con:reportParameters/>
+  <con:tagId>37684b1c-ecbf-4a39-a0e8-8119d12b11dc</con:tagId>
+</con:testSuite>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testSuite xmlns:con="http://eviware.com/soapui/config" id="76df1618-156a-4f7a-a3ff-dc507417cad9" name="Cruise Catalog-Before Migration">
+  <con:settings id="7aec79ad-914d-4f42-ad06-6e2c58dea692">
+    <con:setting id="76df1618-156a-4f7a-a3ff-dc507417cad9fileName">Cruise-Catalog-Before-Migration</con:setting>
+  </con:settings>
+  <con:runType>SEQUENTIAL</con:runType>
+  <con:properties/>
+  <con:reportParameters/>
+  <con:tagId>b51ba806-3b4d-4a61-9811-ac4f12dc1a04</con:tagId>
+</con:testSuite>

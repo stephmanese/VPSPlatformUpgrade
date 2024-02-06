@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testSuite xmlns:con="http://eviware.com/soapui/config" id="1312b558-9cf7-41ba-a3fe-0faaefd50c03" name="Catalog-Before Migration">
+  <con:settings id="bb1b9185-928d-4cc7-8c83-d621ac6a9c3b">
+    <con:setting id="1312b558-9cf7-41ba-a3fe-0faaefd50c03fileName">Catalog-Before-Migration</con:setting>
+  </con:settings>
+  <con:runType>SEQUENTIAL</con:runType>
+  <con:properties/>
+  <con:reportParameters/>
+  <con:tagId>b51ba806-3b4d-4a61-9811-ac4f12dc1a04</con:tagId>
+</con:testSuite>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:interface xmlns:con="http://eviware.com/soapui/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="con:RestService" id="145a8445-ce47-4bb9-a328-4a7b02618e91" name="Pricing Batch(Ingress)(Routing Rule)" type="rest_ex" wadlVersion="https://swagger.io/openapiv3/specification">
+  <con:settings id="28ebcf20-88af-4682-86f2-1fb635dca6ad">
+    <con:setting id="145a8445-ce47-4bb9-a328-4a7b02618e91fileName">Pricing-Batch%28Ingress%29%28Routing-Rule%29</con:setting>
+  </con:settings>
+  <con:definitionCache type="TEXT" rootPart="Pricing Batch  (Ingress) (Routing Rule).json">
+    <con:part>
+      <con:url>Pricing Batch  (Ingress) (Routing Rule).json</con:url>
+      <con:content>{"openapi":"3.0.1","info":{"title":"Pricing Batch  (Ingress) (Routing Rule)","version":"1.0.0"},"servers":[{"url":"/"}],"paths":{"/v1/routing-rule:all":{"description":"","get":{"description":"","responses":{"default":{"description":"Default response"}}}},"/v1/routing-rule:search-by-id/":{"description":"","get":{"description":"","parameters":[{"name":"brand","in":"query","required":true,"style":"form","explode":true,"schema":{"type":"string"}},{"name":"bookingChannel","in":"query","required":true,"style":"form","explode":true,"schema":{"type":"string"}}],"responses":{"default":{"description":"Default response"}}}},"/v1/routing-rule:search-by-ship":{"description":"","get":{"description":"","parameters":[{"name":"Name","in":"cookie","required":true,"schema":{"type":"string"}}],"responses":{"default":{"description":"Default response"}}}}}}</con:content>
+      <con:type>https://swagger.io/openapiv3/specification</con:type>
+    </con:part>
+  </con:definitionCache>
+  <con:endpoints/>
+  <con:environmentSpec>
+    <con:entry environmentId="46dd2ea1-d2d5-4e73-a347-d2f11d97ffb2">
+      <con:authProfile>Inherit From Parent</con:authProfile>
+    </con:entry>
+    <con:entry environmentId="b1c3df59-927c-4c27-adab-00be74f66cd7">
+      <con:authProfile>Inherit From Parent</con:authProfile>
+    </con:entry>
+    <con:entry environmentId="753ef88c-c5b3-4826-b8c1-149d238db59a">
+      <con:authProfile>Inherit From Parent</con:authProfile>
+    </con:entry>
+    <con:entry environmentId="77e1637d-8ad2-4639-8e6b-214fff08a5ca">
+      <con:authProfile>Inherit From Parent</con:authProfile>
+    </con:entry>
+    <con:entry environmentId="b77707d5-127c-4108-8c9f-e5d03698560d">
+      <con:authProfile>Inherit From Parent</con:authProfile>
+    </con:entry>
+    <con:entry environmentId="7419ed87-8fd0-428c-9705-5280df69c4a8">
+      <con:authProfile>Inherit From Parent</con:authProfile>
+    </con:entry>
+    <con:entry environmentId="778500a6-63fb-4ddb-9e03-8f4eb50ed699">
+      <con:authProfile>Inherit From Parent</con:authProfile>
+    </con:entry>
+    <con:entry environmentId="0b2eeff4-794c-4083-8628-e1d1c929e7a6">
+      <con:authProfile>Inherit From Parent</con:authProfile>
+    </con:entry>
+    <con:entry environmentId="9ba133c3-3cd7-45c8-8561-64ce1c92ea67">
+      <con:authProfile>Inherit From Parent</con:authProfile>
+    </con:entry>
+    <con:entry environmentId="015736b2-7549-4743-94e6-d64278e45b46">
+      <con:authProfile>Inherit From Parent</con:authProfile>
+    </con:entry>
+    <con:entry environmentId="e94bb75c-7f53-42a7-9f97-eb5aa3fcaf53">
+      <con:authProfile>Inherit From Parent</con:authProfile>
+    </con:entry>
+    <con:entry environmentId="b2abf588-b45c-4e44-9dd0-8b2249bbc4e7">
+      <con:authProfile>Inherit From Parent</con:authProfile>
+    </con:entry>
+    <con:entry environmentId="5322014d-43c7-4904-af96-4329a0290c25">
+      <con:authProfile>Inherit From Parent</con:authProfile>
+    </con:entry>
+    <con:entry environmentId="495bcf82-3dfa-4956-b162-f0b1bfb07f10">
+      <con:authProfile>Inherit From Parent</con:authProfile>
+    </con:entry>
+    <con:entry environmentId="feba3ebd-aeec-4c25-8b24-4b9e406c22cb">
+      <con:authProfile>Inherit From Parent</con:authProfile>
+    </con:entry>
+    <con:entry environmentId="b3e5490d-8b80-49fe-97a2-a82077345345">
+      <con:authProfile>Inherit From Parent</con:authProfile>
+    </con:entry>
+    <con:entry environmentId="a98aa22f-37cb-4a0e-84c6-f2de81903489">
+      <con:authProfile>Inherit From Parent</con:authProfile>
+    </con:entry>
+  </con:environmentSpec>
+</con:interface>

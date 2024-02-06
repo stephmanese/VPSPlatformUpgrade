@@ -1,0 +1,8 @@
+basePrices-%7C-Price-Type%3A-STANDARD-%7C-FIT.xml
+basePrices-%7C-Request-Body-for-Group-bookingType.xml
+basePrices-%7C-MAF-Value-checking.xml
+basePrices-%7C-Cruise-Tour.xml
+changes-%7C-includeLinkCurrencies%3A-TRUE.xml
+changes-%7C-fromDate-within-2-days.xml
+changes-%7C-fromDate-beyond-2-days.xml
+changes-%7C-fromDate-future-date.xml

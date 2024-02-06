@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testSuite xmlns:con="http://eviware.com/soapui/config" id="f79240f1-9148-4910-ad34-8f42a4085b1a" name="Combinability Rule-Before Migration">
+  <con:settings id="1d2e8f97-2b62-4951-8df7-280421a1447c">
+    <con:setting id="f79240f1-9148-4910-ad34-8f42a4085b1afileName">Combinability-Rule-Before-Migration</con:setting>
+  </con:settings>
+  <con:runType>SEQUENTIAL</con:runType>
+  <con:properties/>
+  <con:reportParameters/>
+  <con:tagId>b51ba806-3b4d-4a61-9811-ac4f12dc1a04</con:tagId>
+</con:testSuite>

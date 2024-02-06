@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testSuite xmlns:con="http://eviware.com/soapui/config" id="c120c516-8e4b-43ef-9a9d-d9f74927b396" name="External Services (Ingress)-After Migration">
+  <con:settings id="1e7760d7-453f-4a33-aaab-338246fa33ea">
+    <con:setting id="c120c516-8e4b-43ef-9a9d-d9f74927b396fileName">External-Services-%28Ingress%29-After-Migration</con:setting>
+  </con:settings>
+  <con:runType>SEQUENTIAL</con:runType>
+  <con:properties/>
+  <con:reportParameters/>
+  <con:tagId>ef2ea71b-2e65-433a-9a02-b2b88d72bbd0</con:tagId>
+</con:testSuite>

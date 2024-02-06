@@ -1,0 +1,14 @@
+sailings-%7C-R---CO.xml
+sailings-%7C-R---CT.xml
+sailings-%7C-C---CT---Galapagos.xml
+ships-%7C-Verify-List-of-Ships.xml
+sailings-package-changes-%7C-Agency-ID-and-fromDateTime.xml
+sailings-package-changes-%7C-fromDateTime-within-2-days.xml
+sailings-package-changes-%7C-fromDateTime-beyond-2-days.xml
+sailings-package-changes-%7C-fromDateTime-future-date.xml
+sailing-package-%7C-R---includeTourPackages-%3A-false.xml
+sailing-package-%7C-R---includeTourPackages-%3A-true.xml
+sailing-package-%7C-C---Galapagos---includeTourPackages-%3A-true.xml
+catalog%3Aall.xml
+catalog%3Aby-sailing-%7C-R---CT.xml
+catalog%3Aby-sailing-%7C-C---CT---Galapagos.xml

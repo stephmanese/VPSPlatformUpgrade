@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:testCase xmlns:con="http://eviware.com/soapui/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="bb561585-556e-41a0-a93f-999f663a29df" discardOkResults="false" failOnError="false" failTestCaseOnErrors="true" keepSession="false" name="promo-codes:by-promo-codes|Search multiple unique offer codes;then filter" searchProperties="true" timeout="0" disabled="true">
+  <con:settings id="f2c4dbb0-bb12-4de3-b361-1725760a5ac3">
+    <con:setting id="bb561585-556e-41a0-a93f-999f663a29dffileName">promo-codes%3Aby-promo-codes%7CSearch-multiple-unique-offer-codes%3Bthen-filter</con:setting>
+  </con:settings>
+  <con:testStep type="groovy" name="loadTestData-promoSpecifScenario" id="2508d3fa-beb5-4af1-aa23-c46dd79b174c">
+    <con:settings/>
+    <con:config>
+      <script>//load/fetch test data from local source
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+//get user's device OS and set directory
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsTestData/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsTestData/" //directory for mac
+	}
+
+	
+def testData = context.expand( '${#Project#testData-promoSpecifScenario}' ) //modify this based on test case
+def filePath = directory + testData
+def restResponse = new JsonSlurper().parseText(new File(filePath).text)
+def prettyJson = new groovy.json.JsonBuilder(restResponse).toPrettyString()</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="loadTestData-promotion-R" id="d588d109-9b20-4bb8-b4d8-7674c99119f1">
+    <con:settings/>
+    <con:config>
+      <script>//load/fetch test data from local source
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+//get user's device OS and set directory
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsTestData/"
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsTestData/" //directory for mac
+	}
+
+	
+def testData = context.expand( '${#Project#testData-royal}' ) //modify this based on test case
+def filePath = directory + testData
+def restResponse = new JsonSlurper().parseText(new File(filePath).text)
+def prettyJson = new groovy.json.JsonBuilder(restResponse).toPrettyString()</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="setVariables" id="97630ed8-3881-428d-867f-db0c3846a234">
+    <con:settings/>
+    <con:config>
+      <script>//set variables from the fetched test data needed for the REST request
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+
+//get data from promoSpecificScenario
+def promoCode1 = context.expand( '${loadTestData-promoSpecifScenario#result#$[\'promoSpecifScenario\'][\'TO\'][\'TORestricted\'][\'promoCodes\'][0]}' )
+log.info(promoCode1);
+testRunner.testCase.setPropertyValue("promoCode1",promoCode1);
+
+def promoCode2 = context.expand( '${loadTestData-promoSpecifScenario#result#$[\'promoSpecifScenario\'][\'TO\'][\'TOUnrestricted\'][\'promoCodes\'][0]}' )
+log.info(promoCode2);
+testRunner.testCase.setPropertyValue("promoCode2",promoCode2);
+
+def promotionId = context.expand( '${loadTestData-promoSpecifScenario#result#$[\'promoSpecifScenario\'][\'TO\'][\'TORestricted\'][\'promoID\']}' )
+log.info(promotionId);
+testRunner.testCase.setPropertyValue("promotionId",promotionId);
+
+//get data from promotion of Royal
+def promoCode3 = context.expand( '${loadTestData-promotion-R#result#$[\'royal\'][\'CO\'][\'promotionGuestQualifier\'][\'promoCodes\'][0]}' )
+log.info(promoCode3);
+testRunner.testCase.setPropertyValue("promoCode3",promoCode3);</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="restrequest" name="promoCodesBefore" id="f7f054b8-9d4d-4c19-ac77-2062a1d1819b">
+    <con:settings/>
+    <con:config service="Promotion(Ingress)(Used by ESL)" resourcePath="/v1/promo-codes:by-promo-codes" methodName="promo-codes:by-promo-codes" xsi:type="con:RestRequestStep">
+      <con:restRequest name="promoCodesBefore" id="05683681-20da-4c9e-93bc-0b0a859c9bda" mediaType="application/json" postQueryString="false">
+        <con:settings>
+          <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+        </con:settings>
+        <con:request>{
+	"promoCodes":["${#TestCase#promoCode1}", "${#TestCase#promoCode2}","${#TestCase#promoCode3}"],
+	"includePromotionLevelPromoCodes": true,
+	"filters": {
+		"promotionIds": [
+			"${#TestCase#promotionId}"
+		]
+	}
+}</con:request>
+        <con:originalUri>http://vps-stg-a.rccl.com/vps-sierra/promotion/v1/promo-codes:by-promo-codes</con:originalUri>
+        <con:assertion type="Valid HTTP Status Codes" id="f63f54a8-dcfd-434c-b525-d0703f51782a" name="Valid HTTP Status Codes">
+          <con:settings/>
+          <con:configuration>
+            <codes>200</codes>
+          </con:configuration>
+        </con:assertion>
+        <con:assertion type="GroovyScriptAssertion" id="595faf10-62a3-45ea-95bd-75e6d9d7b9e5" name="Script Assertion">
+          <con:configuration>
+            <scriptText>def jsonRes = messageExchange.getResponse().contentAsString
+
+
+def jsonSlurper = new groovy.json.JsonSlurper();
+def parse = jsonSlurper.parseText(jsonRes)
+
+
+def promoCode = parse.status.details[0].code
+log.info promoCode
+assert promoCode== 1005</scriptText>
+          </con:configuration>
+        </con:assertion>
+        <con:credentials>
+          <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+          <con:authType>No Authorization</con:authType>
+        </con:credentials>
+        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        <con:parameters/>
+        <con:environmentSpec>
+          <con:entry environmentId="9ba133c3-3cd7-45c8-8561-64ce1c92ea67">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="015736b2-7549-4743-94e6-d64278e45b46">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="e94bb75c-7f53-42a7-9f97-eb5aa3fcaf53">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b2abf588-b45c-4e44-9dd0-8b2249bbc4e7">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="5322014d-43c7-4904-af96-4329a0290c25">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="495bcf82-3dfa-4956-b162-f0b1bfb07f10">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="feba3ebd-aeec-4c25-8b24-4b9e406c22cb">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="b3e5490d-8b80-49fe-97a2-a82077345345">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+          <con:entry environmentId="a98aa22f-37cb-4a0e-84c6-f2de81903489">
+            <con:authProfile>Inherit From Parent</con:authProfile>
+          </con:entry>
+        </con:environmentSpec>
+      </con:restRequest>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="fetchResponse" id="60459333-eb15-4562-adda-6a271deb77fd">
+    <con:settings/>
+    <con:config>
+      <script>//fetch the REST response
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+
+def restResponse = context.expand( '${promoCodesBefore#Response}' ); //modify this based on test case
+def restResponse2 = new JsonSlurper().parseText(restResponse);
+def prettyJson = new groovy.json.JsonBuilder(restResponse2).toPrettyString();</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="groovy" name="setFolderDirectory" id="693c642c-cec0-496e-838d-d08a8b423c17">
+    <con:settings/>
+    <con:config>
+      <script>//set folder directory for storing the response and create json file for storing REST response
+
+String osType = System.properties['os.name'][0..6];
+def directory = "";
+String jsonFileName = "promoCodeSearchMultipleUniqueOfferCode.json" //modify this based on test case
+
+if (osType == "Windows"){
+	directory = "C:/VPS_JSON/vpsResponseBeforeMigration/" + jsonFileName
+	}
+else{
+	directory = "/Applications/VPS_JSON/vpsResponseBeforeMigration/" + jsonFileName // directory for mac
+	}</script>
+    </con:config>
+  </con:testStep>
+  <con:testStep type="datasink" name="storeResponse" id="2bc4de28-3b51-4035-ae10-600ccc975f65">
+    <con:settings/>
+    <con:config xsi:type="con:DataSinkStep">
+      <con:dataSink type="File">
+        <con:configuration>
+          <fileName>${setFolderDirectory#result}</fileName>
+          <separator/>
+          <escape/>
+          <quote>false</quote>
+          <trim>true</trim>
+          <append>false</append>
+          <encoding>UTF-8</encoding>
+        </con:configuration>
+      </con:dataSink>
+      <con:properties>
+        <con:property>
+          <con:name>promoCodeSearchMultipleUniqueOfferCode</con:name>
+          <con:value>${fetchResponse#result}</con:value>
+        </con:property>
+      </con:properties>
+    </con:config>
+  </con:testStep>
+  <con:properties>
+    <con:property>
+      <con:name>promoCode1</con:name>
+      <con:value>23TEST048RJJFTR</con:value>
+    </con:property>
+    <con:property>
+      <con:name>promoCode2</con:name>
+      <con:value>UNIQ4BY6Q6R1</con:value>
+    </con:property>
+    <con:property>
+      <con:name>promoCode3</con:name>
+      <con:value>DP340</con:value>
+    </con:property>
+    <con:property>
+      <con:name>promotionId</con:name>
+      <con:value>M7392338</con:value>
+    </con:property>
+  </con:properties>
+  <con:reportParameters/>
+</con:testCase>

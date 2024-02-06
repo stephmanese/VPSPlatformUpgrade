@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:interface xmlns:con="http://eviware.com/soapui/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="con:RestService" id="46dea039-95fb-4fe3-8d6b-6624bb29d221" name="Group Shell" type="rest_ex" wadlVersion="https://swagger.io/openapiv3/specification">
+  <con:settings id="ac1c94e1-8ff1-43ec-8947-e2b13af8bda3">
+    <con:setting id="46dea039-95fb-4fe3-8d6b-6624bb29d221fileName">Group-Shell</con:setting>
+  </con:settings>
+  <con:definitionCache type="TEXT" rootPart="Group Shell.json">
+    <con:part>
+      <con:url>Group Shell.json</con:url>
+      <con:content>{"openapi":"3.0.1","info":{"title":"Group Shell","description":"","version":"1.0.0"},"servers":[{"url":"/"}],"paths":{"/v1/group-shells":{"description":"","post":{"description":"","requestBody":{"content":{"application/json":{}}},"responses":{"default":{"description":"Default response"}}}},"/v1/group-shell:byId":{"description":"","post":{"description":"","requestBody":{"content":{"application/json":{"example":"{\n\t\"key\": {\n\t\t\"groupId\": \"${#TestCase#groupId}\"\n\t}\n}"}}},"responses":{"default":{"description":"Default response"}}}}}}</con:content>
+      <con:type>https://swagger.io/openapiv3/specification</con:type>
+    </con:part>
+  </con:definitionCache>
+  <con:endpoints/>
+</con:interface>
